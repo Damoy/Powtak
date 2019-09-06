@@ -10,20 +10,16 @@ public class EnergyChunck {
 
 	private List<Energy> energies;
 
-	private EnergyChunck(List<Energy> energies) {
+	public EnergyChunck(List<Energy> energies) {
 		this.energies = energies;
 	}
 	
-	private EnergyChunck() {
+	public EnergyChunck(Energy... energies) {
+		this.energies = Arrays.asList(energies);
+	}
+	
+	public EnergyChunck() {
 		this.energies = new ArrayList<>();
-	}
-	
-	public static EnergyChunck empty() {
-		return new EnergyChunck();
-	}
-	
-	public static EnergyChunck of(Energy... energies) {
-		return new EnergyChunck(Arrays.asList(energies));
 	}
 	
 	public void render(Screen s) {

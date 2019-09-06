@@ -67,10 +67,10 @@ public class LevelLoader {
 		NextLevelTpPointSource nextLevelTpPointSource = null;
 		
 		// enemies
-		EnemyChunck enemyChunck = EnemyChunck.empty();
+		EnemyChunck enemyChunck = new EnemyChunck();
 		
 		// energies
-		EnergyChunck energyChunck = EnergyChunck.empty();
+		EnergyChunck energyChunck = new EnergyChunck();
 		
 		try {
 			tex = ImageIO.read(new FileInputStream(Utils.levelPath(levelFileName)));
