@@ -1,0 +1,218 @@
+package core.world.teleportation;
+
+import org.eclipse.collections.api.list.MutableList;
+
+public class NextLevelTpPoints {
+
+	private MutableList<NextLevelTpPoint> teleports;
+
+	public NextLevelTpPoints(MutableList<NextLevelTpPoint> teleports) {
+		this.teleports = teleports;
+	}
+	
+	
+}
+
+
+
+	private DirectedAnimationOnCall generateAnimation() {
+		DirectedAnimationOnCall animation = new DirectedAnimationOnCall(); 
+		animation.addDirTicksEntry(Direction.DOWN, 4);
+		animation.addDirTicksEntry(Direction.LEFT, 4);
+		animation.addDirTicksEntry(Direction.RIGHT, 4);
+		animation.addDirTicksEntry(Direction.UP, 4);
+		
+		animation.addAnimationChunck(Direction.DOWN,
+				Factory.mList(new AnimationFrame(getTexture(), 0, 0, 12, 13, 1.0f),
+								new AnimationFrame(getTexture(), 13, 0, 12, 13, 1.0f)));
+		animation.addAnimationChunck(Direction.LEFT,
+				Factory.mList(new AnimationFrame(getTexture(), 26, 0, 12, 13, 1.0f),
+								new AnimationFrame(getTexture(), 39, 0, 12, 13, 1.0f)));
+		animation.addAnimationChunck(Direction.RIGHT,
+				Factory.mList(new AnimationFrame(getTexture(), 52, 0, 8, 13, 1.0f),
+								new AnimationFrame(getTexture(), 61, 0, 8, 13, 1.0f)));
+		animation.addAnimationChunck(Direction.UP,
+				Factory.mList(new AnimationFrame(getTexture(), 70, 0, 8, 13, 1.0f),
+								new AnimationFrame(getTexture(), 79, 0, 8, 13, 1.0f)));
+		
+		return animation;
+	}
+
+
+		// private final static Logger INSTANCE = new Logger();
+	
+	private Logger() {}
+	
+	public static Logger get() {
+		return INSTANCE;
+	}
+
+
+	//		switch(direction) {
+//			case DOWN:
+//				return (ts - w) >> 1;
+//			case UP:
+//				return (ts - w) >> 1;
+//			case RIGHT:
+//				(ts - w) >> 1;
+//			case LEFT:
+//				return 6;
+//		default:
+//			throw new IllegalStateException();
+//		}
+
+
+
+
+package rendering.animation;
+
+import org.eclipse.collections.api.list.MutableList;
+
+import rendering.Texture;
+
+public class BasicAnimationOnTick extends BasicAnimation{
+
+	protected BasicAnimationOnTick(int delay, MutableList<AnimationFrame> frames) {
+		super(delay, frames);
+	}
+
+	@Override
+	public void update() {
+		tickCounter.increment();
+		if(tickCounter.isStopped()) {
+			++framePtr;
+			tickCounter.reset();
+		}
+		
+		if(framePtr >= framesCount)
+			framePtr = 0;
+	}
+	
+	public static Animation get(Texture spritesheet, int delay, float scale, int... framesData) {
+		MutableList<AnimationFrame> frames = AnimationFrame.getFromData(spritesheet, scale, framesData);
+		return new BasicAnimationOnTick(delay, frames);
+	}
+}
+
+		// Logger.get().logn("Texture sizes: " + frameSheet.getWidth() + ", " + frameSheet.getHeight());
+		// Logger.get().logn("Subimage on: " + startX + ", " + startY + ", " + width + ", " + height);
+
+//		Texture s = Texture.ENERGY_SPRITESHEET;
+//		return BasicAnimation.get(s, 12, 1.0f,
+//				0, 0, 6, 9,
+//				7, 0, 6, 9,
+//				14, 0, 6, 9,
+//				21, 0, 6, 9);
+
+	public void setCurrentDirection(Direction direction) {
+		Logger.log("Direction was " + this.direction);
+		this.direction = direction;
+		Logger.log(", is now: " + this.direction + "\n");
+	}
+
+package core.entities.projectiles;
+
+import core.entities.Direction;
+import core.entities.MoveStrategy;
+import core.entities.enemies.Enemy;
+import core.entities.walls.Wall;
+import core.world.Tile;
+import core.world.level.Level;
+import rendering.animation.Animation;
+import utils.AABB;
+import utils.Config;
+
+public class PlayerAnimatedProjectile extends AnimatedProjectile{
+
+	private MoveStrategy moveStrategy;
+	
+	public PlayerAnimatedProjectile(Level level, Direction direction, Animation animation, int x, int y) {
+		super(level, direction, animation, x, y);
+		this.moveStrategy = new PlayerProjectileMoveStrategy(level.getPlayer(), animation);
+	}
+
+	@Override
+	public void update() {
+		move();
+	}
+	
+	private void move() {
+		AABB box = getBox();
+		Enemy enemyCollision = level.enemyCollision(box);
+		
+		if(enemyCollision != null) {
+			enemyCollision.die();
+			die();
+		} else {
+			Wall wallCollision = level.wallCollision(box);
+			if(wallCollision != null) {
+				die();
+				if(wallCollision.isDestructible()) {
+					wallCollision.forget();
+				}
+			} else {
+				Tile tile = getTile();
+				if(tile == null || tile.isDoored()) {
+					die();
+					return;
+				}
+						
+				x += dx;
+				y += dy;
+				
+				if(x < 0 || x > Config.WIDTH || y < 0 || y > Config.HEIGHT) {
+					die();
+					return;
+				}
+				
+				animation.update();
+			}
+		}
+	}
+	
+}
+
+
+package rendering.UI;
+
+import java.awt.Color;
+
+import core.Core;
+import rendering.Screen;
+
+public class LoadingScreen implements Runnable{
+
+	private Core core;
+	private ProgressBar progressBar;
+	private Screen screen;
+	// private boolean running;
+	
+	public LoadingScreen(Core core, Screen screen) {
+		this.core = core;
+		this.screen = screen;
+		// this.running = false;
+		this.progressBar = new ProgressBar(core);
+	}
+	
+	public void start() {
+		// this.running = true;
+	}
+	
+	@Override
+	public void run() {
+		while(running) {
+			screen.clear(Color.WHITE);
+			screen.renderText("YO", 50, 50, 24.0f, Color.WHITE);
+			screen.render();
+		}
+	}
+}
+
+
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+
+        int w = core.getSize().width;
+        int h = core.getSize().height;
+        int x = (dim.width-w)/2;
+        int y = (dim.height-h)/2;
+        bar.setLocation(x, y);
