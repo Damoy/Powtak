@@ -1,6 +1,7 @@
 package core.entities.enemies;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import core.world.level.Level;
@@ -17,6 +18,10 @@ public class EnemyChunck {
 	
 	public EnemyChunck(List<Enemy> enemies) {
 		this.enemies = enemies;
+	}
+	
+	public EnemyChunck(Enemy... enemies) {
+		this.enemies = Arrays.asList(enemies);
 	}
 	
 	public void render(Screen s) {

@@ -5,7 +5,7 @@ import core.world.Tile;
 import core.world.level.Level;
 import rendering.Texture;
 
-public abstract class Zombie extends Enemy{
+public abstract class Zombie extends Enemy {
 
 	protected Direction direction;
 	
