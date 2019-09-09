@@ -12,12 +12,8 @@ public class WallChunck {
 
 	private List<Wall> walls;
 
-	private WallChunck() {
+	public WallChunck() {
 		walls = new ArrayList<>();
-	}
-	
-	public static WallChunck empty() {
-		return new WallChunck();
 	}
 	
 	public void add(Wall wall) {

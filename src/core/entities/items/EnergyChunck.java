@@ -1,7 +1,6 @@
 package core.entities.items;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import rendering.Screen;
@@ -10,20 +9,12 @@ public class EnergyChunck {
 
 	private List<Energy> energies;
 
-	private EnergyChunck(List<Energy> energies) {
+	public EnergyChunck(List<Energy> energies) {
 		this.energies = energies;
 	}
 	
-	private EnergyChunck() {
+	public EnergyChunck() {
 		this.energies = new ArrayList<>();
-	}
-	
-	public static EnergyChunck empty() {
-		return new EnergyChunck();
-	}
-	
-	public static EnergyChunck of(Energy... energies) {
-		return new EnergyChunck(Arrays.asList(energies));
 	}
 	
 	public void render(Screen s) {

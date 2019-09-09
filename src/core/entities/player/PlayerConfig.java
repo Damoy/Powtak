@@ -5,21 +5,13 @@ public class PlayerConfig {
 	private int x;
 	private int y;
 	
-	private PlayerConfig() {}
+	public PlayerConfig() {}
 	
-	private PlayerConfig(int x, int y) {
+	public PlayerConfig(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 	
-	public static PlayerConfig empty() {
-		return new PlayerConfig();
-	}
-	
-	public static PlayerConfig of(int x, int y) {
-		return new PlayerConfig(x, y);
-	}
-
 	public int getX() {
 		return x;
 	}

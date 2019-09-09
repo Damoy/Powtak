@@ -365,7 +365,6 @@ public class Player extends Entity{
 				
 				if(tile.isPoweredUp()) {
 					tile.getEnergy().interact(this);
-					tile.getEnergy().forget();
 				}
 			}
 		}

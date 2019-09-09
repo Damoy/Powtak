@@ -8,20 +8,13 @@ import java.util.Map;
 import core.world.Tile;
 import rendering.Screen;
 import utils.Colors;
-import utils.Config;
 
 public class DoorKeyEngine {
 	
 	private Map<Integer, DoorKeyEntry> memory;
-	private boolean[] entryExistence;
 
-	private DoorKeyEngine() {
+	public DoorKeyEngine() {
 		memory = new HashMap<>();
-		entryExistence = new boolean[Config.DOOR_KEY_ENGINE_SIZE];
-	}
-	
-	public static DoorKeyEngine get() {
-		return new DoorKeyEngine();
 	}
 	
 	public int getKeyIdentifier(int rgb) {
@@ -32,10 +25,9 @@ public class DoorKeyEngine {
 		return Colors.green(rgb);
 	}
 	
-	public boolean addEntry(int id, Key key, Door... doors) {
-		if(!entryExistence[id]) {
-			memory.put(id, new DoorKeyEntry(key, doors));
-			entryExistence[id] = true;
+	public boolean addEntry(Key key, Door... doors) {
+		if(!memory.containsKey(key.getId())) {
+			memory.put(key.getId(), new DoorKeyEntry(key, doors));
 			return true;
 		}
 		
@@ -65,11 +57,10 @@ public class DoorKeyEngine {
 	}
 	
 	private boolean interactIfCollision(Tile tile, Key key) {
-		if(entryExistence[key.getId()]) {
-			entryExistence[key.getId()] = false;
-			memory.get(key.getId()).doors.forEach(door -> door.forget());
+		if(memory.containsKey(key.getId())) {
+			memory.get(key.getId()).doors.forEach(door -> door.interact());
 			memory.remove(key.getId());
-			key.forget();
+			key.interact();
 			return true;
 		}
 		

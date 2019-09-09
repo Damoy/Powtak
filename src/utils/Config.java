@@ -31,4 +31,15 @@ public final class Config {
 	public final static Color SPAWN_PLAYER_COLOR = Color.GREEN;
 	public final static Color NEXT_LEVEL_TELEPORT_POINT_COLOR = Color.BLACK;
 	public final static Color SHADOW_COLOR = Color.RED;
+	
+	private final static int BASE_DOOR_INDEX = 0;
+	private final static int BASE_KEY_INDEX = BASE_DOOR_INDEX + DOOR_KEY_ENGINE_SIZE;
+	
+	public static int getDoorId(int index) {
+		return BASE_DOOR_INDEX + index;
+	}
+	
+	public static int getKeyId(int index) {
+		return BASE_KEY_INDEX + index;
+	}
 }

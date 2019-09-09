@@ -4,6 +4,7 @@ import core.entities.Entity;
 import core.world.Tile;
 import rendering.Screen;
 import rendering.Texture;
+import utils.Config;
 
 public class Door extends Entity{
 	
@@ -11,7 +12,7 @@ public class Door extends Entity{
 
 	public Door(Tile tile, int id, int x, int y) {
 		super(tile, x, y, Texture.DOOR);
-		this.id = id;
+		this.id = Config.getDoorId(id);
 	}
 
 	@Override
@@ -28,7 +29,7 @@ public class Door extends Entity{
 		return id;
 	}
 	
-	public void forget() {
+	public void interact() {
 		tile.setDoor(null);
 	}
 	

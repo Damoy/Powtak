@@ -49,10 +49,10 @@ public class LevelLoader {
 		Tile[][] tiles = new Tile[rows][cols];
 		
 		// walls
-		WallChunck wallChunk = WallChunck.empty();
+		WallChunck wallChunk = new WallChunck();
 		
 		// key engine
-		DoorKeyEngine doorKeyEngine = DoorKeyEngine.get();
+		DoorKeyEngine doorKeyEngine = new DoorKeyEngine();
 		Key[] keys = new Key[Config.DOOR_KEY_ENGINE_SIZE];
 		initNullArray(keys);
 		
@@ -61,16 +61,16 @@ public class LevelLoader {
 		initNullArray(doors);
 		
 		// player configuration
-		PlayerConfig playerConfig = PlayerConfig.empty();
+		PlayerConfig playerConfig = new PlayerConfig();
 		
 		// teleportation to new level
 		NextLevelTpPointSource nextLevelTpPointSource = null;
 		
 		// enemies
-		EnemyChunck enemyChunck = EnemyChunck.empty();
+		EnemyChunck enemyChunck = new EnemyChunck();
 		
 		// energies
-		EnergyChunck energyChunck = EnergyChunck.empty();
+		EnergyChunck energyChunck = new EnergyChunck();
 		
 		try {
 			tex = ImageIO.read(new FileInputStream(Utils.levelPath(levelFileName)));
@@ -180,7 +180,7 @@ public class LevelLoader {
 					doorArr[j] = (Door) doors[i].get(j);
 				}
 				
-				doorKeyEngine.addEntry(i, keys[i], doorArr);
+				doorKeyEngine.addEntry(keys[i], doorArr);
 			}
 			
 			return LevelConfig.of(rows, cols, tiles, wallChunk, doorKeyEngine, playerConfig, nextLevelTpPointSource, enemyChunck, energyChunck);

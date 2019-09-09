@@ -11,20 +11,12 @@ public class EnemyChunck {
 	
 	private List<Enemy> enemies;
 	
-	private EnemyChunck() {
+	public EnemyChunck() {
 		enemies = new ArrayList<>();
 	}
 	
-	private EnemyChunck(List<Enemy> enemies) {
+	public EnemyChunck(List<Enemy> enemies) {
 		this.enemies = enemies;
-	}
-	
-	public static EnemyChunck of(List<Enemy> enemies) {
-		return new EnemyChunck(enemies);
-	}
-	
-	public static EnemyChunck empty() {
-		return new EnemyChunck();
 	}
 	
 	public void render(Screen s) {

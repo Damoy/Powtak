@@ -48,13 +48,10 @@ public class Energy extends Item{
 	@Override
 	public void interact(Player player) {
 		player.addPower(value);
-	}
-	
-	public void forget() {
 		chunck.remove(this);
 		tile.setEnergy(null);
 	}
-
+	
 	@Override
 	public int getWidth() {
 		return animation.getCurrentFrame().getWidth();
