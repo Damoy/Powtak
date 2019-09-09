@@ -20,7 +20,8 @@ public final class WorldGenerationWrapper {
 	
 	public static World generatePredefined(Screen screen) {
 		return enableBasicWorldTeleportation(new World(LevelChunck.of(
-				Level.froms(screen, Arrays.asList(LEVEL_1_FILE_NAME, LEVEL_2_FILE_NAME, LEVEL_3_FILE_NAME)))));
+				//Level.froms(screen, Arrays.asList(LEVEL_1_FILE_NAME, LEVEL_2_FILE_NAME, LEVEL_3_FILE_NAME)))));
+		Level.froms(screen, Arrays.asList(LEVEL_3_FILE_NAME)))));
 				// Level.froms(screen,Factory.iList(LEVEL_2_FILE_NAME, LEVEL_1_FILE_NAME, LEVEL_3_FILE_NAME)))));
 	}
 	

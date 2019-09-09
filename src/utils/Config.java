@@ -8,8 +8,8 @@ public final class Config {
 	private Config() {}
 	
 	public final static int UPS = 60;
-	public final static int WIDTH = 272;
-	public final static int HEIGHT = 176;
+	public final static int WIDTH = 240;
+	public final static int HEIGHT = 160;
 	public final static int SCALE = 4;
 	public final static int S_WIDTH = WIDTH * SCALE;
 	public final static int S_HEIGHT = HEIGHT * SCALE;
