@@ -20,11 +20,11 @@ public class LevelConfig {
 	private EnemyChunck enemyChunck;
 	private EnergyChunck energyChunck;
 	
-	private LevelConfig() {
+	public LevelConfig() {
 		
 	}
 	
-	private LevelConfig(int rows, int cols, Tile[][] tiles, WallChunck wallChunk, DoorKeyEngine doorKeyEngine,
+	public LevelConfig(int rows, int cols, Tile[][] tiles, WallChunck wallChunk, DoorKeyEngine doorKeyEngine,
 			PlayerConfig playerConfig, NextLevelTpPointSource nextLevelTpPointSource, EnemyChunck enemyChunck, EnergyChunck energyChunck) {
 		this.rows = rows;
 		this.cols = cols;
@@ -37,15 +37,6 @@ public class LevelConfig {
 		this.energyChunck = energyChunck;
 	}
 	
-	public static LevelConfig empty() {
-		return new LevelConfig();
-	}
-	
-	public static LevelConfig of(int rows, int cols, Tile[][] tiles, WallChunck wallChunk, DoorKeyEngine doorKeyEngine,
-			PlayerConfig playerConfig, NextLevelTpPointSource nextLevelTpPointSource, EnemyChunck enemyChunck, EnergyChunck energyChunck) {
-		return new LevelConfig(rows, cols, tiles, wallChunk, doorKeyEngine, playerConfig, nextLevelTpPointSource, enemyChunck, energyChunck);
-	}
-
 	public int getRows() {
 		return rows;
 	}

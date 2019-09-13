@@ -4,12 +4,14 @@ public class PlayerConfig {
 
 	private int x;
 	private int y;
+	private int energy;
 	
 	public PlayerConfig() {}
 	
-	public PlayerConfig(int x, int y) {
+	public PlayerConfig(int x, int y, int energy) {
 		this.x = x;
 		this.y = y;
+		this.energy = energy;
 	}
 	
 	public int getX() {
@@ -27,4 +29,13 @@ public class PlayerConfig {
 	public void setY(int y) {
 		this.y = y;
 	}
+
+	public int getEnergy() {
+		return energy;
+	}
+
+	public void setEnergy(int energy) {
+		this.energy = energy;
+	}
+	
 }

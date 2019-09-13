@@ -28,8 +28,8 @@ public class ZombieProjectile extends EnemyProjectile{
 		} else {
 			
 			if(level.playerCollidesWith(this)) {
-				level.getPlayer().die();
 				die();
+				level.getPlayer().die();
 				return;
 			}
 			
@@ -49,11 +49,12 @@ public class ZombieProjectile extends EnemyProjectile{
 			
 			animation.update();
 		}
+		
 	}
 	
 	@Override
 	public void render(Screen s) {
-		animation.getCurrentFrame().render(s, x + xOffset, y + yOffset);
+		animation.getCurrentFrame().render(s, x, y);
 	}
 
 }

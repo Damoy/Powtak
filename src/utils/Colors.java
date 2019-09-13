@@ -80,7 +80,7 @@ public class Colors {
 		return r == 255 && g >= 0 && g < 100 && b == 255;
 	}
 	
-	// energy when:
+	// zombie when:
 	// 	- red: 255
 	// 	- green: 0
 	// 	- blue < 4 ; 0 up ; 1 right ; 2 down ; 3 left
@@ -90,6 +90,19 @@ public class Colors {
 		int g = cBundle.g();
 		int b = cBundle.b();
 		return r == 255 && g == 0 && b >= 0 && b <= 3;
+	}
+	
+	// spawn when:
+	// 	- red: 0
+	// 	- green >= 155
+	// 	- blue: 0
+	public static boolean isSpawn(int rgb) {
+		ColorBundle cBundle = extract(rgb);
+		int r = cBundle.r();
+		int g = cBundle.g();
+		int b = cBundle.b();
+		// value of green significates value of initial energy
+		return r == 0 && b == 0 && g >= 155 && g <= 255;
 	}
 	
 	public static class ColorBundle{

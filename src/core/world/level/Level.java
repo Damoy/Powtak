@@ -71,12 +71,17 @@ public class Level {
 	
 	private ParticleEngine buildParticleEngine() {
 		ParticleEngine particleEngine = ParticleEngine.empty();
-		List<Particle> particles = new ArrayList<>();
-		particles.add(new Particle(this, particleEngine, 0, 100, 100, new ParticleMovement(100, 100, 25, 25), new ExplosionAnimation(4, 1.0f)));
-		particles.add(new Particle(this, particleEngine, 0, 100, 100, new ParticleMovement(100, 100, 25, -25), new ExplosionAnimation(4, 1.0f)));
-		particles.add(new Particle(this, particleEngine, 0, 100, 100, new ParticleMovement(100, 100, -25, 25), new ExplosionAnimation(4, 1.0f)));
-		particles.add(new Particle(this, particleEngine, 0, 100, 100, new ParticleMovement(100, 100, -25, -25), new ExplosionAnimation(4, 1.0f)));
+//		List<Particle> particles = new ArrayList<>();
+//		particles.add(new Particle(this, particleEngine, 0, 100, 100, new ParticleMovement(100, 100, 25, 25), new ExplosionAnimation(4, 1.0f)));
+//		particles.add(new Particle(this, particleEngine, 0, 100, 100, new ParticleMovement(100, 100, 25, -25), new ExplosionAnimation(4, 1.0f)));
+//		particles.add(new Particle(this, particleEngine, 0, 100, 100, new ParticleMovement(100, 100, -25, 25), new ExplosionAnimation(4, 1.0f)));
+//		particles.add(new Particle(this, particleEngine, 0, 100, 100, new ParticleMovement(100, 100, -25, -25), new ExplosionAnimation(4, 1.0f)));
+//		particleEngine.addComponent(particles);
 		return particleEngine;
+	}
+	
+	public void reset() {
+		// TODO
 	}
 	
 	public static Level from(Screen screen, LevelConfig config) {
@@ -108,7 +113,6 @@ public class Level {
 	}
 	
 	public void update() {
-		checkPlayer();
 		setEnemyLevel();
 		map.update();
 		wallChunk.update();
@@ -119,16 +123,11 @@ public class Level {
 		particleEngine.update();
 	}
 	
-	private void checkPlayer() {
-		if(player == null) throw new IllegalStateException();
-	}
-	
 	private void setEnemyLevel() {
 		enemyChunck.setEnemiesLevel(this);
 	}
 	
 	public boolean playerCollidesWith(Entity entity) {
-		checkPlayer();
 		return player.collides(entity);
 	}
 	
@@ -166,7 +165,6 @@ public class Level {
 	}
 	
 	public Player getPlayer() {
-		checkPlayer();
 		return player;
 	}
 	

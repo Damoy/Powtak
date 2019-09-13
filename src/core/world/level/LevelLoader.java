@@ -97,10 +97,11 @@ public class LevelLoader {
 						tiles[row][col].setWall(wall);
 					}
 					
-					if(rgb == Config.SPAWN_PLAYER_COLOR.getRGB()) {
+					if(Colors.isSpawn(rgb)) {
 						tiles[row][col] = new GroundTile(x, y);
 						playerConfig.setX(x);
 						playerConfig.setY(y);
+						playerConfig.setEnergy(Colors.green(rgb) - 155);
 					}
 					
 					if(rgb == Config.NEXT_LEVEL_TELEPORT_POINT_COLOR.getRGB()) {
@@ -183,7 +184,7 @@ public class LevelLoader {
 				doorKeyEngine.addEntry(keys[i], doorArr);
 			}
 			
-			return LevelConfig.of(rows, cols, tiles, wallChunk, doorKeyEngine, playerConfig, nextLevelTpPointSource, enemyChunck, energyChunck);
+			return new LevelConfig(rows, cols, tiles, wallChunk, doorKeyEngine, playerConfig, nextLevelTpPointSource, enemyChunck, energyChunck);
 			
 		} catch (IOException e) {
 			e.printStackTrace();

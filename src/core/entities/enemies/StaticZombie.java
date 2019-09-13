@@ -11,7 +11,7 @@ import rendering.Screen;
 import rendering.Texture;
 import rendering.animation.Animation;
 import rendering.animation.BasicAnimationOnCall;
-import rendering.animation.ExplosionAnimation;
+import rendering.animation.StaticAnimation;
 import utils.Config;
 import utils.Utils;
 import utils.TickCounter;
@@ -28,11 +28,13 @@ public class StaticZombie extends Zombie{
 	public StaticZombie(Tile tile, EnemyChunck enemyChunck, int x, int y, float scale, Direction initialDirection) {
 		super(null, tile, enemyChunck, x, y, Texture.STATIC_ZOMBIE_SPRITESHEET, initialDirection);
 		this.scale = scale;
-		this.shootSpeed = Utils.irand(Config.UPS >> 2, Config.UPS);
+		this.shootSpeed = Utils.irand(Config.UPS, Config.UPS * 2);
 		this.ticksCap = shootSpeed;
 		this.projectiles = new ArrayList<>();
 		this.shootCounter = new TickCounter(shootSpeed);
 		this.animation = generateAnimation();
+		this.x += getRenderingXOffset();
+		this.y += getRenderingYOffset();
 	}
 	
 	private Animation generateAnimation() {
@@ -67,7 +69,8 @@ public class StaticZombie extends Zombie{
 	private int getRenderingYOffset() {
 		int ts = Config.TILE_SIZE;
 		int h = getHeight();
-		return (ts - h) >> 1;
+		int offset = ((ts - h) >> 1);
+		return offset;
 	}
 	
 	@Override
@@ -82,7 +85,7 @@ public class StaticZombie extends Zombie{
 
 	@Override
 	public void render(Screen s) {
-		animation.render(s, x + getRenderingXOffset(), y + getRenderingYOffset());
+		animation.render(s, x, y);
 		renderProjectiles(s);
 	}
 	
@@ -92,15 +95,10 @@ public class StaticZombie extends Zombie{
 
 	@Override
 	public void update() {
-		checkLevelExists();
 		animation.update();
 		updateProjectiles();
 		removeDeadProjectiles();
 		shoot();
-	}
-	
-	private void checkLevelExists() {
-		if(level == null) throw new IllegalStateException("Level should not be null !");
 	}
 	
 	private void shoot() {
@@ -112,11 +110,6 @@ public class StaticZombie extends Zombie{
 	}
 	
 	private void updateProjectiles() {
-		int xoff = getRenderingXOffset();
-		int yoff = getRenderingYOffset();
-		
-		projectiles.forEach(projectile -> projectile.addXOffset(xoff));
-		projectiles.forEach(projectile -> projectile.addYOffset(yoff));
 		projectiles.forEach(projectile -> projectile.update());
 	}
 	
@@ -124,8 +117,35 @@ public class StaticZombie extends Zombie{
 		projectiles.removeIf(projectile -> projectile.isDead());
 	}
 	
+	private final static Animation ZOMBIE_ANIMATION = new StaticAnimation(Texture.RED_PROJECTILE, 0, 0, 2, 2, 1);
+	
 	private void generateProjectile() {
-		projectiles.add(new ZombieProjectile(getLevel(), direction, new ExplosionAnimation(8, 1.0f), x, y));
+		int ts = Config.TILE_SIZE;
+		int w = ZOMBIE_ANIMATION.getCurrentFrame().getWidth();
+		int h = ZOMBIE_ANIMATION.getCurrentFrame().getHeight();
+		int projX = 0;
+		int projY = 0;
+		
+		switch(direction) {
+		case UP:
+			projX = x + ((ts - w) >> 1);
+			projY = (y + ((ts - h) >> 2)) - 1;
+			break;
+		case DOWN:
+			projX = x + ((ts - w) >> 1);
+			projY = (y + ((ts - h))) - 1;
+			break;
+		case LEFT:
+			projX = x - w;
+			projY = (y + ((ts - h) >> 1)) - 1;
+			break;
+		case RIGHT:
+			projX = x + ((ts - w) >> 1);
+			projY = (y + ((ts - h) >> 1)) - 1;
+			break;
+		default:
+		}
+		projectiles.add(new ZombieProjectile(getLevel(), direction, ZOMBIE_ANIMATION, projX, projY));
 	}
 
 }

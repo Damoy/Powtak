@@ -60,16 +60,16 @@ public class Player extends Entity{
 	
 	public Player(Level level, int x, int y) {
 		super(null, x, y, Texture.PLAYER_SPRITESHEET);
-		this.changeLevel(level);
 		this.map = level.getMap();
 		this.animation = generateAnimation();
 		this.direction = Direction.NULL;
 		this.projectiles = new ArrayList<>();
 		this.teleporting = false;
 		this.tpCounter = null;
-		this.energyAmount = 5;
+		this.energyAmount = 0;
 		this.startX = x;
 		this.startY = y;
+		this.changeLevel(level);
 	}
 	
 	private DirectedAnimationOnTick generateAnimation() {
@@ -118,8 +118,9 @@ public class Player extends Entity{
 		this.sy = 0;
 		this.ldx = 0;
 		this.ldy = 0;
-		this.x = startX;
-		this.y = startY;
+		this.x = 0;
+		this.y = 0;
+		updateAccordingToLevel();
 		removeProjectiles();
 	}
 	
@@ -136,11 +137,15 @@ public class Player extends Entity{
 		this.level = level;
 		this.level.setPlayer(this);
 		this.map = this.level.getMap();
-		reset();
-		setX(level.getPlayerConfig().getX());
-		setY(level.getPlayerConfig().getY());
-		startX = x;
-		startY = y;
+		reset(); // TODO DIRECTION
+	}
+	
+	private void updateAccordingToLevel() {
+		this.startX = level.getPlayerConfig().getX();
+		this.startY = level.getPlayerConfig().getY();
+		this.energyAmount = level.getPlayerConfig().getEnergy();
+		setX(startX);
+		setY(startY);
 	}
 
 	@Override
@@ -208,9 +213,16 @@ public class Player extends Entity{
 		}
 		
 		if(Keys.isPressed(Keys.SPACE)) {
-			projectiles.add(new PlayerStaticProjectile(getLevel(), animation.getCurrentDirection(),
-							getProjX(), getProjY()));
+			energyAmount -= 2;
+			if(checkEnergy()) {
+				projectiles.add(new PlayerStaticProjectile(getLevel(), animation.getCurrentDirection(),
+						getProjX(), getProjY()));
+			}
 			Keys.deactivate(Keys.SPACE);
+		}
+		
+		if(Keys.isPressed(Keys.ENTER)) {
+			level.reset();
 		}
 		
 		if(Keys.isPressed(Keys.ESCAPE)) {
@@ -288,6 +300,10 @@ public class Player extends Entity{
 			}
 			
 			blocked = !(move2(dx, 0) && move2(0, dy));
+			if(!blocked) {
+				--energyAmount;
+				checkEnergy();
+			}
 		}
 		else {
 			// not moving
@@ -315,6 +331,14 @@ public class Player extends Entity{
 			if(!blocked) moving = true;
 			else resetMovement();
 		}
+	}
+	
+	private boolean checkEnergy() {
+		if(energyAmount <= 0) {
+			die();
+			return false;
+		}
+		return true;
 	}
 	
 	private boolean move2(int dx, int dy) {

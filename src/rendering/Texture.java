@@ -15,23 +15,22 @@ import utils.Utils;
 
 public class Texture {
 	
-	public final static Texture GROUND_TILE = getSubTexture(Utils.texturePath("ground_tile.png"));
-	public final static Texture GROUND_TILE2 = getSubTexture(Utils.texturePath("ground_tile2.png"));
+	public final static Texture GROUND_TILE = getSubTexture(Utils.texturePath("groundTile.png"));
+	public final static Texture GROUND_TILE2 = getSubTexture(Utils.texturePath("groundTile2.png"));
 	public final static Texture STANDARD_WALL = getSubTexture(Utils.texturePath("swall.png"));
 	public final static Texture DESTRUCTIBLE_WALL = getSubTexture(Utils.texturePath("dwall.png"));
-	public final static Texture PLAYER = getSubTexture(Utils.texturePath("player.png")).colorize(Color.CYAN, 0.5f);
 	public final static Texture KEY = getSubTexture(Utils.texturePath("key.png"));
 	public final static Texture DOOR = getSubTexture(Utils.texturePath("door.png"));
-	public final static Texture RED_PROJECTILE = getSubTexture(Utils.texturePath("proj1.png"), 0, 0, 4, 4);
-	public final static Texture TELEPORT_POINT = getSubTexture(Utils.texturePath("teleportPoint2.png"));
 	public final static Texture SHADOW = getSubTexture(Utils.texturePath("shadow.png"));
-	public final static Texture GRAY_PROJECTILE = getSubTexture(Utils.texturePath("grayProj.png"), 0, 0, 1, 1);
+	public final static Texture GRAY_PROJECTILE = getSubTexture(Utils.texturePath("grayProj.png"), 0, 0, 2, 2);
+	public final static Texture RED_PROJECTILE = getSubTexture(Utils.texturePath("redProj.png"), 0, 0, 2, 2);
 	
 	// Sprite-sheets
-	public final static Texture PLAYER_SPRITESHEET = getSubTexture(Utils.texturePath("playeranim2.png"), 0, 0, 155, 13);
-	public final static Texture PROJECTILE_SPRITESHEET = getSubTexture(Utils.texturePath("particuleAnimTest.png"), 0, 0, 9, 3);
-	public final static Texture ENERGY_SPRITESHEET = getSubTexture(Utils.texturePath("energySpritesheet3.png"), 0, 0, 31, 10);
-	public final static Texture STATIC_ZOMBIE_SPRITESHEET = getSubTexture(Utils.texturePath("staticZombieSpritesheet.png"), 0, 0, 87, 13);
+	public final static Texture PLAYER_SPRITESHEET = getSubTexture(Utils.texturePath("player_spritesheet.png"), 0, 0, 155, 13);
+	public final static Texture PARTICULE_SPRITESHEET = getSubTexture(Utils.texturePath("particuleAnimTest.png"), 0, 0, 9, 3);
+	public final static Texture ENERGY_SPRITESHEET = getSubTexture(Utils.texturePath("energy_spritesheet.png"), 0, 0, 31, 10);
+	public final static Texture STATIC_ZOMBIE_SPRITESHEET = getSubTexture(Utils.texturePath("staticZombie_spritesheet.png"), 0, 0, 87, 13);
+	public final static Texture TELEPORT_POINT_SPRITESHEET = getSubTexture(Utils.texturePath("portal_spritesheet.png"), 0, 0, 64, 16);
 
 	private int width;
 	private int height;

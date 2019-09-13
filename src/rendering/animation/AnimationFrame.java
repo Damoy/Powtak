@@ -14,6 +14,7 @@ public class AnimationFrame {
 	private int startY;
 	private int width;
 	private int height;
+	private float scale;
 	
 	public AnimationFrame(Texture frameSheet, int startX, int startY, int width, int height, float scale) {
 		this.frameSheet = frameSheet;
@@ -21,7 +22,11 @@ public class AnimationFrame {
 		this.startY = startY;
 		this.width = width;
 		this.height = height;
-		this.frameData = Texture.of(width, height, frameSheet.get().getSubimage(startX, startY, width, height), null).scale(scale, scale);
+		this.frameData = Texture.of(width, height, frameSheet.get().getSubimage(startX, startY, width, height), null);
+		this.scale = scale;
+		if(scale != 0) {
+			this.frameData = this.frameData.scale(scale, scale);
+		}
 	}
 	
 	public static List<AnimationFrame> getFromData(Texture spritesheet, float scale, int... framesData){
@@ -58,6 +63,10 @@ public class AnimationFrame {
 
 	public int getHeight() {
 		return height;
+	}
+
+	public float getScale() {
+		return scale;
 	}
 	
 }
