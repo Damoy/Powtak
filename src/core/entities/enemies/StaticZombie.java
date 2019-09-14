@@ -117,22 +117,22 @@ public class StaticZombie extends Zombie{
 		projectiles.removeIf(projectile -> projectile.isDead());
 	}
 	
-	private final static Animation ZOMBIE_ANIMATION = new StaticAnimation(Texture.RED_PROJECTILE, 0, 0, 2, 2, 1);
+	private final static Animation ZOMBIE_PROJECTILE_ANIMATION = new StaticAnimation(Texture.RED_PROJECTILE, 0, 0, 2, 2, 1);
 	
 	private void generateProjectile() {
 		int ts = Config.TILE_SIZE;
-		int w = ZOMBIE_ANIMATION.getCurrentFrame().getWidth();
-		int h = ZOMBIE_ANIMATION.getCurrentFrame().getHeight();
+		int w = ZOMBIE_PROJECTILE_ANIMATION.getCurrentFrame().getWidth();
+		int h = ZOMBIE_PROJECTILE_ANIMATION.getCurrentFrame().getHeight();
 		int projX = 0;
 		int projY = 0;
 		
 		switch(direction) {
 		case UP:
-			projX = x + ((ts - w) >> 1);
-			projY = (y + ((ts - h) >> 2)) - 1;
+			projX = x + (ts / 3);
+			projY = y - w;
 			break;
 		case DOWN:
-			projX = x + ((ts - w) >> 1);
+			projX = x + (ts / 3);
 			projY = (y + ((ts - h))) - 1;
 			break;
 		case LEFT:
@@ -144,8 +144,9 @@ public class StaticZombie extends Zombie{
 			projY = (y + ((ts - h) >> 1)) - 1;
 			break;
 		default:
+			throw new IllegalStateException("Badly formed projectile.");
 		}
-		projectiles.add(new ZombieProjectile(getLevel(), direction, ZOMBIE_ANIMATION, projX, projY));
+		projectiles.add(new ZombieProjectile(getLevel(), direction, ZOMBIE_PROJECTILE_ANIMATION, projX, projY));
 	}
 
 }
