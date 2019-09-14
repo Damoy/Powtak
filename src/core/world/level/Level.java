@@ -175,7 +175,7 @@ public class Level {
 	public void setNextLevelTpPoint(NextLevelTpPoint nextLevelTpPoint) {
 		this.nextLevelTpPoint = nextLevelTpPoint;
 		map.setNextLevelTpPoint(nextLevelTpPoint);
-		utils.Logger.logn("Teleport dest x: " + nextLevelTpPoint.getDestX() + ", y: " + nextLevelTpPoint.getDestY());
+		utils.Logger.info("Teleport dest x: " + nextLevelTpPoint.getDestX() + ", y: " + nextLevelTpPoint.getDestY());
 	}
 
 	public NextLevelTpPointSource getNextLevelTpPointSource() {

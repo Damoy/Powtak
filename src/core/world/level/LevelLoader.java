@@ -131,7 +131,7 @@ public class LevelLoader {
 						}
 						
 						enemyChunck.add(new StaticZombie(tiles[row][col], enemyChunck, x, y, 1.0f, zomDir));
-						Logger.logn("Zombie");
+						Logger.info("Zombie");
 					}
 					
 					if(Colors.isDoor(rgb)) {
@@ -148,7 +148,7 @@ public class LevelLoader {
 						Door door = new Door(tiles[row][col], doorIdentifier, x, y);
 						identifiedDoors.add(door);
 						tiles[row][col].setDoor(door);
-						Logger.logn("Door");
+						Logger.info("Door");
 					}
 					
 					if(Colors.isKey(rgb)) {
@@ -160,14 +160,14 @@ public class LevelLoader {
 						
 						keys[keyIdentifier] = new Key(tiles[row][col], keyIdentifier, x, y);
 						tiles[row][col].setKey(keys[keyIdentifier] );
-						Logger.logn("Key");
+						Logger.info("Key");
 					}
 					
 					if(Colors.isEnergy(rgb)) {
 						tiles[row][col] = new GroundTile(x, y);
 						int energyAmount = Energy.retrievePower(rgb);
 						energyChunck.add(new Energy(tiles[row][col], x, y, energyAmount, energyChunck));
-						Logger.logn("Energy");
+						Logger.info("Energy");
 					}
 				}
 			}

@@ -124,8 +124,8 @@ public class Player extends Entity{
 		this.ldy = 0;
 		this.x = 0;
 		this.y = 0;
-		updateAccordingToLevel();
 		removeProjectiles();
+		updateAccordingToLevel();
 	}
 	
 	private void updateAccordingToLevel() {
