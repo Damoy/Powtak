@@ -110,6 +110,10 @@ public class Player extends Entity{
 		return animation;
 	}
 	
+	public void die() {
+		reset();
+	}
+	
 	public void reset() {
 		this.direction = Direction.NULL;
 		this.moving = false;
@@ -124,8 +128,12 @@ public class Player extends Entity{
 		removeProjectiles();
 	}
 	
-	public void die() {
-		reset();
+	private void updateAccordingToLevel() {
+		this.startX = level.getPlayerConfig().getX();
+		this.startY = level.getPlayerConfig().getY();
+		this.energyAmount = level.getPlayerConfig().getEnergy();
+		setX(startX);
+		setY(startY);
 	}
 	
 	private void removeProjectiles() {
@@ -140,14 +148,6 @@ public class Player extends Entity{
 		reset(); // TODO DIRECTION
 	}
 	
-	private void updateAccordingToLevel() {
-		this.startX = level.getPlayerConfig().getX();
-		this.startY = level.getPlayerConfig().getY();
-		this.energyAmount = level.getPlayerConfig().getEnergy();
-		setX(startX);
-		setY(startY);
-	}
-
 	@Override
 	public void render(Screen s) {
 		renderProjectiles(s);
@@ -160,9 +160,7 @@ public class Player extends Entity{
 	}
 	
 	private void renderEnergy(Screen s) {
-		Point pos = ScreenPositionCalculator.getScreenUIPositionStart();
-		s.renderText(energyAmount, pos.x, pos.y,
-				TextRenderingConfig.PLAYER_ENERGY_FONT_SIZE, TextRenderingConfig.PLAYER_ENERGY_FONT_COLOR);
+		s.renderUIText(energyAmount, TextRenderingConfig.PLAYER_ENERGY_FONT_SIZE, TextRenderingConfig.PLAYER_ENERGY_FONT_COLOR);
 	}
 	
 	private void renderAnimation(Screen s) {

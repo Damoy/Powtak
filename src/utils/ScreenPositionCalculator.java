@@ -26,4 +26,17 @@ public class ScreenPositionCalculator {
 		return new Point(Config.WIDTH >> 1, Config.HEIGHT >> 1);
 	}
 	
+	public static Point computePositionAtUIStart(int content, float fontSize, int tileOffset) {
+		int ifontSize = (int) fontSize;
+		int digitsContent = Utils.getDigitsLen(content);
+		int digitsFontSize = Utils.getDigitsLen(ifontSize);
+		
+		Point pos = getScreenUIPositionStart();
+		int x = pos.x + tileOffset * Config.TILE_SIZE;
+		int xoffset = (3 - digitsFontSize);
+		x += (digitsContent >= 2) ? -1: (4 - digitsContent);
+		x += xoffset;
+		return new Point(x, pos.y);
+	}
+	
 }

@@ -13,8 +13,8 @@ public class TextRenderingConfig {
 
 	public static Font GAME_RENDERING_FONT;
 	public static final Font RAW_RENDERING_FONT = new Font("Tahoma", Font.PLAIN, 24);
-	public static final Color PLAYER_ENERGY_FONT_COLOR = new Color(10, 255, 10);
-	public static final float PLAYER_ENERGY_FONT_SIZE = 18.0f;
+	public static final Color PLAYER_ENERGY_FONT_COLOR = new Color(40, 220, 40);
+	public static final float PLAYER_ENERGY_FONT_SIZE = 12.0f;
 	
 	static {
 		try {

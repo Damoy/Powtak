@@ -25,6 +25,10 @@ public final class Utils {
 		return seed.nextInt((max - min) + 1) + min;
 	}
 	
+	public static int getDigitsLen(int x) {
+		return (int) (Math.log10(x) + 1);
+	}
+	
 	public static String levelPath(String levelFileName) {
 		return "./resources/levels/" + levelFileName;
 	}

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 import core.Core;
@@ -11,6 +12,7 @@ import core.world.light.LightEngine;
 import core.world.light.LightHint;
 import rendering.config.TextRenderingConfig;
 import utils.Config;
+import utils.ScreenPositionCalculator;
 import utils.TickCounter;
 
 public class Screen {
@@ -62,6 +64,11 @@ public class Screen {
 	
 	public void renderText(int v, int x, int y, float fontSize, Color fontColor) {
 		renderText(Integer.toString(v), x, y, fontSize, fontColor);
+	}
+	
+	public void renderUIText(int content, float fontSize, Color fontColor) {
+		Point textPos = ScreenPositionCalculator.computePositionAtUIStart(content, fontSize, 0);
+		renderText(content, textPos.x, textPos.y, fontSize, fontColor);
 	}
 	
 	public static Screen of(Core core, BufferedImage data) {
