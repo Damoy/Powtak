@@ -2,9 +2,9 @@ package utils;
 
 import java.time.LocalDateTime;
 
-public final class Logger {
+public final class Log {
 	
-	private Logger() {}
+	private Log() {}
 	
 	public static <T> void info(T o) {
 		System.out.println(LocalDateTime.now() + " [INFO] " + o.toString());

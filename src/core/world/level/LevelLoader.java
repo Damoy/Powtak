@@ -26,7 +26,7 @@ import core.world.items.Key;
 import core.world.teleportation.NextLevelTpPointSource;
 import utils.Colors;
 import utils.Config;
-import utils.Logger;
+import utils.Log;
 import utils.Utils;
 
 public class LevelLoader {
@@ -102,6 +102,25 @@ public class LevelLoader {
 						playerConfig.setX(x);
 						playerConfig.setY(y);
 						playerConfig.setEnergy(Colors.green(rgb) - 155);
+						Direction playerDirection = Direction.NULL;
+						switch(Colors.red(rgb)) {
+						case 0:
+							playerDirection = Direction.DOWN;
+							break;
+						case 1:
+							playerDirection = Direction.LEFT;
+							break;
+						case 2:
+							playerDirection = Direction.UP;
+							break;
+						case 3:
+							playerDirection = Direction.RIGHT;
+							break;
+						default:
+							throw new IllegalStateException();
+						}
+						
+						playerConfig.setDirection(playerDirection);
 					}
 					
 					if(rgb == Config.NEXT_LEVEL_TELEPORT_POINT_COLOR.getRGB()) {
@@ -131,7 +150,7 @@ public class LevelLoader {
 						}
 						
 						enemyChunck.add(new StaticZombie(tiles[row][col], enemyChunck, x, y, 1.0f, zomDir));
-						Logger.info("Zombie");
+						Log.info("Zombie");
 					}
 					
 					if(Colors.isDoor(rgb)) {
@@ -148,7 +167,7 @@ public class LevelLoader {
 						Door door = new Door(tiles[row][col], doorIdentifier, x, y);
 						identifiedDoors.add(door);
 						tiles[row][col].setDoor(door);
-						Logger.info("Door");
+						Log.info("Door");
 					}
 					
 					if(Colors.isKey(rgb)) {
@@ -160,14 +179,14 @@ public class LevelLoader {
 						
 						keys[keyIdentifier] = new Key(tiles[row][col], keyIdentifier, x, y);
 						tiles[row][col].setKey(keys[keyIdentifier] );
-						Logger.info("Key");
+						Log.info("Key");
 					}
 					
 					if(Colors.isEnergy(rgb)) {
 						tiles[row][col] = new GroundTile(x, y);
 						int energyAmount = Energy.retrievePower(rgb);
 						energyChunck.add(new Energy(tiles[row][col], x, y, energyAmount, energyChunck));
-						Logger.info("Energy");
+						Log.info("Energy");
 					}
 				}
 			}

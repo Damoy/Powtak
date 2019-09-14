@@ -19,6 +19,7 @@ import rendering.animation.DirectedAnimation;
 import rendering.animation.DirectedAnimationOnTick;
 import rendering.config.TextRenderingConfig;
 import utils.Config;
+import utils.Log;
 import utils.Utils;
 import utils.ScreenPositionCalculator;
 import utils.TickCounter;
@@ -115,25 +116,20 @@ public class Player extends Entity{
 	}
 	
 	public void reset() {
-		this.direction = Direction.NULL;
+		removeProjectiles();
 		this.moving = false;
 		this.blocked = false;
 		this.sx = 0;
 		this.sy = 0;
 		this.ldx = 0;
 		this.ldy = 0;
-		this.x = 0;
-		this.y = 0;
-		removeProjectiles();
-		updateAccordingToLevel();
-	}
-	
-	private void updateAccordingToLevel() {
 		this.startX = level.getPlayerConfig().getX();
 		this.startY = level.getPlayerConfig().getY();
 		this.energyAmount = level.getPlayerConfig().getEnergy();
+		setDirection(level.getPlayerConfig().getDirection());
 		setX(startX);
 		setY(startY);
+		Log.info("startx: " + startX + ",startY: " + startY + ",x: " + x + ",y: " + y);
 	}
 	
 	private void removeProjectiles() {
@@ -145,7 +141,7 @@ public class Player extends Entity{
 		this.level = level;
 		this.level.setPlayer(this);
 		this.map = this.level.getMap();
-		reset(); // TODO DIRECTION
+		reset();
 	}
 	
 	@Override
@@ -300,7 +296,9 @@ public class Player extends Entity{
 			blocked = !(move2(dx, 0) && move2(0, dy));
 			if(!blocked) {
 				--energyAmount;
-				checkEnergy();
+				if(!checkEnergy()) {
+					return;
+				}
 			}
 		}
 		else {

@@ -102,7 +102,7 @@ public class Colors {
 		int g = cBundle.g();
 		int b = cBundle.b();
 		// value of green significates value of initial energy
-		return r == 0 && b == 0 && g >= 155 && g <= 255;
+		return r >= 0 && r <= 3 && b == 0 && g >= 155 && g <= 255;
 	}
 	
 	public static class ColorBundle{
