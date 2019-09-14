@@ -67,7 +67,7 @@ public class Core extends JPanel implements Runnable, KeyListener{
 		long lastTimer1 = System.currentTimeMillis();
 		requestFocus();
 		
-		loadingScreen.start();
+		// loadingScreen.start();
 		
 		while (running) {
 			long now = System.nanoTime();
