@@ -11,15 +11,11 @@ public class LevelChunck {
 	private Player player;
 	private int ptr;
 	
-	private LevelChunck(List<Level> levels) {
+	public LevelChunck(List<Level> levels) {
 		this.levels = levels;
 		this.ptr = 0;
 		this.levels.forEach(level -> level.setLevelChunck(this));
 		this.player = new Player(levels.get(0), 0, 0);
-	}
-	
-	public static LevelChunck of(List<Level> levels) {
-		return new LevelChunck(levels);
 	}
 	
 	public void render(Screen s) {
