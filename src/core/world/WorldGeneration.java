@@ -26,19 +26,16 @@ public final class WorldGeneration {
 	
 	public static World generatePredefined(Screen screen) {
 		return enablePortals(new World(new LevelChunck(
-				Level.froms(screen, Arrays.asList(LEVEL_1_FILE_NAME, LEVEL_2_FILE_NAME, LEVEL_3_FILE_NAME)))));
+				Level.froms(screen, Arrays.asList(
+						LEVEL_4_FILE_NAME)))));
 	}
 	
-	private static World enablePortals(World world) {
+	private static World enablePortals(World world, String... levelFileNames) {
 		int lvlCount = world.getLevelCount();
 		
-		if(lvlCount > 1) {
-			if(lvlCount == 2) {
-				world.addNextLevelTpPoint(0, 1);
-			} else {
-				for(int i = 0; i < lvlCount - 1; ++i) {
-					world.addNextLevelTpPoint(i, i + 1);
-				}
+		if (lvlCount > 1) {
+			for (int i = 0; i < lvlCount - 1; ++i) {
+				world.addNextLevelTpPoint(levelFileNames[i], levelFileNames[i + 1]);
 			}
 		}
 		

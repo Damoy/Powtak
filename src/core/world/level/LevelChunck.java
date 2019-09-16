@@ -1,21 +1,37 @@
 package core.world.level;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import core.entities.player.Player;
 import rendering.Screen;
 
 public class LevelChunck {
 
-	private List<Level> levels;
+	private Map<String, Level> levels;
 	private Player player;
-	private int ptr;
+	private String idCurrent;
+	private int idCurrentPtr;
 	
 	public LevelChunck(List<Level> levels) {
-		this.levels = levels;
-		this.ptr = 0;
-		this.levels.forEach(level -> level.setLevelChunck(this));
+		this.levels = new HashMap<>();
+		this.idCurrentPtr = 0;
+		this.idCurrent = levels.get(idCurrentPtr).getId();
+		
+		levels.forEach(level -> {
+			this.levels.put(level.getId(), level);
+			level.setLevelChunck(this);	
+		});
+		
 		this.player = new Player(levels.get(0));
+	}
+	
+	public void reload(Screen s, String levelId) {
+		Level reloadedLevel = Level.from(s, LevelLoader.get().load(levelId));
+		reloadedLevel.setLevelChunck(this);
+		levels.put(levelId, reloadedLevel);
+		player.setLevel(reloadedLevel);
 	}
 	
 	public void render(Screen s) {
@@ -29,19 +45,21 @@ public class LevelChunck {
 	}
 	
 	public Level getCurrent() {
-		return levels.get(ptr);
+		return levels.get(idCurrent);
 	}
 	
-	public Level get(int index) {
-		return levels.get(index);
+	public Level get(String id) {
+		return levels.get(id);
 	}
 	
 	public void grow() {
-		++ptr;
+		++idCurrentPtr;
+		idCurrent = (String) this.levels.keySet().toArray()[idCurrentPtr];
 	}
 	
 	public void decrease() {
-		--ptr;
+		--idCurrentPtr;
+		idCurrent = (String) this.levels.keySet().toArray()[idCurrentPtr];
 	}
 	
 	public int count() {

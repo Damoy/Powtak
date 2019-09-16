@@ -22,9 +22,9 @@ public class World {
 		this.levelChunck.update();
 	}
 	
-	public void addNextLevelTpPoint(int lvlSrcIndex, int lvlDestIndex) {
-		Level levelSrc = levelChunck.get(lvlSrcIndex);
-		Level levelDest = levelChunck.get(lvlDestIndex);
+	public void addNextLevelTpPoint(String lvlSrcId, String lvlDestId) {
+		Level levelSrc = levelChunck.get(lvlSrcId);
+		Level levelDest = levelChunck.get(lvlDestId);
 		
 		if(levelSrc == null || levelDest == null) throw new IllegalStateException();
 		

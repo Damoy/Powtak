@@ -203,7 +203,7 @@ public class LevelLoader {
 				doorKeyEngine.addEntry(keys[i], doorArr);
 			}
 			
-			return new LevelConfig(rows, cols, tiles, wallChunk, doorKeyEngine, playerConfig, nextLevelTpPointSource, enemyChunck, energyChunck);
+			return new LevelConfig(levelFileName, rows, cols, tiles, wallChunk, doorKeyEngine, playerConfig, nextLevelTpPointSource, enemyChunck, energyChunck);
 			
 		} catch (IOException e) {
 			e.printStackTrace();

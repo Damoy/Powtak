@@ -122,7 +122,7 @@ public class Player extends Entity{
 	}
 	
 	public void die() {
-		reset();
+		level.reset();
 	}
 	
 	private DirectedAnimationOnTick generateAnimation() {

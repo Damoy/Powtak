@@ -20,15 +20,13 @@ import core.world.light.LightSpot;
 import core.world.teleportation.NextLevelTpPoint;
 import core.world.teleportation.NextLevelTpPointSource;
 import rendering.Screen;
-import rendering.animation.ExplosionAnimation;
-import rendering.particles.Particle;
 import rendering.particles.ParticleEngine;
-import rendering.particles.ParticleMovement;
 import utils.AABB;
 import utils.Config;
 
 public class Level {
 
+	private String id;
 	private LevelChunck levelChunck;
 	private Screen s;
 	private Map map;
@@ -43,8 +41,9 @@ public class Level {
 	private EnemyChunck enemyChunck;
 	private EnergyChunck energyChunck;
 	
-	private Level(Screen screen, Map map, WallChunck wallChunk, DoorKeyEngine doorKeyEngine,
+	private Level(String id, Screen screen, Map map, WallChunck wallChunk, DoorKeyEngine doorKeyEngine,
 			PlayerConfig playerConfig, NextLevelTpPointSource nextLevelTpPointSource, EnemyChunck enemyChunck, EnergyChunck energyChunck) {
+		this.id = id;
 		this.levelChunck = null;
 		this.s = screen;
 		this.map = map;
@@ -80,12 +79,14 @@ public class Level {
 		return particleEngine;
 	}
 	
+	private boolean shouldReset = false;
+	
 	public void reset() {
-		// TODO
+		shouldReset = true;
 	}
 	
 	public static Level from(Screen screen, LevelConfig config) {
-		return new Level(screen, new Map(config.getRows(), config.getCols(), config.getTiles()),
+		return new Level(config.getId(), screen, new Map(config.getRows(), config.getCols(), config.getTiles()),
 				config.getWallChunk(), config.getDoorKeyEngine(), config.getPlayerConfig(),
 				config.getNextLevelTpPointSource(), config.getEnemyChunck(), config.getEnergyChunck());
 	}
@@ -121,6 +122,14 @@ public class Level {
 		energyChunck.update();
 		updateNextLevelTpPoint();
 		// particleEngine.update();
+		
+		if(shouldReset) {
+//			map.reset();
+//			enemyChunck.reset();
+//			player.reset();
+			shouldReset = false;
+			levelChunck.reload(s, id);
+		}
 	}
 	
 	private void setEnemyLevel() {
@@ -188,6 +197,10 @@ public class Level {
 
 	public void setLevelChunck(LevelChunck levelChunck) {
 		this.levelChunck = levelChunck;
+	}
+
+	public String getId() {
+		return id;
 	}
 
 	@Override

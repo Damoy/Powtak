@@ -10,6 +10,7 @@ import core.world.teleportation.NextLevelTpPointSource;
 
 public class LevelConfig {
 
+	private String id;
 	private int rows;
 	private int cols;
 	private Tile[][] tiles;
@@ -24,8 +25,9 @@ public class LevelConfig {
 		
 	}
 	
-	public LevelConfig(int rows, int cols, Tile[][] tiles, WallChunck wallChunk, DoorKeyEngine doorKeyEngine,
+	public LevelConfig(String id, int rows, int cols, Tile[][] tiles, WallChunck wallChunk, DoorKeyEngine doorKeyEngine,
 			PlayerConfig playerConfig, NextLevelTpPointSource nextLevelTpPointSource, EnemyChunck enemyChunck, EnergyChunck energyChunck) {
+		this.id = id;
 		this.rows = rows;
 		this.cols = cols;
 		this.tiles = tiles;
@@ -37,6 +39,14 @@ public class LevelConfig {
 		this.energyChunck = energyChunck;
 	}
 	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	public int getRows() {
 		return rows;
 	}
