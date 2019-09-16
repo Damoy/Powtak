@@ -15,7 +15,7 @@ public class LevelChunck {
 		this.levels = levels;
 		this.ptr = 0;
 		this.levels.forEach(level -> level.setLevelChunck(this));
-		this.player = new Player(levels.get(0), 0, 0);
+		this.player = new Player(levels.get(0));
 	}
 	
 	public void render(Screen s) {

@@ -1,6 +1,5 @@
 package core.entities.player;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,9 +18,7 @@ import rendering.animation.DirectedAnimation;
 import rendering.animation.DirectedAnimationOnTick;
 import rendering.config.TextRenderingConfig;
 import utils.Config;
-import utils.Log;
 import utils.Utils;
-import utils.ScreenPositionCalculator;
 import utils.TickCounter;
 
 public class Player extends Entity{
@@ -31,6 +28,7 @@ public class Player extends Entity{
 	private boolean moving;
 	private boolean blocked;
 	private boolean teleporting;
+	private boolean moveInputReceived;
 	
 	// save x, y
 	private int sx;
@@ -59,18 +57,72 @@ public class Player extends Entity{
 	// teleportation counter
 	private TickCounter tpCounter;
 	
-	public Player(Level level, int x, int y) {
-		super(null, x, y, Texture.PLAYER_SPRITESHEET);
-		this.map = level.getMap();
+	public Player(Level level) {
+		super(Texture.PLAYER_SPRITESHEET);
+		attributesInit();
+		initUsingLevel(level);
+	}
+	
+	private void attributesInit() {
 		this.animation = generateAnimation();
-		this.direction = Direction.NULL;
 		this.projectiles = new ArrayList<>();
+		this.moving = false;
+		this.blocked = false;
 		this.teleporting = false;
+		this.moveInputReceived = false;
 		this.tpCounter = null;
-		this.energyAmount = 0;
-		this.startX = x;
-		this.startY = y;
-		this.changeLevel(level);
+	}
+	
+	private void initUsingLevel(Level level) {
+		this.level = level;
+		PlayerConfig config = level.getPlayerConfig();
+		this.map = level.getMap();
+		this.startX = config.getX();
+		this.startY = config.getY();
+		this.energyAmount = config.getEnergy();
+		this.x = startX;
+		this.y = startY;
+		this.sx = 0;
+		this.sy = 0;
+		this.ldx = 0;
+		this.ldy = 0;
+		this.setDirection(config.getDirection());
+		this.level.setPlayer(this);
+	}
+	
+	public void setLevel(Level level) {
+		this.moving = false;
+		this.blocked = false;
+		this.moveInputReceived = false;
+		initUsingLevel(level);
+		Keys.deactivateAll();
+	}
+	
+	public void reset() {
+		this.removeProjectiles();
+		this.moving = false;
+		this.blocked = false;
+		this.teleporting = false;
+		this.moveInputReceived = false;
+		this.tpCounter = null;
+		this.energyAmount = level.getPlayerConfig().getEnergy();
+		this.x = startX;
+		this.y = startY;
+		this.sx = 0;
+		this.sy = 0;
+		this.ldx = 0;
+		this.ldy = 0;
+		this.setDirection(level.getPlayerConfig().getDirection());
+		Keys.deactivateAll();
+	}
+	
+	private void removeProjectiles() {
+		if(projectiles != null)
+			projectiles.clear();
+	}
+	
+	public void die() {
+		reset();
 	}
 	
 	private DirectedAnimationOnTick generateAnimation() {
@@ -102,46 +154,12 @@ public class Player extends Entity{
 		leftAnimations.add(new AnimationFrame(t, 129, 0, 10, 13, 1.0f));
 		leftAnimations.add(new AnimationFrame(t, 145, 0, 10, 13, 1.0f));
 		
-		animation.addAnimationChunck(Direction.DOWN, downAnimations);
-		animation.addAnimationChunck(Direction.RIGHT, rightAnimations);
 		animation.addAnimationChunck(Direction.UP, upAnimations);
+		animation.addAnimationChunck(Direction.DOWN, downAnimations);
 		animation.addAnimationChunck(Direction.LEFT, leftAnimations);
+		animation.addAnimationChunck(Direction.RIGHT, rightAnimations);
 		
-		animation.start(Direction.DOWN);
 		return animation;
-	}
-	
-	public void die() {
-		reset();
-	}
-	
-	public void reset() {
-		removeProjectiles();
-		this.moving = false;
-		this.blocked = false;
-		this.sx = 0;
-		this.sy = 0;
-		this.ldx = 0;
-		this.ldy = 0;
-		this.startX = level.getPlayerConfig().getX();
-		this.startY = level.getPlayerConfig().getY();
-		this.energyAmount = level.getPlayerConfig().getEnergy();
-		setDirection(level.getPlayerConfig().getDirection());
-		setX(startX);
-		setY(startY);
-		Log.info("startx: " + startX + ",startY: " + startY + ",x: " + x + ",y: " + y);
-	}
-	
-	private void removeProjectiles() {
-		if(projectiles != null)
-			projectiles.clear();
-	}
-	
-	public void changeLevel(Level level) {
-		this.level = level;
-		this.level.setPlayer(this);
-		this.map = this.level.getMap();
-		reset();
 	}
 	
 	@Override
@@ -192,18 +210,22 @@ public class Player extends Entity{
 	private void input() {
 		if(Keys.upKeyPressed()) {
 			setDirection(Direction.UP);
+			moveInputReceived = true;
 		}
 		
 		if(Keys.downKeyPressed()) {
 			setDirection(Direction.DOWN);
+			moveInputReceived = true;
 		}
 		
 		if(Keys.leftKeyPressed()) {
 			setDirection(Direction.LEFT);
+			moveInputReceived = true;
 		}
 		
 		if(Keys.rightKeyPressed()) {
 			setDirection(Direction.RIGHT);
+			moveInputReceived = true;
 		}
 		
 		if(Keys.isPressed(Keys.SPACE)) {
@@ -389,11 +411,14 @@ public class Player extends Entity{
 			}
 		}
 		
-		addX(dx);
-		addY(dy);
-		animation.update();
+		if(moveInputReceived) {
+			addX(dx);
+			addY(dy);
+			animation.update();
+			return true;
+		}
 		
-		return true;
+		return false;
 	}
 	
 	private void updateProjectiles() {

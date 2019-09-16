@@ -41,7 +41,7 @@ public class NextLevelTpPoint extends Entity{
 		if(config.getLevelDest() == null) throw new IllegalStateException("Level should exist at activation.");
 		player.getLevel().getLevelChunck().grow();
 		player.activateTeleportation();
-		player.changeLevel(config.getLevelDest());
+		player.setLevel(config.getLevelDest());
 	}
 
 	@Override

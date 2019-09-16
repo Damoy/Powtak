@@ -13,6 +13,10 @@ public abstract class Entity {
 	protected Texture texture;
 	protected Tile tile;
 	
+	public Entity(Texture texture) {
+		this.texture = texture;
+	}
+	
 	public Entity(Tile tile, int x, int y, Texture texture) {
 		this.tile = tile;
 		this.x = x;

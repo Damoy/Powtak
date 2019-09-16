@@ -120,7 +120,7 @@ public class Level {
 		enemyChunck.update();
 		energyChunck.update();
 		updateNextLevelTpPoint();
-		particleEngine.update();
+		// particleEngine.update();
 	}
 	
 	private void setEnemyLevel() {
@@ -189,4 +189,14 @@ public class Level {
 	public void setLevelChunck(LevelChunck levelChunck) {
 		this.levelChunck = levelChunck;
 	}
+
+	@Override
+	public String toString() {
+		return "Level [levelChunck=" + levelChunck + ", s=" + s + ", map=" + map + ", player=" + player + ", wallChunk="
+				+ wallChunk + ", lightChunck=" + lightChunck + ", particleEngine=" + particleEngine + ", doorKeyEngine="
+				+ doorKeyEngine + ", playerConfig=" + playerConfig + ", nextLevelTpPointSource="
+				+ nextLevelTpPointSource + ", nextLevelTpPoint=" + nextLevelTpPoint + ", enemyChunck=" + enemyChunck
+				+ ", energyChunck=" + energyChunck + "]";
+	}
+	
 }

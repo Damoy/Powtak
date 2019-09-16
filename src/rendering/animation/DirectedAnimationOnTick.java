@@ -26,10 +26,6 @@ public class DirectedAnimationOnTick extends DirectedAnimation{
 		this.frameGroupPtr = 0;
 	}
 	
-	public void start(Direction direction) {
-		setDirection(direction);
-	}
-
 	@Override
 	public void update() {
 		tickCounter.increment();
@@ -51,7 +47,7 @@ public class DirectedAnimationOnTick extends DirectedAnimation{
 			frameGroupPtr = 0;
 			this.direction = direction;
 			frameChunck = frames.get(direction);
-			frameCount = frames.get(direction).size();
+			frameCount = frameChunck.size();
 			tickCounter = tickCounters.get(direction);
 			this.currentFrame = frameChunck.get(frameGroupPtr);
 		}

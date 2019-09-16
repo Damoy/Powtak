@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 import core.world.World;
-import core.world.WorldGenerationWrapper;
+import core.world.WorldGeneration;
 import input.Keys;
 import rendering.Screen;
 import rendering.Window;
@@ -48,7 +48,7 @@ public class Core extends JPanel implements Runnable, KeyListener{
 	private void init() {
 		initGraphics();
 		this.loadingScreen = new IndependentLoadingScreen(this, screen, 3000);
-		this.world = WorldGenerationWrapper.generatePredefined(screen);
+		this.world = WorldGeneration.generatePredefined(screen);
 	}
 
 	private void initGraphics() {
