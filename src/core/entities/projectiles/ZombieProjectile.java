@@ -22,9 +22,6 @@ public class ZombieProjectile extends EnemyProjectile{
 		
 		if(wallCollision != null) {
 			die();
-			if(wallCollision.isDestructible()) {
-				wallCollision.forget();
-			}
 		} else {
 			
 			if(level.playerCollidesWith(this)) {

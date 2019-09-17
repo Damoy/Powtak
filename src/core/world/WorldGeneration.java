@@ -27,7 +27,7 @@ public final class WorldGeneration {
 	public static World generatePredefined(Screen screen) {
 		return enablePortals(new World(new LevelChunck(
 				Level.froms(screen, Arrays.asList(
-						LEVEL_4_FILE_NAME)))));
+						LEVEL_5_FILE_NAME)))));
 	}
 	
 	private static World enablePortals(World world, String... levelFileNames) {
