@@ -49,5 +49,10 @@ public class PlayerConfig {
 	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
+
+	@Override
+	public String toString() {
+		return "PlayerConfig [x=" + x + ", y=" + y + ", energy=" + energy + ", direction=" + direction + "]";
+	}
 	
 }

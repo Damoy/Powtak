@@ -1,5 +1,7 @@
 package core.world.level;
 
+import java.util.Arrays;
+
 import core.entities.enemies.EnemyChunck;
 import core.entities.items.EnergyChunck;
 import core.entities.player.PlayerConfig;
@@ -104,6 +106,30 @@ public class LevelConfig {
 
 	public void setEnergyChunck(EnergyChunck energyChunck) {
 		this.energyChunck = energyChunck;
+	}
+
+	public void setDoorKeyEngine(DoorKeyEngine doorKeyEngine) {
+		this.doorKeyEngine = doorKeyEngine;
+	}
+
+	public void setPlayerConfig(PlayerConfig playerConfig) {
+		this.playerConfig = playerConfig;
+	}
+
+	public void setNextLevelTpPointSource(NextLevelTpPointSource nextLevelTpPointSource) {
+		this.nextLevelTpPointSource = nextLevelTpPointSource;
+	}
+
+	public void setEnemyChunck(EnemyChunck enemyChunck) {
+		this.enemyChunck = enemyChunck;
+	}
+
+	@Override
+	public String toString() {
+		return "LevelConfig [id=" + id + ", rows=" + rows + ", cols=" + cols + ", tiles=" + Arrays.toString(tiles)
+				+ ", wallChunk=" + wallChunk + ", doorKeyEngine=" + doorKeyEngine + ", playerConfig=" + playerConfig
+				+ ", nextLevelTpPointSource=" + nextLevelTpPointSource + ", enemyChunck=" + enemyChunck
+				+ ", energyChunck=" + energyChunck + "]";
 	}
 	
 }

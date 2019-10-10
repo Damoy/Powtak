@@ -23,6 +23,8 @@ import rendering.Screen;
 import rendering.particles.ParticleEngine;
 import utils.AABB;
 import utils.Config;
+import utils.Log;
+import utils.exceptions.PowtakException;
 
 public class Level {
 
@@ -93,7 +95,13 @@ public class Level {
 	
 	public static List<Level> froms(Screen screen, List<String> levelFileNames){
 		List<Level> levels = new ArrayList<>();
-		levelFileNames.forEach(lfn -> levels.add(Level.from(screen, LevelLoader.get().load(lfn))));
+		for(String levelFileName : levelFileNames) {
+			try {
+				levels.add(Level.from(screen, LevelLoader.get().loadCustomLevel(levelFileName)));
+			} catch(PowtakException e) {
+				Log.error(e.getMessage());
+			}
+		}
 		return levels;
 	}
 	
@@ -113,7 +121,7 @@ public class Level {
 			nextLevelTpPoint.render(s);
 	}
 	
-	public void update() {
+	public void update() throws PowtakException {
 		setEnemyLevel();
 		map.update();
 		wallChunk.update();

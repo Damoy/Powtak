@@ -6,6 +6,7 @@ import java.util.Map;
 
 import core.entities.player.Player;
 import rendering.Screen;
+import utils.exceptions.PowtakException;
 
 public class LevelChunck {
 
@@ -27,8 +28,8 @@ public class LevelChunck {
 		this.player = new Player(levels.get(0));
 	}
 	
-	public void reload(Screen s, String levelId) {
-		Level reloadedLevel = Level.from(s, LevelLoader.get().load(levelId));
+	public void reload(Screen s, String levelId) throws PowtakException {
+		Level reloadedLevel = Level.from(s, LevelLoader.get().loadCustomLevel(levelId));
 		reloadedLevel.setLevelChunck(this);
 		levels.put(levelId, reloadedLevel);
 		player.setLevel(reloadedLevel);
@@ -39,7 +40,7 @@ public class LevelChunck {
 		player.render(s);
 	}
 	
-	public void update() {
+	public void update() throws PowtakException {
 		getCurrent().update();
 		player.update();
 	}

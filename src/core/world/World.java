@@ -5,6 +5,7 @@ import core.world.level.LevelChunck;
 import core.world.teleportation.NextLevelTpPoint;
 import core.world.teleportation.NextLevelTpConfig;
 import rendering.Screen;
+import utils.exceptions.PowtakException;
 
 public class World {
 
@@ -18,7 +19,7 @@ public class World {
 		this.levelChunck.render(s);
 	}
 	
-	public void update() {
+	public void update() throws PowtakException {
 		this.levelChunck.update();
 	}
 	

@@ -7,11 +7,13 @@ public class Colors {
 	private Colors() {}
 	
 	public static int red(int rgb) {
-		return (rgb & 0xFF0000) >> 16;
+		// return (rgb & 0xFF0000) >> 16;
+		return (rgb >> 16) & 0xff;
 	}
 	
 	public static int green(int rgb) {
-		return (rgb & 0xFF00) >> 8;
+		// return (rgb & 0xFF00) >> 8;
+		return (rgb >> 8) & 0xff;
 	}
 	
 	public static int blue(int rgb) {

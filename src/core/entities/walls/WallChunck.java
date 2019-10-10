@@ -32,6 +32,7 @@ public class WallChunck {
 			wall.setWallChunck(this);
 			wall.setTile(tile);
 			walls.add(wall);
+			tile.setWall(wall);
 			return wall;
 		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();

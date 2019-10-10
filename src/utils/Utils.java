@@ -1,6 +1,11 @@
 package utils;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public final class Utils {
 	
@@ -39,5 +44,15 @@ public final class Utils {
 	
 	public static String fontPath(String fontFileName) {
 		return "./resources/fonts/" + fontFileName;
+	}
+	
+	public static List<String> getFileLines(String fileName) {
+		try {
+			return Files.lines(Paths.get(fileName)).collect(Collectors.toList());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 }

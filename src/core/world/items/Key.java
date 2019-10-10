@@ -12,7 +12,7 @@ public class Key extends Entity{
 	
 	public Key(Tile tile, int id, int x, int y) {
 		super(tile, x, y, Texture.KEY);
-		this.id = Config.getKeyId(id);
+		this.id = id;
 	}
 
 	@Override

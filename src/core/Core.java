@@ -15,6 +15,7 @@ import rendering.Screen;
 import rendering.Window;
 import rendering.UI.IndependentLoadingScreen;
 import utils.Config;
+import utils.exceptions.PowtakException;
 
 
 public class Core extends JPanel implements Runnable, KeyListener{
@@ -77,7 +78,11 @@ public class Core extends JPanel implements Runnable, KeyListener{
 
 			while (unprocessed >= 1) {
 				ticks++;
-				update();
+				try {
+					update();
+				} catch (PowtakException e) {
+					e.printStackTrace();
+				}
 				unprocessed -= 1;
 				shouldRender = true;
 			}
@@ -102,7 +107,7 @@ public class Core extends JPanel implements Runnable, KeyListener{
 		}
 	}
 
-	public void update() {
+	public void update() throws PowtakException {
 		world.update();
 		screen.update();
 		Keys.updateKeysBlockCounter();

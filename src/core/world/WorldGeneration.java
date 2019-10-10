@@ -8,15 +8,11 @@ import rendering.Screen;
 
 public final class WorldGeneration {
 	
-	private static final String LEVEL_1_FILE_NAME = "level1.png";
-	private static final String LEVEL_2_FILE_NAME = "level2.png";
-	private static final String LEVEL_3_FILE_NAME = "level3.png";
-	private static final String LEVEL_4_FILE_NAME = "level4.png";
-	private static final String LEVEL_5_FILE_NAME = "level5.png";
-	private static final String LEVEL_6_FILE_NAME = "level6.png";
-	private static final String LEVEL_7_FILE_NAME = "level7.png";
-	private static final String LEVEL_8_FILE_NAME = "level8.png";
-	private static final String LEVEL_9_FILE_NAME = "level9.png";
+	private static final String LEVEL_1_FILE_NAME = "level1";
+	private static final String LEVEL_2_FILE_NAME = "level2";
+	private static final String LEVEL_3_FILE_NAME = "level3";
+	private static final String LEVEL_4_FILE_NAME = "level4";
+	private static final String LEVEL_5_FILE_NAME = "level5";
 	
 	private WorldGeneration() {}
 	
@@ -27,7 +23,7 @@ public final class WorldGeneration {
 	public static World generatePredefined(Screen screen) {
 		return enablePortals(new World(new LevelChunck(
 				Level.froms(screen, Arrays.asList(
-						LEVEL_5_FILE_NAME)))));
+						LEVEL_4_FILE_NAME)))));
 	}
 	
 	private static World enablePortals(World world, String... levelFileNames) {
