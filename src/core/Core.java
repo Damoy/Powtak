@@ -30,26 +30,22 @@ public class Core extends JPanel implements Runnable, KeyListener{
 	private World world;
 	private IndependentLoadingScreen loadingScreen;
 
-	private Core() {
+	public Core() throws PowtakException {
 		super();
 		setComponent();
 		init();
 	}
 	
-	public static Core generate() {
-		return new Core();
-	}
-
 	private void setComponent() {
 		setPreferredSize(new Dimension(Config.WIDTH * Config.SCALE, Config.HEIGHT * Config.SCALE));
 		setFocusable(true);
 		requestFocus();
 	}
 
-	private void init() {
+	private void init() throws PowtakException {
 		initGraphics();
 		this.loadingScreen = new IndependentLoadingScreen(this, screen, 3000);
-		this.world = WorldGeneration.generatePredefined(screen);
+		this.world = WorldGeneration.generateWorldFromPredefinedLevels(screen);
 	}
 
 	private void initGraphics() {

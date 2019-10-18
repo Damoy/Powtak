@@ -1,9 +1,6 @@
 package core.world;
 
-import core.world.level.Level;
 import core.world.level.LevelChunck;
-import core.world.teleportation.NextLevelTpPoint;
-import core.world.teleportation.NextLevelTpConfig;
 import rendering.Screen;
 import utils.exceptions.PowtakException;
 
@@ -21,20 +18,6 @@ public class World {
 	
 	public void update() throws PowtakException {
 		this.levelChunck.update();
-	}
-	
-	public void addNextLevelTpPoint(String lvlSrcId, String lvlDestId) {
-		Level levelSrc = levelChunck.get(lvlSrcId);
-		Level levelDest = levelChunck.get(lvlDestId);
-		
-		if(levelSrc == null || levelDest == null) throw new IllegalStateException();
-		
-		int x = levelSrc.getNextLevelTpPointSource().getX();
-		int y = levelSrc.getNextLevelTpPointSource().getY();
-		Tile tile = levelSrc.getMap().getNormTileAt(x, y);
-		
-		NextLevelTpPoint nextLevelTpPoint = new NextLevelTpPoint(tile, x, y, NextLevelTpConfig.of(levelDest));
-		levelSrc.setNextLevelTpPoint(nextLevelTpPoint);
 	}
 	
 	public int getLevelCount() {

@@ -1,38 +1,43 @@
 package core.world.level;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import core.entities.player.Player;
+import core.world.teleportation.Portal;
+import core.world.teleportation.PortalSourcePoint;
 import rendering.Screen;
 import utils.exceptions.PowtakException;
 
 public class LevelChunck {
 
-	private Map<String, Level> levels;
+	private List<Level> levels;
+	private int currentLevelIndex;
 	private Player player;
-	private String idCurrent;
-	private int idCurrentPtr;
 	
-	public LevelChunck(List<Level> levels) {
-		this.levels = new HashMap<>();
-		this.idCurrentPtr = 0;
-		this.idCurrent = levels.get(idCurrentPtr).getId();
-		
-		levels.forEach(level -> {
-			this.levels.put(level.getId(), level);
-			level.setLevelChunck(this);	
-		});
-		
-		this.player = new Player(levels.get(0));
+	public LevelChunck(List<Level> inLevels) {
+		this.currentLevelIndex = 0;
+		this.levels = inLevels;
+		this.levels.forEach(lvl -> lvl.setLevelChunck(this));
+		this.player = new Player(this.levels.get(0));
 	}
 	
-	public void reload(Screen s, String levelId) throws PowtakException {
+	public void reload(Screen s, String levelId, PortalSourcePoint nextLevelPortalSourcePoint, Portal nextLevelPortal) throws PowtakException {
 		Level reloadedLevel = Level.from(s, LevelLoader.get().loadCustomLevel(levelId));
 		reloadedLevel.setLevelChunck(this);
-		levels.put(levelId, reloadedLevel);
+		reloadedLevel.setNextLevelPortalSourcePoint(nextLevelPortalSourcePoint);
+		reloadedLevel.setNextLevelPortal(nextLevelPortal);
+		levels.set(getLevelIndexUsingId(levelId), reloadedLevel);
 		player.setLevel(reloadedLevel);
+	}
+	
+	private int getLevelIndexUsingId(String levelId) throws PowtakException {
+		for(int i = 0; i < levels.size(); ++i) {
+			if(levels.get(i).getId().equals(levelId)) {
+				return i;
+			}
+		}
+		throw new PowtakException("Unknown level identified by \"" + levelId + "\"" + levelId) {
+			private static final long serialVersionUID = -7622403420527172374L;};
 	}
 	
 	public void render(Screen s) {
@@ -46,24 +51,26 @@ public class LevelChunck {
 	}
 	
 	public Level getCurrent() {
-		return levels.get(idCurrent);
+		return levels.get(currentLevelIndex);
 	}
 	
-	public Level get(String id) {
-		return levels.get(id);
+	public Level get(String levelId) throws PowtakException {
+		return levels.get(getLevelIndexUsingId(levelId));
 	}
 	
 	public void grow() {
-		++idCurrentPtr;
-		idCurrent = (String) this.levels.keySet().toArray()[idCurrentPtr];
+		++currentLevelIndex;
 	}
 	
 	public void decrease() {
-		--idCurrentPtr;
-		idCurrent = (String) this.levels.keySet().toArray()[idCurrentPtr];
+		--currentLevelIndex;
 	}
 	
 	public int count() {
 		return levels.size();
+	}
+	
+	public List<Level> getLevels(){
+		return levels;
 	}
 }

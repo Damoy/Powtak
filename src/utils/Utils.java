@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import utils.exceptions.NullObjectException;
+import utils.exceptions.PowtakException;
+
 public final class Utils {
 	
 	private final static double log10of2 = Math.log10(2);
@@ -54,5 +57,10 @@ public final class Utils {
 		}
 		
 		return null;
+	}
+	
+	public static void validateNotNull(Object o, String errorMsg) throws PowtakException {
+		if(o == null)
+			throw new NullObjectException(errorMsg);
 	}
 }

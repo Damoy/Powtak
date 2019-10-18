@@ -8,7 +8,7 @@ import core.entities.player.PlayerConfig;
 import core.entities.walls.WallChunck;
 import core.world.Tile;
 import core.world.items.DoorKeyEngine;
-import core.world.teleportation.NextLevelTpPointSource;
+import core.world.teleportation.PortalSourcePoint;
 
 public class LevelConfig {
 
@@ -19,7 +19,7 @@ public class LevelConfig {
 	private WallChunck wallChunk;
 	private DoorKeyEngine doorKeyEngine;
 	private PlayerConfig playerConfig;
-	private NextLevelTpPointSource nextLevelTpPointSource;
+	private PortalSourcePoint nextLevelTpPointSource;
 	private EnemyChunck enemyChunck;
 	private EnergyChunck energyChunck;
 	
@@ -28,7 +28,7 @@ public class LevelConfig {
 	}
 	
 	public LevelConfig(String id, int rows, int cols, Tile[][] tiles, WallChunck wallChunk, DoorKeyEngine doorKeyEngine,
-			PlayerConfig playerConfig, NextLevelTpPointSource nextLevelTpPointSource, EnemyChunck enemyChunck, EnergyChunck energyChunck) {
+			PlayerConfig playerConfig, PortalSourcePoint nextLevelTpPointSource, EnemyChunck enemyChunck, EnergyChunck energyChunck) {
 		this.id = id;
 		this.rows = rows;
 		this.cols = cols;
@@ -92,7 +92,7 @@ public class LevelConfig {
 		return playerConfig;
 	}
 
-	public NextLevelTpPointSource getNextLevelTpPointSource() {
+	public PortalSourcePoint getNextLevelTpPointSource() {
 		return nextLevelTpPointSource;
 	}
 
@@ -116,7 +116,7 @@ public class LevelConfig {
 		this.playerConfig = playerConfig;
 	}
 
-	public void setNextLevelTpPointSource(NextLevelTpPointSource nextLevelTpPointSource) {
+	public void setNextLevelTpPointSource(PortalSourcePoint nextLevelTpPointSource) {
 		this.nextLevelTpPointSource = nextLevelTpPointSource;
 	}
 

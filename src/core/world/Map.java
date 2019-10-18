@@ -1,6 +1,6 @@
 package core.world;
 
-import core.world.teleportation.NextLevelTpPoint;
+import core.world.teleportation.Portal;
 import rendering.Screen;
 import utils.Config;
 
@@ -56,8 +56,8 @@ public class Map {
 		return t.isDoored() || t.isKeyed() || t.isWalled();
 	}
 	
-	public void setNextLevelTpPoint(NextLevelTpPoint nextLevelTpPoint) {
-		getNormTileAt(nextLevelTpPoint.getX(), nextLevelTpPoint.getY()).setNextLevelTpPoint(nextLevelTpPoint);
+	public void setNextLevelPortal(Portal nextLevelPortal) {
+		getNormTileAt(nextLevelPortal.getX(), nextLevelPortal.getY()).setNextLevelPortal(nextLevelPortal);
 	}
 
 	public int getNumRows() {

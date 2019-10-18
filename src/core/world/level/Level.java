@@ -17,8 +17,8 @@ import core.world.Tile;
 import core.world.items.DoorKeyEngine;
 import core.world.light.LightChunck;
 import core.world.light.LightSpot;
-import core.world.teleportation.NextLevelTpPoint;
-import core.world.teleportation.NextLevelTpPointSource;
+import core.world.teleportation.Portal;
+import core.world.teleportation.PortalSourcePoint;
 import rendering.Screen;
 import rendering.particles.ParticleEngine;
 import utils.AABB;
@@ -38,13 +38,13 @@ public class Level {
 	private ParticleEngine particleEngine;
 	private DoorKeyEngine doorKeyEngine;
 	private PlayerConfig playerConfig;
-	private NextLevelTpPointSource nextLevelTpPointSource;
-	private NextLevelTpPoint nextLevelTpPoint;
+	private PortalSourcePoint nextLevelPortalSourcePoint;
+	private Portal nextLevelPortal;
 	private EnemyChunck enemyChunck;
 	private EnergyChunck energyChunck;
 	
 	private Level(String id, Screen screen, Map map, WallChunck wallChunk, DoorKeyEngine doorKeyEngine,
-			PlayerConfig playerConfig, NextLevelTpPointSource nextLevelTpPointSource, EnemyChunck enemyChunck, EnergyChunck energyChunck) {
+			PlayerConfig playerConfig, PortalSourcePoint nextLevelPortalSourcePoint, EnemyChunck enemyChunck, EnergyChunck energyChunck) {
 		this.id = id;
 		this.levelChunck = null;
 		this.s = screen;
@@ -54,8 +54,8 @@ public class Level {
 		this.particleEngine = buildParticleEngine();
 		this.doorKeyEngine = doorKeyEngine;
 		this.playerConfig = playerConfig;
-		this.nextLevelTpPointSource = nextLevelTpPointSource;
-		this.nextLevelTpPoint = null;
+		this.nextLevelPortalSourcePoint = nextLevelPortalSourcePoint;
+		this.nextLevelPortal = null;
 		this.enemyChunck = enemyChunck;
 		this.energyChunck = energyChunck;
 		this.player = null;
@@ -93,7 +93,7 @@ public class Level {
 				config.getNextLevelTpPointSource(), config.getEnemyChunck(), config.getEnergyChunck());
 	}
 	
-	public static List<Level> froms(Screen screen, List<String> levelFileNames){
+	public static List<Level> from(Screen screen, List<String> levelFileNames){
 		List<Level> levels = new ArrayList<>();
 		for(String levelFileName : levelFileNames) {
 			try {
@@ -109,16 +109,16 @@ public class Level {
 		map.render(s);
 		wallChunk.render(s);
 		doorKeyEngine.render(s);
-		renderNextLevelTpPoint(s);
+		renderNextLevelPortalSourcePoint(s);
 		enemyChunck.render(s);
 		energyChunck.render(s);
 		// particleEngine.render(s);
 		// lightChunck.enlight(0.5f);
 	}
 	
-	private void renderNextLevelTpPoint(Screen s) {
-		if(nextLevelTpPoint != null)
-			nextLevelTpPoint.render(s);
+	private void renderNextLevelPortalSourcePoint(Screen s) {
+		if(nextLevelPortal != null)
+			nextLevelPortal.render(s);
 	}
 	
 	public void update() throws PowtakException {
@@ -128,15 +128,12 @@ public class Level {
 		doorKeyEngine.update();
 		enemyChunck.update();
 		energyChunck.update();
-		updateNextLevelTpPoint();
+		updateNextLevelPortalSourcePoint();
 		// particleEngine.update();
 		
 		if(shouldReset) {
-//			map.reset();
-//			enemyChunck.reset();
-//			player.reset();
 			shouldReset = false;
-			levelChunck.reload(s, id);
+			levelChunck.reload(s, id, nextLevelPortalSourcePoint, nextLevelPortal);
 		}
 	}
 	
@@ -152,9 +149,9 @@ public class Level {
 		return enemyChunck.get(row, col);
 	}
 	
-	private void updateNextLevelTpPoint() {
-		if(nextLevelTpPoint != null)
-			nextLevelTpPoint.update();
+	private void updateNextLevelPortalSourcePoint() {
+		if(nextLevelPortal != null)
+			nextLevelPortal.update();
 	}
 	
 	public boolean interactIfCollisionDoorKey(Tile tile) {
@@ -189,14 +186,12 @@ public class Level {
 		this.player = player;
 	}
 
-	public void setNextLevelTpPoint(NextLevelTpPoint nextLevelTpPoint) {
-		this.nextLevelTpPoint = nextLevelTpPoint;
-		map.setNextLevelTpPoint(nextLevelTpPoint);
-		utils.Log.info("Teleport dest x: " + nextLevelTpPoint.getDestX() + ", y: " + nextLevelTpPoint.getDestY());
-	}
-
-	public NextLevelTpPointSource getNextLevelTpPointSource() {
-		return nextLevelTpPointSource;
+	public void setNextLevelPortal(Portal portal) {
+		if(portal != null) {
+			nextLevelPortal = portal;
+			map.setNextLevelPortal(portal);
+			Log.info("Teleport dest x: " + portal.getDestinationX() + ", y: " + portal.getDestinationY());
+		}
 	}
 
 	public LevelChunck getLevelChunck() {
@@ -211,13 +206,16 @@ public class Level {
 		return id;
 	}
 
-	@Override
-	public String toString() {
-		return "Level [levelChunck=" + levelChunck + ", s=" + s + ", map=" + map + ", player=" + player + ", wallChunk="
-				+ wallChunk + ", lightChunck=" + lightChunck + ", particleEngine=" + particleEngine + ", doorKeyEngine="
-				+ doorKeyEngine + ", playerConfig=" + playerConfig + ", nextLevelTpPointSource="
-				+ nextLevelTpPointSource + ", nextLevelTpPoint=" + nextLevelTpPoint + ", enemyChunck=" + enemyChunck
-				+ ", energyChunck=" + energyChunck + "]";
+	public PortalSourcePoint getNextLevelPortalSourcePoint() {
+		return nextLevelPortalSourcePoint;
 	}
-	
+
+	public void setNextLevelPortalSourcePoint(PortalSourcePoint nextLevelPortalSourcePoint) {
+		this.nextLevelPortalSourcePoint = nextLevelPortalSourcePoint;
+	}
+
+	public Portal getNextLevelPortal() {
+		return nextLevelPortal;
+	}
+
 }

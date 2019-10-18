@@ -400,8 +400,8 @@ public class Player extends Entity{
 				}
 				
 				// next level teleport collision
-				if(tile.isNextLevelTpPointed()) {
-					tile.getNextLevelTpPoint().activate(this);
+				if(tile.isNextLevelPortaled()) {
+					tile.getNextLevelPortal().activate(this);
 					return false;
 				}
 				

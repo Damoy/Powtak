@@ -1,11 +1,15 @@
 package core.world;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 import core.world.level.Level;
 import core.world.level.LevelChunck;
+import core.world.teleportation.PortalSetup;
 import rendering.Screen;
+import utils.exceptions.PowtakException;
 
+@SuppressWarnings("unused")
 public final class WorldGeneration {
 	
 	private static final String LEVEL_1_FILE_NAME = "level1";
@@ -14,27 +18,20 @@ public final class WorldGeneration {
 	private static final String LEVEL_4_FILE_NAME = "level4";
 	private static final String LEVEL_5_FILE_NAME = "level5";
 	
+	private static final List<String> levelsFileNames = new ArrayList<>();
+	
+	static {
+		levelsFileNames.add(LEVEL_1_FILE_NAME);
+		levelsFileNames.add(LEVEL_4_FILE_NAME);
+	}
+	
 	private WorldGeneration() {}
 	
-	public static World generate(Screen screen, String... levelFileNames) {
-		return enablePortals(new World(new LevelChunck(Level.froms(screen, Arrays.asList(levelFileNames)))));
+	public static World generateWorldFromPredefinedLevels(Screen screen) throws PowtakException {
+		List<Level> levels = Level.from(screen, levelsFileNames);
+		LevelChunck levelChunck = new LevelChunck(levels);
+		PortalSetup.enableNextLevelPortals(levelChunck);
+		return new World(levelChunck);
 	}
-	
-	public static World generatePredefined(Screen screen) {
-		return enablePortals(new World(new LevelChunck(
-				Level.froms(screen, Arrays.asList(
-						LEVEL_4_FILE_NAME)))));
-	}
-	
-	private static World enablePortals(World world, String... levelFileNames) {
-		int lvlCount = world.getLevelCount();
-		
-		if (lvlCount > 1) {
-			for (int i = 0; i < lvlCount - 1; ++i) {
-				world.addNextLevelTpPoint(levelFileNames[i], levelFileNames[i + 1]);
-			}
-		}
-		
-		return world;
-	}
+
 }

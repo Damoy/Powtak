@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import core.entities.Direction;
 import core.entities.enemies.EnemyChunck;
@@ -11,12 +12,14 @@ import core.entities.enemies.StaticZombie;
 import core.entities.items.Energy;
 import core.entities.items.EnergyChunck;
 import core.entities.player.PlayerConfig;
+import core.entities.walls.DestructibleWall;
 import core.entities.walls.StandardWall;
+import core.entities.walls.Wall;
 import core.entities.walls.WallChunck;
 import core.world.GroundTile;
 import core.world.Tile;
 import core.world.items.DoorKeyEngine;
-import core.world.teleportation.NextLevelTpPointSource;
+import core.world.teleportation.PortalSourcePoint;
 import utils.Config;
 import utils.Log;
 import utils.Utils;
@@ -35,6 +38,8 @@ public class LevelLoader {
 	
 	public LevelConfig loadCustomLevel(String levelFileName) throws PowtakException {
 		String levelFilePath = "./resources/levels/custom/" + levelFileName + ".lvl";
+		Log.info("Loading \"" + levelFileName + "\" .");
+		
 		int rows = Config.NUM_ROWS;
 		int cols = Config.NUM_COLS;
 
@@ -76,7 +81,7 @@ public class LevelLoader {
 	}
 	
 	private void loadCustomLevel(LevelConfig levelConfig, String levelFileName, List<String> levelFileLines) throws PowtakException {
-		for(String levelFileLine : levelFileLines) {
+		for(String levelFileLine : levelFileLines.stream().filter(lfl -> !lfl.isBlank()).collect(Collectors.toList())) {
 			loadCustomLevelLine(levelConfig, levelFileName, levelFileLine);
 		}
 	}
@@ -129,6 +134,7 @@ public class LevelLoader {
 	private Pattern directionPattern = Pattern.compile("direction=[a-zA-Z]+");
 	private Pattern exceptIntegerPattern = Pattern.compile("except=(\\d|,)+");
 	private Pattern exceptStringPattern = Pattern.compile("except=([a-zA-Z]|,)+");
+	private Pattern destructiblePattern = Pattern.compile("destructible=(true|false)");
 	private Pattern idPattern = Pattern.compile("id=\\d+");
 	private Pattern powerPattern = Pattern.compile("power=\\d+");
 	
@@ -219,7 +225,11 @@ public class LevelLoader {
 			}
 			
 			Tile tile = levelConfig.getTiles()[row][col];
-			wallChunck.add(tile, row, col, StandardWall.class);
+			if(!tile.isWalled()) {
+				wallChunck.add(tile, row, col, StandardWall.class);
+			} else {
+				Log.warn("Wall already found at row=" + row + ", col=" + col + ".");
+			}
 		}
 	}
 	
@@ -252,21 +262,28 @@ public class LevelLoader {
 		Log.info("Level loading: wall.");
 		Matcher rowMatcher = rowPattern.matcher(levelFileLine);
 		Matcher colMatcher = colPattern.matcher(levelFileLine);
+		Matcher destructibleMatcher = destructiblePattern.matcher(levelFileLine);
 		rowMatcher.find();
 		colMatcher.find();
+		boolean destructible = destructibleMatcher.find();
+		
 		int row;
 		int col;
 		
 		try {
 			row = Integer.parseInt(rowMatcher.group().split("=")[1]);
 			col = Integer.parseInt(colMatcher.group().split("=")[1]);
+			if(destructible) {
+				destructible = Boolean.parseBoolean(destructibleMatcher.group().split("=")[1]);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new IllegalLevelFileException(levelFileName);
 		}
 		
 		Tile tile = levelConfig.getTiles()[row][col];
-		levelConfig.getWallChunk().add(tile, row, col, StandardWall.class);
+		Class<? extends Wall> wallClazz = destructible ? DestructibleWall.class : StandardWall.class;
+		levelConfig.getWallChunk().add(tile, row, col, wallClazz);
 	}
 	
 	private void handleZombieLoad(LevelConfig levelConfig, String levelFileName, String levelFileLine) throws PowtakException {
@@ -318,7 +335,7 @@ public class LevelLoader {
 		
 		int x = col * Config.TILE_SIZE;
 		int y = row * Config.TILE_SIZE; 
-		levelConfig.setNextLevelTpPointSource(new NextLevelTpPointSource(x, y));
+		levelConfig.setNextLevelTpPointSource(new PortalSourcePoint(x, y));
 	}
 	
 	private void handleDoorLoad(LevelConfig levelConfig, String levelFileName, String levelFileLine) throws PowtakException {
