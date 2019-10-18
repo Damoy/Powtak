@@ -1,8 +1,11 @@
 package utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -37,16 +40,32 @@ public final class Utils {
 		return (int) (Math.log10(x) + 1);
 	}
 	
+	public static List<File> loadFilesIgnoreDirs(String directoryPath){
+		List<File> files = loadFiles(directoryPath);
+		return files.stream().filter(f -> !f.isDirectory()).collect(Collectors.toList());
+	}
+	
+	
+	public static List<File> loadFiles(String directoryPath){
+		File file = new File(directoryPath);
+		if(!file.isDirectory()) {
+			Log.error("\"" + directoryPath + "\" files could not be loaded.");
+			return null;
+		} else {
+			return Arrays.asList(file.listFiles());
+		}
+	}
+	
 	public static String levelPath(String levelFileName) {
-		return "./resources/levels/" + levelFileName;
+		return Config.CUSTOM_LEVELS_FILE_PATH + levelFileName;
 	}
 	
 	public static String texturePath(String textureFileName) {
-		return "./resources/textures/" + textureFileName;
+		return Config.TEXTURES_FILE_PATH + textureFileName;
 	}
 	
 	public static String fontPath(String fontFileName) {
-		return "./resources/fonts/" + fontFileName;
+		return Config.FONTS_FILE_PATH + fontFileName;
 	}
 	
 	public static List<String> getFileLines(String fileName) {

@@ -1,5 +1,6 @@
 package core.world.level;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -36,8 +37,13 @@ public class LevelLoader {
 		return INSTANCE;
 	}
 	
-	public LevelConfig loadCustomLevel(String levelFileName) throws PowtakException {
-		String levelFilePath = "./resources/levels/custom/" + levelFileName + ".lvl";
+	public LevelConfig loadCustomLevel(String levelFilePath) throws PowtakException {
+		return loadCustomLevel(new File(levelFilePath));
+	}
+	
+	public LevelConfig loadCustomLevel(File file) throws PowtakException {
+		String levelFilePath = file.getAbsolutePath();
+		String levelFileName = file.getName();
 		Log.info("Loading \"" + levelFileName + "\" .");
 		
 		int rows = Config.NUM_ROWS;
@@ -194,8 +200,12 @@ public class LevelLoader {
 		Matcher colStartMatcher = colStartPattern.matcher(levelFileLine);
 		Matcher colEndMatcher = colEndPattern.matcher(levelFileLine);
 		Matcher exceptMatcher = exceptIntegerPattern.matcher(levelFileLine);
+		Matcher destructibleMatcher = destructiblePattern.matcher(levelFileLine);
+		
 		colStartMatcher.find();
 		colEndMatcher.find();
+		boolean destructible = destructibleMatcher.find();
+		
 		int row;
 		int colStart;
 		int colEnd;
@@ -213,6 +223,10 @@ public class LevelLoader {
 					exceptions.add(Integer.parseInt(token));
 				}
 			}
+			
+			if(destructible) {
+				destructible = Boolean.parseBoolean(destructibleMatcher.group().split("=")[1]);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new IllegalLevelFileException(levelFileName);
@@ -226,7 +240,8 @@ public class LevelLoader {
 			
 			Tile tile = levelConfig.getTiles()[row][col];
 			if(!tile.isWalled()) {
-				wallChunck.add(tile, row, col, StandardWall.class);
+				Class<? extends Wall> wallClazz = destructible ? DestructibleWall.class : StandardWall.class;
+				wallChunck.add(tile, row, col, wallClazz);
 			} else {
 				Log.warn("Wall already found at row=" + row + ", col=" + col + ".");
 			}
@@ -237,8 +252,11 @@ public class LevelLoader {
 			Matcher colMatcher, String levelFileName, String levelFileLine) throws PowtakException {
 		Matcher rowStartMatcher = rowStartPattern.matcher(levelFileLine);
 		Matcher rowEndMatcher = rowEndPattern.matcher(levelFileLine);
+		Matcher destructibleMatcher = destructiblePattern.matcher(levelFileLine);
 		rowStartMatcher.find();
 		rowEndMatcher.find();
+		boolean destructible = destructibleMatcher.find();
+		
 		int col;
 		int rowStart;
 		int rowEnd;
@@ -247,6 +265,10 @@ public class LevelLoader {
 			col = Integer.parseInt(colMatcher.group().split("=")[1]);
 			rowStart = Integer.parseInt(rowStartMatcher.group().split("=")[1]);
 			rowEnd = Integer.parseInt(rowEndMatcher.group().split("=")[1]);
+			
+			if(destructible) {
+				destructible = Boolean.parseBoolean(destructibleMatcher.group().split("=")[1]);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new IllegalLevelFileException(levelFileName);
@@ -254,7 +276,8 @@ public class LevelLoader {
 		
 		for(int row = rowStart; row <= rowEnd; ++row) {
 			Tile tile = levelConfig.getTiles()[row][col];
-			wallChunck.add(tile, row, col, StandardWall.class);
+			Class<? extends Wall> wallClazz = destructible ? DestructibleWall.class : StandardWall.class;
+			wallChunck.add(tile, row, col, wallClazz);
 		}
 	}
 	

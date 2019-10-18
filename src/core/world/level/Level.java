@@ -1,6 +1,7 @@
 package core.world.level;
 
 import java.awt.Color;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import utils.exceptions.PowtakException;
 
 public class Level {
 
+	// is level file path
 	private String id;
 	private LevelChunck levelChunck;
 	private Screen s;
@@ -93,11 +95,12 @@ public class Level {
 				config.getNextLevelTpPointSource(), config.getEnemyChunck(), config.getEnergyChunck());
 	}
 	
-	public static List<Level> from(Screen screen, List<String> levelFileNames){
+	public static List<Level> from(Screen screen, List<File> levelFiles){
+		LevelLoader levelLoader = LevelLoader.get();
 		List<Level> levels = new ArrayList<>();
-		for(String levelFileName : levelFileNames) {
+		for(File levelFileName : levelFiles) {
 			try {
-				levels.add(Level.from(screen, LevelLoader.get().loadCustomLevel(levelFileName)));
+				levels.add(Level.from(screen, levelLoader.loadCustomLevel(levelFileName)));
 			} catch(PowtakException e) {
 				Log.error(e.getMessage());
 			}

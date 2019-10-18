@@ -35,6 +35,10 @@ public final class Config {
 	private final static int BASE_DOOR_INDEX = 0;
 	private final static int BASE_KEY_INDEX = BASE_DOOR_INDEX + DOOR_KEY_ENGINE_SIZE;
 	
+	public final static String CUSTOM_LEVELS_FILE_PATH = "./resources/levels/custom/";
+	public final static String TEXTURES_FILE_PATH = "./resources/textures/";
+	public final static String FONTS_FILE_PATH = "./resources/fonts/";
+	
 	public static int getDoorId(int index) {
 		return BASE_DOOR_INDEX + index;
 	}
