@@ -1,0 +1,17 @@
+spawn:row=0;col=6;energy=14;direction=down
+walls:row=0;colStart=0;colEnd=14;except=6
+walls:row=2;colStart=0;colEnd=14;except=9
+walls:row=4;colStart=0;colEnd=14;except=2
+walls:row=6;colStart=0;colEnd=14;except=7,11
+walls:row=7;colStart=6;colEnd=8
+walls:row=9;colStart=0;colEnd=14
+walls:col=0;rowStart=0;rowEnd=9
+walls:col=14;rowStart=0;rowEnd=9
+zombie:row=1;col=1;direction=right
+zombie:row=3;col=13;direction=left
+zombie:row=5;col=1;direction=right
+zombie:row=7;col=1;direction=right
+zombie:row=8;col=13;direction=left
+energy:row=4;col=2;power=12
+energy:row=6;col=11;power=13
+portal:row=8;col=1

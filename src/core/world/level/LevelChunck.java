@@ -6,6 +6,7 @@ import core.entities.player.Player;
 import core.world.teleportation.Portal;
 import core.world.teleportation.PortalSourcePoint;
 import rendering.Screen;
+import utils.Config;
 import utils.exceptions.PowtakException;
 
 public class LevelChunck {
@@ -22,7 +23,9 @@ public class LevelChunck {
 	}
 	
 	public void reload(Screen s, String levelId, PortalSourcePoint nextLevelPortalSourcePoint, Portal nextLevelPortal) throws PowtakException {
-		Level reloadedLevel = Level.from(s, LevelLoader.get().loadCustomLevel(levelId));
+		LevelLoader levelLoader = LevelLoader.get();
+		String levelFilePath = Config.CUSTOM_LEVELS_FILE_PATH + levelId;
+		Level reloadedLevel = Level.from(s, levelLoader.loadCustomLevel(levelFilePath));
 		reloadedLevel.setLevelChunck(this);
 		reloadedLevel.setNextLevelPortalSourcePoint(nextLevelPortalSourcePoint);
 		reloadedLevel.setNextLevelPortal(nextLevelPortal);

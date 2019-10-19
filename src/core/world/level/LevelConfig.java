@@ -19,7 +19,7 @@ public class LevelConfig {
 	private WallChunck wallChunk;
 	private DoorKeyEngine doorKeyEngine;
 	private PlayerConfig playerConfig;
-	private PortalSourcePoint nextLevelTpPointSource;
+	private PortalSourcePoint nextLevelPortalSourcePoint;
 	private EnemyChunck enemyChunck;
 	private EnergyChunck energyChunck;
 	
@@ -28,7 +28,7 @@ public class LevelConfig {
 	}
 	
 	public LevelConfig(String id, int rows, int cols, Tile[][] tiles, WallChunck wallChunk, DoorKeyEngine doorKeyEngine,
-			PlayerConfig playerConfig, PortalSourcePoint nextLevelTpPointSource, EnemyChunck enemyChunck, EnergyChunck energyChunck) {
+			PlayerConfig playerConfig, PortalSourcePoint nextLevelPortalSourcePoint, EnemyChunck enemyChunck, EnergyChunck energyChunck) {
 		this.id = id;
 		this.rows = rows;
 		this.cols = cols;
@@ -36,7 +36,7 @@ public class LevelConfig {
 		this.wallChunk = wallChunk;
 		this.doorKeyEngine = doorKeyEngine;
 		this.playerConfig = playerConfig;
-		this.nextLevelTpPointSource = nextLevelTpPointSource;
+		this.nextLevelPortalSourcePoint = nextLevelPortalSourcePoint;
 		this.enemyChunck = enemyChunck;
 		this.energyChunck = energyChunck;
 	}
@@ -92,10 +92,6 @@ public class LevelConfig {
 		return playerConfig;
 	}
 
-	public PortalSourcePoint getNextLevelTpPointSource() {
-		return nextLevelTpPointSource;
-	}
-
 	public EnemyChunck getEnemyChunck() {
 		return enemyChunck;
 	}
@@ -107,6 +103,14 @@ public class LevelConfig {
 	public void setEnergyChunck(EnergyChunck energyChunck) {
 		this.energyChunck = energyChunck;
 	}
+	
+	public PortalSourcePoint getNextLevelPortalSourcePoint() {
+		return nextLevelPortalSourcePoint;
+	}
+
+	public void setNextLevelPortalSourcePoint(PortalSourcePoint nextLevelPortalSourcePoint) {
+		this.nextLevelPortalSourcePoint = nextLevelPortalSourcePoint;
+	}
 
 	public void setDoorKeyEngine(DoorKeyEngine doorKeyEngine) {
 		this.doorKeyEngine = doorKeyEngine;
@@ -114,10 +118,6 @@ public class LevelConfig {
 
 	public void setPlayerConfig(PlayerConfig playerConfig) {
 		this.playerConfig = playerConfig;
-	}
-
-	public void setNextLevelTpPointSource(PortalSourcePoint nextLevelTpPointSource) {
-		this.nextLevelTpPointSource = nextLevelTpPointSource;
 	}
 
 	public void setEnemyChunck(EnemyChunck enemyChunck) {
@@ -128,8 +128,8 @@ public class LevelConfig {
 	public String toString() {
 		return "LevelConfig [id=" + id + ", rows=" + rows + ", cols=" + cols + ", tiles=" + Arrays.toString(tiles)
 				+ ", wallChunk=" + wallChunk + ", doorKeyEngine=" + doorKeyEngine + ", playerConfig=" + playerConfig
-				+ ", nextLevelTpPointSource=" + nextLevelTpPointSource + ", enemyChunck=" + enemyChunck
+				+ ", nextLevelPortalSourcePoint=" + nextLevelPortalSourcePoint + ", enemyChunck=" + enemyChunck
 				+ ", energyChunck=" + energyChunck + "]";
 	}
-	
+
 }

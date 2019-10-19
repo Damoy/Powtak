@@ -5,6 +5,7 @@ import java.util.List;
 import core.world.Tile;
 import core.world.level.Level;
 import core.world.level.LevelChunck;
+import utils.Log;
 import utils.exceptions.PowtakException;
 
 public final class PortalSetup {
@@ -18,6 +19,8 @@ public final class PortalSetup {
 			for(int i = 0; i < lvlCount - 1; ++i) {
 				enableNextLevelPortal(levels.get(i), levels.get(i + 1));
 			}
+		} else {
+			Log.warn("No next level portals.");
 		}
 	}
 	
@@ -26,7 +29,7 @@ public final class PortalSetup {
 		int y = sourceLevel.getNextLevelPortalSourcePoint().getY();
 		Tile tile = sourceLevel.getMap().getNormTileAt(x, y);
 		
-		Portal nextLevelPortal = new Portal(tile, x, y,
+		Portal nextLevelPortal = new NextLevelPortal(tile, x, y,
 				destinationLevel, destinationLevel.getPlayerConfig().getX(), destinationLevel.getPlayerConfig().getY());
 		sourceLevel.setNextLevelPortal(nextLevelPortal);
 	}

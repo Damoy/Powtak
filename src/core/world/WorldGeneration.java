@@ -23,8 +23,8 @@ public final class WorldGeneration {
 	
 	public static World generateWorldFromPredefinedLevels(Screen screen) throws PowtakException {
 		List<File> levelFiles = new ArrayList<>();
-		levelFiles.add(new File(Config.CUSTOM_LEVELS_FILE_PATH + "level1.lvl"));
-		levelFiles.add(new File(Config.CUSTOM_LEVELS_FILE_PATH + "level2.lvl"));
+		levelFiles.add(new File(Config.CUSTOM_LEVELS_FILE_PATH + "level3.lvl"));
+//		levelFiles.add(new File(Config.CUSTOM_LEVELS_FILE_PATH + "level2.lvl"));
 		levelFiles.add(new File(Config.CUSTOM_LEVELS_FILE_PATH + "level4.lvl"));
 		return generateWorldFromLevelFileNames(screen, levelFiles);
 	}

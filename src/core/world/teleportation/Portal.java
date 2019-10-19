@@ -3,26 +3,21 @@ package core.world.teleportation;
 import core.entities.Entity;
 import core.entities.player.Player;
 import core.world.Tile;
-import core.world.level.Level;
 import rendering.Screen;
 import rendering.Texture;
 import rendering.animation.Animation;
 import rendering.animation.BasicAnimationOnTick;
 import utils.Config;
-import utils.Utils;
 import utils.exceptions.PowtakException;
 
-public class Portal extends Entity{
+public abstract class Portal extends Entity {
 	
-	private Level destinationLevel;
-	private int destinationX;
-	private int destinationY;
-	private Animation animation;
+	protected Animation animation;
+	protected int destinationX;
+	protected int destinationY;
 	
-	public Portal(Tile tile, int x, int y,  Level destinationLevel, int destinationX, int destinationY) throws PowtakException {
+	public Portal(Tile tile, int x, int y, int destinationX, int destinationY) throws PowtakException {
 		super(tile, x, y, Texture.TELEPORT_POINT_SPRITESHEET);
-		Utils.validateNotNull(destinationLevel, "Destination level");
-		this.destinationLevel = destinationLevel;
 		this.destinationX = destinationX;
 		this.destinationY = destinationY;
 		this.x += 1;
@@ -43,12 +38,8 @@ public class Portal extends Entity{
 		animation.render(s, x, y);
 	}
 	
-	public void activate(Player player) {
-		player.getLevel().getLevelChunck().grow();
-		player.activateTeleportation();
-		player.setLevel(destinationLevel);
-	}
-
+	public abstract void activate(Player player);
+	
 	@Override
 	public void update() {
 		animation.update();
@@ -62,14 +53,6 @@ public class Portal extends Entity{
 	@Override
 	public int getHeight() {
 		return animation.getCurrentFrame().getHeight();
-	}
-
-	public Level getDestinationLevel() {
-		return destinationLevel;
-	}
-
-	public void setDestinationLevel(Level destinationLevel) {
-		this.destinationLevel = destinationLevel;
 	}
 
 	public int getDestinationX() {

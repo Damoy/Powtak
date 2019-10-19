@@ -92,7 +92,7 @@ public class Level {
 	public static Level from(Screen screen, LevelConfig config) {
 		return new Level(config.getId(), screen, new Map(config.getRows(), config.getCols(), config.getTiles()),
 				config.getWallChunk(), config.getDoorKeyEngine(), config.getPlayerConfig(),
-				config.getNextLevelTpPointSource(), config.getEnemyChunck(), config.getEnergyChunck());
+				config.getNextLevelPortalSourcePoint(), config.getEnemyChunck(), config.getEnergyChunck());
 	}
 	
 	public static List<Level> from(Screen screen, List<File> levelFiles){

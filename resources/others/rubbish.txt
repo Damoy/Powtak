@@ -348,3 +348,144 @@ public class LevelChunck {
 //				levelDest, levelDest.getPlayerConfig().getX(), levelDest.getPlayerConfig().getY());
 //		levelSrc.setNextLevelPortal(nextLevelPortal);
 //	}
+
+--
+
+
+//	public LevelConfig load(String levelFileName) {
+//		int rows = Config.NUM_ROWS;
+//		int cols = Config.NUM_COLS;
+//		BufferedImage tex = new BufferedImage(cols, rows, BufferedImage.TYPE_INT_ARGB);
+//		
+//		// tiles
+//		Tile[][] tiles = new Tile[rows][cols];
+//		
+//		// walls
+//		WallChunck wallChunk = new WallChunck();
+//		
+//		// key engine
+//		DoorKeyEngine doorKeyEngine = new DoorKeyEngine();
+//		
+//		// player configuration
+//		PlayerConfig playerConfig = new PlayerConfig();
+//		
+//		// teleportation to new level
+//		NextLevelTpPointSource nextLevelTpPointSource = null;
+//		
+//		// enemies
+//		EnemyChunck enemyChunck = new EnemyChunck();
+//		
+//		// energies
+//		EnergyChunck energyChunck = new EnergyChunck();
+//		
+//		try {
+//			tex = ImageIO.read(new FileInputStream(Utils.levelPath(levelFileName)));
+//
+//			for(int col = 0; col < cols; ++col) {
+//				for(int row = 0; row < rows; ++row) {
+//					int rgb = tex.getRGB(col, row);
+//					int x = col * Config.TILE_SIZE;
+//					int y = row * Config.TILE_SIZE;
+//					
+//					if(rgb == Config.GROUND_TILE_COLOR.getRGB()) {
+//						tiles[row][col] = new GroundTile(x, y);
+//					}
+//					
+//					if(rgb == Config.STANDARD_WALL_COLOR.getRGB()) {
+//						tiles[row][col] = new GroundTile(x, y);
+//						Wall wall = wallChunk.add(tiles[row][col], row, col, StandardWall.class);
+//						tiles[row][col].setWall(wall);
+//					}
+//					
+//					if(rgb == Config.DESTRUCTIBLE_WALL_COLOR.getRGB()) {
+//						tiles[row][col] = new GroundTile(x, y);
+//						Wall wall = wallChunk.add(tiles[row][col], row, col, DestructibleWall.class);
+//						tiles[row][col].setWall(wall);
+//					}
+//					
+//					if(rgb == Config.NEXT_LEVEL_TELEPORT_POINT_COLOR.getRGB()) {
+//						tiles[row][col] = new GroundTile(x, y);
+//						nextLevelTpPointSource = new NextLevelTpPointSource(x, y);
+//						Log.info("Portal");
+//					}
+//					
+//					if(Colors.isSpawn(rgb)) {
+//						tiles[row][col] = new GroundTile(x, y);
+//						playerConfig.setX(x);
+//						playerConfig.setY(y);
+//						playerConfig.setEnergy(Colors.green(rgb) - 155);
+//						Direction playerDirection = Direction.NULL;
+//						switch(Colors.red(rgb)) {
+//						case 0:
+//							playerDirection = Direction.DOWN;
+//							break;
+//						case 1:
+//							playerDirection = Direction.LEFT;
+//							break;
+//						case 2:
+//							playerDirection = Direction.UP;
+//							break;
+//						case 3:
+//							playerDirection = Direction.RIGHT;
+//							break;
+//						default:
+//							throw new IllegalStateException();
+//						}
+//						
+//						playerConfig.setDirection(playerDirection);
+//					}
+//					
+//					if(Colors.isZombie(rgb)) {
+//						tiles[row][col] = new GroundTile(x, y);
+//						Direction zomDir;
+//						
+//						switch(Colors.blue(rgb)) {
+//							case 0:
+//								zomDir = Direction.DOWN;
+//								break;
+//							case 1:
+//								zomDir = Direction.LEFT;
+//								break;
+//							case 2:
+//								zomDir = Direction.UP;
+//								break;
+//							case 3:
+//								zomDir = Direction.RIGHT;
+//								break;
+//							default:
+//								throw new IllegalStateException();
+//						}
+//						
+//						enemyChunck.add(new StaticZombie(tiles[row][col], enemyChunck, x, y, 1.0f, zomDir));
+//						Log.info("Zombie");
+//					}
+//					
+//					if(Colors.isDoor(rgb)) {
+//						tiles[row][col] = new GroundTile(x, y);
+//						doorKeyEngine.addDoor(tiles[row][col], Colors.green(rgb));
+//						Log.info("Door");
+//					}
+//					
+//					if(Colors.isKey(rgb)) {
+//						tiles[row][col] = new GroundTile(x, y);
+//						doorKeyEngine.addKey(tiles[row][col], Colors.blue(rgb));
+//						Log.info("Key");
+//					}
+//					
+//					if(Colors.isEnergy(rgb)) {
+//						tiles[row][col] = new GroundTile(x, y);
+//						int energyAmount = Energy.retrievePower(rgb);
+//						energyChunck.add(new Energy(tiles[row][col], x, y, energyAmount, energyChunck));
+//						Log.info("Energy");
+//					}
+//				}
+//			}
+//			
+//			doorKeyEngine.setReady();
+//			return new LevelConfig(levelFileName, rows, cols, tiles, wallChunk, doorKeyEngine, playerConfig, nextLevelTpPointSource, enemyChunck, energyChunck);
+//			
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			throw new IllegalStateException();
+//		}
+//	}
