@@ -4,15 +4,19 @@ import core.entities.Direction;
 import core.entities.walls.Wall;
 import core.world.Tile;
 import core.world.level.Level;
+import core.world.level.ingame.InGameLevel;
 import rendering.Screen;
 import rendering.animation.Animation;
 import utils.AABB;
 import utils.Config;
 
 public class ZombieProjectile extends EnemyProjectile{
-
-	public ZombieProjectile(Level level, Direction direction, Animation animation, int x, int y) {
+	
+	private boolean inGameLevel;
+	
+	public ZombieProjectile(Level level, boolean inGameLevel, Direction direction, Animation animation, int x, int y) {
 		super(level, direction, animation, x, y);
+		this.inGameLevel = inGameLevel;
 	}
 
 	@Override
@@ -23,12 +27,14 @@ public class ZombieProjectile extends EnemyProjectile{
 		if(wallCollision != null) {
 			die();
 		} else {
-			
-			if(level.playerCollidesWith(this)) {
-				die();
-				level.getPlayer().die();
-				return;
-			}
+			if(inGameLevel) {
+				InGameLevel level = (InGameLevel) this.level;
+				if(level.playerCollidesWith(this)) {
+					die();
+					level.getPlayer().die();
+					return;
+				}
+			} 
 			
 			Tile tile = getTile();
 			if(tile == null || tile.isDoored()) {

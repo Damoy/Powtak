@@ -8,6 +8,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import core.gamestates.GameState;
+import core.menus.MainMenu;
 import core.world.World;
 import core.world.WorldGeneration;
 import input.Keys;
@@ -24,7 +26,9 @@ public class Core extends JPanel implements Runnable, KeyListener{
 
 	private Thread thread;
 	private boolean running;
+	private GameState gameState;
 
+	private MainMenu mainMenu;
 	private Screen screen;
 	private Window window;
 	private World world;
@@ -44,8 +48,10 @@ public class Core extends JPanel implements Runnable, KeyListener{
 
 	private void init() throws PowtakException {
 		initGraphics();
-		this.loadingScreen = new IndependentLoadingScreen(this, screen, 3000);
-		this.world = WorldGeneration.generateWorldFromPredefinedLevels(screen);
+		// this.loadingScreen = new IndependentLoadingScreen(this, screen, 3000);
+		this.gameState = GameState.MAIN_MENU;
+		this.mainMenu = new MainMenu(this, screen);
+		// this.world = WorldGeneration.generateWorldFromPredefinedLevels(screen);
 	}
 
 	private void initGraphics() {
@@ -104,14 +110,39 @@ public class Core extends JPanel implements Runnable, KeyListener{
 	}
 
 	public void update() throws PowtakException {
-		world.update();
-		screen.update();
-		Keys.updateKeysBlockCounter();
+		switch (gameState) {
+		case MAIN_MENU:
+			this.mainMenu.update();
+			break;
+		case IN_GAME:
+			world.update();
+			screen.update();
+			Keys.updateKeysBlockCounter();
+			break;
+		case PAUSED:
+			break;
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + gameState);
+		}
+
 	}
 
 	public void render() {
 		screen.clear(Color.WHITE);
-		world.render(screen);
+		
+		switch (gameState) {
+		case MAIN_MENU:
+			this.mainMenu.render();
+			break;
+		case IN_GAME:
+			world.render(screen);
+			break;
+		case PAUSED:
+			break;
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + gameState);
+		}
+		
 		screen.render();
 	}
 

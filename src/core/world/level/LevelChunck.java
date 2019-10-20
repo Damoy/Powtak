@@ -2,38 +2,25 @@ package core.world.level;
 
 import java.util.List;
 
-import core.entities.player.Player;
 import core.world.teleportation.Portal;
 import core.world.teleportation.PortalSourcePoint;
 import rendering.Screen;
-import utils.Config;
 import utils.exceptions.PowtakException;
 
-public class LevelChunck {
+public abstract class LevelChunck {
 
-	private List<Level> levels;
-	private int currentLevelIndex;
-	private Player player;
+	protected List<Level> levels;
+	protected int currentLevelIndex;
 	
 	public LevelChunck(List<Level> inLevels) {
 		this.currentLevelIndex = 0;
 		this.levels = inLevels;
 		this.levels.forEach(lvl -> lvl.setLevelChunck(this));
-		this.player = new Player(this.levels.get(0));
 	}
 	
-	public void reload(Screen s, String levelId, PortalSourcePoint nextLevelPortalSourcePoint, Portal nextLevelPortal) throws PowtakException {
-		LevelLoader levelLoader = LevelLoader.get();
-		String levelFilePath = Config.CUSTOM_LEVELS_FILE_PATH + levelId;
-		Level reloadedLevel = Level.from(s, levelLoader.loadCustomLevel(levelFilePath));
-		reloadedLevel.setLevelChunck(this);
-		reloadedLevel.setNextLevelPortalSourcePoint(nextLevelPortalSourcePoint);
-		reloadedLevel.setNextLevelPortal(nextLevelPortal);
-		levels.set(getLevelIndexUsingId(levelId), reloadedLevel);
-		player.setLevel(reloadedLevel);
-	}
+	public abstract void reload(Screen s, String levelId, PortalSourcePoint nextLevelPortalSourcePoint, Portal nextLevelPortal) throws PowtakException;
 	
-	private int getLevelIndexUsingId(String levelId) throws PowtakException {
+	protected int getLevelIndexUsingId(String levelId) throws PowtakException {
 		for(int i = 0; i < levels.size(); ++i) {
 			if(levels.get(i).getId().equals(levelId)) {
 				return i;
@@ -43,14 +30,12 @@ public class LevelChunck {
 			private static final long serialVersionUID = -7622403420527172374L;};
 	}
 	
-	public void render(Screen s) {
-		getCurrent().render();
-		player.render(s);
-	}
-	
 	public void update() throws PowtakException {
 		getCurrent().update();
-		player.update();
+	}
+	
+	public void render(Screen s) {
+		getCurrent().render();
 	}
 	
 	public Level getCurrent() {
@@ -72,8 +57,13 @@ public class LevelChunck {
 	public int count() {
 		return levels.size();
 	}
-	
-	public List<Level> getLevels(){
+
+	public List<Level> getLevels() {
 		return levels;
 	}
+
+	public int getCurrentLevelIndex() {
+		return currentLevelIndex;
+	}
+	
 }

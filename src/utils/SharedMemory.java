@@ -6,15 +6,15 @@ public final class SharedMemory {
 	
 	private SharedMemory() {}
 	
-	public static StringBuffer getStringBuffer() {
+	public synchronized static StringBuffer getStringBuffer() {
 		return sharedStringBuffer;
 	}
 	
-	public static void clearStringBuffer() {
+	public synchronized static void clearStringBuffer() {
 		sharedStringBuffer.setLength(0);
 	}
 	
-	public static StringBuffer getClearedStringBuffer() {
+	public synchronized static StringBuffer getClearedStringBuffer() {
 		clearStringBuffer();
 		return sharedStringBuffer;
 	}

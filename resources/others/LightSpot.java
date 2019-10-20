@@ -21,11 +21,11 @@ public class LightSpot{
 	}
 	
 	public void enlight(float brightness) {
-		screen.enlight(x, y, radius, radius, color.getRGB(), brightness, LightHint.ELLIPSE);
+		screen.enlight(x, y, radius, radius, color.getRGB(), brightness);
 	}
 	
 	public void darken(float brightness) {
-		screen.darken(x, y, radius, radius, color.getRGB(), brightness, LightHint.ELLIPSE);
+		screen.darken(x, y, radius, radius, color.getRGB(), brightness);
 	}
 
 }

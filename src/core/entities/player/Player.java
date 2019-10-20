@@ -10,6 +10,7 @@ import core.entities.projectiles.Projectile;
 import core.world.Map;
 import core.world.Tile;
 import core.world.level.Level;
+import core.world.level.ingame.InGameLevel;
 import input.Keys;
 import rendering.Screen;
 import rendering.Texture;
@@ -45,7 +46,7 @@ public class Player extends Entity{
 	// energy
 	private int energyAmount;
 	
-	private Level level;
+	private InGameLevel level;
 	private Map map;
 	
 	// animation
@@ -57,7 +58,7 @@ public class Player extends Entity{
 	// teleportation counter
 	private TickCounter tpCounter;
 	
-	public Player(Level level) {
+	public Player(InGameLevel level) {
 		super(Texture.PLAYER_SPRITESHEET);
 		attributesInit();
 		initUsingLevel(level);
@@ -73,7 +74,7 @@ public class Player extends Entity{
 		this.tpCounter = null;
 	}
 	
-	private void initUsingLevel(Level level) {
+	private void initUsingLevel(InGameLevel level) {
 		this.level = level;
 		PlayerConfig config = level.getPlayerConfig();
 		this.map = level.getMap();
@@ -90,7 +91,7 @@ public class Player extends Entity{
 		this.level.setPlayer(this);
 	}
 	
-	public void setLevel(Level level) {
+	public void setLevel(InGameLevel level) {
 		this.moving = false;
 		this.blocked = false;
 		this.moveInputReceived = false;

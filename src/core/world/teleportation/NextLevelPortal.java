@@ -3,14 +3,15 @@ package core.world.teleportation;
 import core.entities.player.Player;
 import core.world.Tile;
 import core.world.level.Level;
+import core.world.level.ingame.InGameLevel;
 import utils.Utils;
 import utils.exceptions.PowtakException;
 
 public class NextLevelPortal extends Portal {
 
-	private Level destinationLevel;
+	private InGameLevel destinationLevel;
 	
-	public NextLevelPortal(Tile tile, int x, int y, Level destinationLevel, int destinationX, int destinationY)
+	public NextLevelPortal(Tile tile, int x, int y, InGameLevel destinationLevel, int destinationX, int destinationY)
 			throws PowtakException {
 		super(tile, x, y, destinationX, destinationY);
 		Utils.validateNotNull(destinationLevel, "Destination level");
@@ -28,7 +29,7 @@ public class NextLevelPortal extends Portal {
 		return destinationLevel;
 	}
 
-	public void setDestinationLevel(Level destinationLevel) {
+	public void setDestinationLevel(InGameLevel destinationLevel) {
 		this.destinationLevel = destinationLevel;
 	}
 	

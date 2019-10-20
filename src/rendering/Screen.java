@@ -8,12 +8,9 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 import core.Core;
-import core.world.light.LightEngine;
-import core.world.light.LightHint;
 import rendering.config.TextRenderingConfig;
 import utils.Config;
 import utils.ScreenPositionCalculator;
-import utils.TickCounter;
 
 public class Screen {
 
@@ -75,38 +72,13 @@ public class Screen {
 		return new Screen(core, data, (Graphics2D) data.getGraphics());
 	}
 	
-	public void enlight(int sx, int sy, int w, int h, int color, float brightness, LightHint lhint) {
-		LightEngine.get().enlight(this, sx, sy, w, h, color, brightness, lhint);
-	}
-	
-	public void darken(int sx, int sy, int w, int h, int color, float brightness, LightHint lhint) {
-		LightEngine.get().darken(this, sx, sy, w, h, color, brightness, lhint);
-	}
-	
-	public void darken(float brightness) {
-		darken(0, 0, Config.WIDTH, Config.HEIGHT, Color.WHITE.getRGB(), brightness, LightHint.RECTANGLE);
-	}
-	
 	public void render() {
-		//darken(DarkenValue);
 		Graphics g2 = core.getGraphics();
 		g2.drawImage(data, 0, 0, Config.S_WIDTH, Config.S_HEIGHT, null);
 		g2.dispose();
 	}
 	
-	float DarkenValue = 0.1f;
-	float ddv = 0.1f;
-	TickCounter darkenCounter = new TickCounter(Config.UPS >> 1);
-	
 	public void update() {
-		darkenCounter.increment();
-		if(darkenCounter.isStopped()) {
-			DarkenValue += ddv;
-			darkenCounter.reset();
-			if(DarkenValue <= 0.0f || DarkenValue >= 0.8f) {
-				ddv = -ddv;
-			}
-		}
 	}
 	
 	public BufferedImage getData() {

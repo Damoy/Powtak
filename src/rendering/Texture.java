@@ -9,7 +9,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import utils.Colors;
 import utils.Config;
 import utils.Utils;
 
@@ -89,16 +88,6 @@ public class Texture {
 		g2d.dispose();
 		
 		data = scaled;
-		return this;
-	}
-	
-	public Texture colorize(Color color, float brightness) {
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				data.setRGB(x, y, Colors.increase(data.getRGB(x, y), color, brightness));
-			}
-		}
-		
 		return this;
 	}
 	

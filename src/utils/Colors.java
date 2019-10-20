@@ -6,13 +6,15 @@ public class Colors {
 
 	private Colors() {}
 	
+	public static int alpha(int rgb) {
+		return (rgb >> 24) & 0xff;
+	}
+	
 	public static int red(int rgb) {
-		// return (rgb & 0xFF0000) >> 16;
 		return (rgb >> 16) & 0xff;
 	}
 	
 	public static int green(int rgb) {
-		// return (rgb & 0xFF00) >> 8;
 		return (rgb >> 8) & 0xff;
 	}
 	
@@ -20,156 +22,88 @@ public class Colors {
 		return (rgb & 0xFF);
 	}
 	
-//	public static ColorBundle extract(Color color) {
-//		return new ColorBundle(color.getRed(), color.getGreen(), color.getBlue());
-//	}
-	
-	public static ColorBundle extract(int rgb) {
+	public static Color from(int rgb) {
 		int r = red(rgb);
 		int g = green(rgb);
 		int b = blue(rgb);
-		
-		return new ColorBundle(r, g, b);
+		int a = alpha(rgb);
+		return new Color(r, g, b, a);
 	}
 	
-	public static Color of(ColorBundle colorBundle) {
-		return new Color(colorBundle.r(), colorBundle.g(), colorBundle.b());
+	public static Color increase(Color sourceColor, Color increaseColor, int power) {
+		int sr = sourceColor.getRed();
+		int sg = sourceColor.getGreen();
+		int sb = sourceColor.getBlue();
+		int sa = sourceColor.getAlpha();
+		
+		int ir = increaseColor.getRed();
+		int ig = increaseColor.getGreen();
+		int ib = increaseColor.getBlue();
+		int ia = increaseColor.getAlpha();
+		
+		return increase(sr, sg, sb, sa, ir, ig, ib, ia, power);
 	}
 	
-	public static int increase(int rgb, Color color, float brightness) {
-		return extract(rgb).increase(color, brightness).rgb();
+	public static Color increase(int sourceColorRGB, Color increaseColor, int power) {
+		int sr = red(sourceColorRGB);
+		int sg = green(sourceColorRGB);
+		int sb = blue(sourceColorRGB);
+		int sa = alpha(sourceColorRGB);
+		
+		int ir = increaseColor.getRed();
+		int ig = increaseColor.getGreen();
+		int ib = increaseColor.getBlue();
+		int ia = increaseColor.getAlpha();
+		
+		return increase(sr, sg, sb, sa, ir, ig, ib, ia, power);
 	}
 	
-	// key when:
-	// 	- red: 255  
-	// 	- green: 255 
-	// 	- blue: < 100
-	public static boolean isKey(int rgb) {
-		ColorBundle cBundle = extract(rgb);
-		int r = cBundle.r();
-		int g = cBundle.g();
-		int b = cBundle.b();
+	public static Color increase(Color sourceColor, int increaseColorRGB, int power) {
+		int sr = sourceColor.getRed();
+		int sg = sourceColor.getGreen();
+		int sb = sourceColor.getBlue();
+		int sa = sourceColor.getAlpha();
 		
-		// 100 keys available
-		return r == 255 && g == 255 && b >= 0 && b < 100;
+		int ir = red(increaseColorRGB);
+		int ig = green(increaseColorRGB);
+		int ib = blue(increaseColorRGB);
+		int ia = alpha(increaseColorRGB);
+		
+		return increase(sr, sg, sb, sa, ir, ig, ib, ia, power);
 	}
 	
-	// door when:
-	// 	- red: 0
-	// 	- green < 100
-	// 	- blue: 255
-	public static boolean isDoor(int rgb) {
-		ColorBundle cBundle = extract(rgb);
-		int r = cBundle.r();
-		int g = cBundle.g();
-		int b = cBundle.b();
+	public static Color increase(int sourceColorRGB, int increaseColorRGB, int power) {
+		int sr = red(sourceColorRGB);
+		int sg = green(sourceColorRGB);
+		int sb = blue(sourceColorRGB);
+		int sa = alpha(sourceColorRGB);
 		
-		// 100 doors available
-		return r == 0 && g >= 0 && g < 100 && b == 255;
+		int ir = red(increaseColorRGB);
+		int ig = green(increaseColorRGB);
+		int ib = blue(increaseColorRGB);
+		int ia = alpha(increaseColorRGB);
+		
+		return increase(sr, sg, sb, sa, ir, ig, ib, ia, power);
 	}
 	
-	// energy when:
-	// 	- red: 255
-	// 	- green < 100
-	// 	- blue: 255
-	public static boolean isEnergy(int rgb) {
-		ColorBundle cBundle = extract(rgb);
-		int r = cBundle.r();
-		int g = cBundle.g();
-		int b = cBundle.b();
+	private static Color increase(int sr, int sg, int sb, int sa,
+			int ir, int ig, int ib, int ia, int power) {
+		sr += ((255 - ir) / 255.0f) * power;
+		sg += ((255 - ig) / 255.0f) * power;
+		sb += ((255 - ib) / 255.0f) * power;
+		sa += ((255 - ia) / 255.0f) * power;
 		
-		// 0 to 100 power amount
-		return r == 255 && g >= 0 && g < 100 && b == 255;
+		if(sr < 0) sr = 0;
+		if(sg < 0) sg = 0;
+		if(sb < 0) sb = 0;
+		if(sa < 0) sa = 0;
+		
+		if(sr > 255) sr = 255;
+		if(sg > 255) sg = 255;
+		if(sb > 255) sb = 255;
+		if(sa > 255) sa = 255;
+		
+		return new Color(sr, sg, sb, sa);
 	}
 	
-	// zombie when:
-	// 	- red: 255
-	// 	- green: 0
-	// 	- blue < 4 ; 0 up ; 1 right ; 2 down ; 3 left
-	public static boolean isZombie(int rgb) {
-		ColorBundle cBundle = extract(rgb);
-		int r = cBundle.r();
-		int g = cBundle.g();
-		int b = cBundle.b();
-		return r == 255 && g == 0 && b >= 0 && b <= 3;
-	}
-	
-	// spawn when:
-	// 	- red: 0
-	// 	- green >= 155
-	// 	- blue: 0
-	public static boolean isSpawn(int rgb) {
-		ColorBundle cBundle = extract(rgb);
-		int r = cBundle.r();
-		int g = cBundle.g();
-		int b = cBundle.b();
-		// value of green significates value of initial energy
-		return r >= 0 && r <= 3 && b == 0 && g >= 155 && g <= 255;
-	}
-	
-	public static class ColorBundle{
-		
-		private int r;
-		private int g;
-		private int b;
-		
-		public ColorBundle(int r, int g, int b) {
-			this.r = r;
-			this.g = g;
-			this.b = b;
-		}
-		
-		public ColorBundle increase(Color color, float brightness) {
-			r += (int) (color.getRed() * brightness);
-			g += (int) (color.getGreen() * brightness);
-			b += (int) (color.getBlue() * brightness);
-			computeBounds();
-			return this;
-		}
-		
-		public ColorBundle increase(int dr, int dg, int db, float brightness) {
-			r += (int) (dr * brightness);
-			g += (int) (dg * brightness);
-			b += (int) (db * brightness);
-			computeBounds();
-			return this;
-		}
-		
-		public ColorBundle decrease(int dr, int dg, int db, float brightness) {
-			r -= (int) (dr * brightness);
-			g -= (int) (dg * brightness);
-			b -= (int) (db * brightness);
-			computeBounds();
-			return this;
-		}
-		
-		public ColorBundle computeBounds() {
-			if(r < 0) r = 0;
-			if(g < 0) g = 0;
-			if(b < 0) b = 0;
-			if(r > 255) r = 255;
-			if(g > 255) g = 255;
-			if(b > 255) b = 255;
-			
-			return this;
-		}
-		
-		public int rgb() {
-			computeBounds();
-			return new Color(r, g, b).getRGB();
-		}
-
-		public int r() {
-			return r;
-		}
-
-		public int g() {
-			return g;
-		}
-
-		public int b() {
-			return b;
-		}
-		
-	}
 }

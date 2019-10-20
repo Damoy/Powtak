@@ -146,7 +146,8 @@ public class StaticZombie extends Zombie{
 		default:
 			throw new IllegalStateException("Badly formed projectile.");
 		}
-		projectiles.add(new ZombieProjectile(getLevel(), direction, ZOMBIE_PROJECTILE_ANIMATION, projX, projY));
+		projectiles.add(new ZombieProjectile(getLevel(), inGameLevel, direction,
+				ZOMBIE_PROJECTILE_ANIMATION, projX, projY));
 	}
 
 }

@@ -489,3 +489,379 @@ public class LevelChunck {
 //			throw new IllegalStateException();
 //		}
 //	}
+
+--
+
+	private LightChunck buildLightChunck() {
+		LightChunck lightChunck = new LightChunck();
+		lightChunck.add(new LightSpot(s, 0, 96, Config.TILE_SIZE, Color.CYAN));
+		lightChunck.add(new LightSpot(s, 32, 96, Config.TILE_SIZE, Color.MAGENTA));
+		lightChunck.add(new LightSpot(s, 64, 96, Config.TILE_SIZE, Color.GREEN));
+		lightChunck.add(new LightSpot(s, 96, 96, Config.TILE_SIZE, Color.WHITE));
+		return lightChunck;
+	}
+	
+	private ParticleEngine buildParticleEngine() {
+		ParticleEngine particleEngine = ParticleEngine.empty();
+//		List<Particle> particles = new ArrayList<>();
+//		particles.add(new Particle(this, particleEngine, 0, 100, 100, new ParticleMovement(100, 100, 25, 25), new ExplosionAnimation(4, 1.0f)));
+//		particles.add(new Particle(this, particleEngine, 0, 100, 100, new ParticleMovement(100, 100, 25, -25), new ExplosionAnimation(4, 1.0f)));
+//		particles.add(new Particle(this, particleEngine, 0, 100, 100, new ParticleMovement(100, 100, -25, 25), new ExplosionAnimation(4, 1.0f)));
+//		particles.add(new Particle(this, particleEngine, 0, 100, 100, new ParticleMovement(100, 100, -25, -25), new ExplosionAnimation(4, 1.0f)));
+//		particleEngine.addComponent(particles);
+		return particleEngine;
+	}
+
+	--
+
+		public static Color of(ColorBundle colorBundle) {
+		return new Color(colorBundle.r(), colorBundle.g(), colorBundle.b());
+	}
+	
+	public static int increase(int rgb, Color color, float brightness) {
+		return extract(rgb).increase(color, brightness).rgb();
+	}
+
+
+	// key when:
+	// 	- red: 255  
+	// 	- green: 255 
+	// 	- blue: < 100
+	public static boolean isKey(int rgb) {
+		ColorBundle cBundle = extract(rgb);
+		int r = cBundle.r();
+		int g = cBundle.g();
+		int b = cBundle.b();
+		
+		// 100 keys available
+		return r == 255 && g == 255 && b >= 0 && b < 100;
+	}
+	
+	// door when:
+	// 	- red: 0
+	// 	- green < 100
+	// 	- blue: 255
+	public static boolean isDoor(int rgb) {
+		ColorBundle cBundle = extract(rgb);
+		int r = cBundle.r();
+		int g = cBundle.g();
+		int b = cBundle.b();
+		
+		// 100 doors available
+		return r == 0 && g >= 0 && g < 100 && b == 255;
+	}
+	
+	// energy when:
+	// 	- red: 255
+	// 	- green < 100
+	// 	- blue: 255
+	public static boolean isEnergy(int rgb) {
+		ColorBundle cBundle = extract(rgb);
+		int r = cBundle.r();
+		int g = cBundle.g();
+		int b = cBundle.b();
+		
+		// 0 to 100 power amount
+		return r == 255 && g >= 0 && g < 100 && b == 255;
+	}
+	
+	// zombie when:
+	// 	- red: 255
+	// 	- green: 0
+	// 	- blue < 4 ; 0 up ; 1 right ; 2 down ; 3 left
+	public static boolean isZombie(int rgb) {
+		ColorBundle cBundle = extract(rgb);
+		int r = cBundle.r();
+		int g = cBundle.g();
+		int b = cBundle.b();
+		return r == 255 && g == 0 && b >= 0 && b <= 3;
+	}
+	
+	// spawn when:
+	// 	- red: 0
+	// 	- green >= 155
+	// 	- blue: 0
+	public static boolean isSpawn(int rgb) {
+		ColorBundle cBundle = extract(rgb);
+		int r = cBundle.r();
+		int g = cBundle.g();
+		int b = cBundle.b();
+		// value of green significates value of initial energy
+		return r >= 0 && r <= 3 && b == 0 && g >= 155 && g <= 255;
+	}
+
+
+	public static class ColorBundle{
+		
+		private int r;
+		private int g;
+		private int b;
+		
+		public ColorBundle(int r, int g, int b) {
+			this.r = r;
+			this.g = g;
+			this.b = b;
+		}
+		
+		public ColorBundle increase(Color color, float brightness) {
+			r += (int) (color.getRed() * brightness);
+			g += (int) (color.getGreen() * brightness);
+			b += (int) (color.getBlue() * brightness);
+			computeBounds();
+			return this;
+		}
+		
+		public ColorBundle increase(int dr, int dg, int db, float brightness) {
+			r += (int) (dr * brightness);
+			g += (int) (dg * brightness);
+			b += (int) (db * brightness);
+			computeBounds();
+			return this;
+		}
+		
+		public ColorBundle decrease(int dr, int dg, int db, float brightness) {
+			r -= (int) (dr * brightness);
+			g -= (int) (dg * brightness);
+			b -= (int) (db * brightness);
+			computeBounds();
+			return this;
+		}
+		
+		public ColorBundle computeBounds() {
+			if(r < 0) r = 0;
+			if(g < 0) g = 0;
+			if(b < 0) b = 0;
+			if(r > 255) r = 255;
+			if(g > 255) g = 255;
+			if(b > 255) b = 255;
+			
+			return this;
+		}
+		
+		public int rgb() {
+			computeBounds();
+			return new Color(r, g, b).getRGB();
+		}
+
+		public int r() {
+			return r;
+		}
+
+		public int g() {
+			return g;
+		}
+
+		public int b() {
+			return b;
+		}
+		
+	}
+
+	--
+
+	package core.world.light;
+
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+
+import rendering.Screen;
+import utils.Colors;
+import utils.Colors.ColorBundle;
+
+public class LightEngine {
+
+	private final static LightEngine INSTANCE = new LightEngine();
+	
+	private LightEngine() {}
+	
+	public static LightEngine get() {
+		return INSTANCE;
+	}
+	
+	public void enlight(Screen screen, int sx, int sy, int w, int h, int color, float brightness, LightHint lhint) {
+		if(lhint == LightHint.ELLIPSE) {
+			eenlight(screen, sx, sy, w, h, color, brightness);
+		} else {
+			renlight(screen, sx, sy, w, h, color, brightness);
+		}
+	}
+	
+	private void eenlight(Screen screen, int sx, int sy, int w, int h, int color, float brightness) {
+		renlight(screen, sx, sy, w, h, color, brightness);
+	}
+	
+	private void renlight(Screen screen, int sx, int sy, int w, int h, int color, float brightness) {
+		BufferedImage sdata = screen.getData();
+		
+		for(int x = sx; x < sx + w; ++x) {
+			for(int y = sy; y < sy + h; ++y) {
+				sdata.setRGB(x, y, enlight(sdata.getRGB(x, y), color, brightness));
+			}
+		}
+	}
+	
+	private int enlight(int rgb, int color, float brightness) {
+		ColorBundle rgbBundle = Colors.extract(rgb);
+		ColorBundle colorBundle = Colors.extract(color);
+		int dr = colorBundle.r();
+		int dg = colorBundle.g();
+		int db = colorBundle.b();
+		
+		return Colors.of(rgbBundle.increase(dr, dg, db, brightness)).getRGB();
+	}
+	
+	public void darken(Screen screen, int sx, int sy, int w, int h, int color, float brightness, LightHint lhint) {
+		BufferedImage sdata = screen.getData();
+		
+		for(int x = sx; x < sx + w; ++x) {
+			for(int y = sy; y < sy + h; ++y) {
+				sdata.setRGB(x, y, darken(sdata.getRGB(x, y), color, brightness));
+			}
+		}
+	}
+	
+	private int darken(int rgb, int color, float brightness) {
+		ColorBundle rgbBundle = Colors.extract(rgb);
+		ColorBundle colorBundle = Colors.extract(color);
+		int dr = colorBundle.r();
+		int dg = colorBundle.g();
+		int db = colorBundle.b();
+		
+		return Colors.of(rgbBundle.decrease(dr, dg, db, brightness)).getRGB();
+	}
+	
+	public void darkenScreen(Screen screen, int power) {
+		BufferedImage sdata = screen.getData();
+		int w = sdata.getWidth();
+		int h = sdata.getHeight();
+		int blackRGB = Color.BLACK.getRGB();
+		
+		for(int x = 0; x < w; ++x) {
+			for(int y = 0; y < h; ++y) {
+				int rgb = sdata.getRGB(x, y);
+				sdata.setRGB(x, y, Colors.decrease(rgb, blackRGB, power).getRGB());
+//				int r = Colors.red(rgb) - power;
+//				int g = Colors.green(rgb) - power;
+//				int b = Colors.blue(rgb) - power;
+//				if(r < 0) r = 0;
+//				if(g < 0) g = 0;
+//				if(b < 0) b = 0;
+//				sdata.setRGB(x, y, Colors.of(new ColorBundle(r, g, b)).getRGB());
+			}
+		}
+	}
+	
+}
+--
+
+package core.world.light;
+
+import java.awt.Color;
+
+import rendering.Screen;
+
+public class LightSpot{
+
+	private Color color;
+	private Screen screen;
+	private int x;
+	private int y;
+	private int radius;
+	
+	public LightSpot(Screen screen, int x, int y, int radius, Color color) {
+		this.color = color;
+		this.screen = screen;
+		this.x = x;
+		this.y = y;
+		this.radius = radius;
+	}
+	
+	public void enlight(float brightness) {
+		screen.enlight(x, y, radius, radius, color.getRGB(), brightness);
+	}
+	
+	public void darken(float brightness) {
+		screen.darken(x, y, radius, radius, color.getRGB(), brightness);
+	}
+
+}
+
+--
+
+package core.world.light;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class LightChunck {
+	
+	private List<LightSpot> lights;
+	
+	public LightChunck() {
+		super();
+		lights = new ArrayList<>();
+	}
+	
+	public LightChunck add(LightSpot lightSpot) {
+		lights.add(lightSpot);
+		return this;
+	}
+
+	public LightChunck(List<LightSpot> lights) {
+		this.lights = lights;
+	}
+
+	public static LightChunck of(List<LightSpot> lights) {
+		return new LightChunck(lights);
+	}
+
+	public void enlight(float brightness) {
+		lights.forEach(light -> light.enlight(brightness));
+	}
+
+	public void darken(float brightness) {
+		lights.forEach(light -> light.darken(brightness));
+	}
+
+}
+--
+
+//				int r = Colors.red(rgb) - power;
+//				int g = Colors.green(rgb) - power;
+//				int b = Colors.blue(rgb) - power;
+//				if(r < 0) r = 0;
+//				if(g < 0) g = 0;
+//				if(b < 0) b = 0;
+//				sdata.setRGB(x, y, Colors.of(new ColorBundle(r, g, b)).getRGB());
+
+--
+
+
+	public void enlight(int sx, int sy, int w, int h, int color, float brightness) {
+		LightEngine.get().enlight(this, sx, sy, w, h, color, brightness);
+	}
+	
+	public void darken(int sx, int sy, int w, int h, int color, float brightness) {
+		LightEngine.get().darken(this, sx, sy, w, h, color, brightness);
+	}
+	
+	public void darken(float brightness) {
+		darken(0, 0, Config.WIDTH, Config.HEIGHT, Color.WHITE.getRGB(), brightness, LightHint.RECTANGLE);
+	}
+
+	--
+
+		float DarkenValue = 0.1f;
+	float ddv = 0.1f;
+	TickCounter darkenCounter = new TickCounter(Config.UPS >> 1);
+	
+	public void update() {
+		darkenCounter.increment();
+		if(darkenCounter.isStopped()) {
+			DarkenValue += ddv;
+			darkenCounter.reset();
+			if(DarkenValue <= 0.0f || DarkenValue >= 0.8f) {
+				ddv = -ddv;
+			}
+		}
+	}
