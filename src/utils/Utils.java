@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import core.configs.GameConfig;
 import utils.exceptions.NullObjectException;
 import utils.exceptions.PowtakException;
 
@@ -57,15 +58,19 @@ public final class Utils {
 	}
 	
 	public static String levelPath(String levelFileName) {
-		return Config.CUSTOM_LEVELS_FILE_PATH + levelFileName;
+		return GameConfig.CUSTOM_LEVELS_FILE_PATH + levelFileName;
 	}
 	
-	public static String texturePath(String textureFileName) {
-		return Config.TEXTURES_FILE_PATH + textureFileName;
+	public static String texturePath(String textureFileName, String folderName) {
+		String texturePath = GameConfig.TEXTURES_FILE_PATH;
+		if(folderName != null) {
+			texturePath += folderName + "/";
+		}
+		return texturePath + textureFileName;
 	}
 	
 	public static String fontPath(String fontFileName) {
-		return Config.FONTS_FILE_PATH + fontFileName;
+		return GameConfig.FONTS_FILE_PATH + fontFileName;
 	}
 	
 	public static List<String> getFileLines(String fileName) {

@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import core.configs.GameConfig;
 import core.entities.Direction;
 import core.entities.enemies.EnemyChunck;
 import core.entities.enemies.StaticZombie;
@@ -21,7 +22,6 @@ import core.world.GroundTile;
 import core.world.Tile;
 import core.world.items.DoorKeyEngine;
 import core.world.teleportation.PortalSourcePoint;
-import utils.Config;
 import utils.Log;
 import utils.Utils;
 import utils.exceptions.IllegalLevelFileException;
@@ -46,15 +46,15 @@ public class LevelLoader {
 		String levelFileName = file.getName();
 		Log.info("Loading \"" + levelFileName + "\" .");
 		
-		int rows = Config.NUM_ROWS;
-		int cols = Config.NUM_COLS;
+		int rows = GameConfig.NUM_ROWS;
+		int cols = GameConfig.NUM_COLS;
 
 		// tiles
 		Tile[][] tiles = new Tile[rows][cols];
 		for(int row = 0; row < rows; ++row) {
 			for(int col = 0; col < cols; ++col) {
-				int x = col * Config.TILE_SIZE;
-				int y = row * Config.TILE_SIZE;
+				int x = col * GameConfig.TILE_SIZE;
+				int y = row * GameConfig.TILE_SIZE;
 				tiles[row][col] = new GroundTile(x, y);
 			}
 		}
@@ -174,8 +174,8 @@ public class LevelLoader {
 		
 		playerConfig.setDirection(direction);
 		playerConfig.setEnergy(energy);
-		playerConfig.setX(col * Config.TILE_SIZE);
-		playerConfig.setY(row * Config.TILE_SIZE);
+		playerConfig.setX(col * GameConfig.TILE_SIZE);
+		playerConfig.setY(row * GameConfig.TILE_SIZE);
 	}
 	
 	private void handleWallsLoad(LevelConfig levelConfig, String levelFileName, String levelFileLine) throws PowtakException {
@@ -334,8 +334,8 @@ public class LevelLoader {
 		
 		Tile tile = levelConfig.getTiles()[row][col];
 		EnemyChunck enemyChunck = levelConfig.getEnemyChunck();
-		int x = col * Config.TILE_SIZE;
-		int y = row * Config.TILE_SIZE; 
+		int x = col * GameConfig.TILE_SIZE;
+		int y = row * GameConfig.TILE_SIZE; 
 		enemyChunck.add(new StaticZombie(tile, enemyChunck, x, y, 1.0f, direction));
 	}
 	
@@ -356,8 +356,8 @@ public class LevelLoader {
 			throw new IllegalLevelFileException(levelFileName);
 		}
 		
-		int x = col * Config.TILE_SIZE;
-		int y = row * Config.TILE_SIZE; 
+		int x = col * GameConfig.TILE_SIZE;
+		int y = row * GameConfig.TILE_SIZE; 
 		levelConfig.setNextLevelPortalSourcePoint(new PortalSourcePoint(x, y));
 	}
 	
@@ -437,8 +437,8 @@ public class LevelLoader {
 		
 		EnergyChunck energyChunck = levelConfig.getEnergyChunck();
 		Tile tile = levelConfig.getTiles()[row][col];
-		int x = col * Config.TILE_SIZE;
-		int y = row * Config.TILE_SIZE; 
+		int x = col * GameConfig.TILE_SIZE;
+		int y = row * GameConfig.TILE_SIZE; 
 		levelConfig.getEnergyChunck().add(new Energy(tile, x, y, power, energyChunck));
 	}
 	

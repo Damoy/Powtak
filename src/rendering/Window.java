@@ -8,7 +8,7 @@ import java.awt.event.WindowAdapter;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-import utils.Config;
+import core.configs.GameConfig;
 import utils.SharedMemory;
 
 public class Window {
@@ -36,7 +36,7 @@ public class Window {
 		    }
 		});
 		win.add(component);
-		win.setResizable(Config.RESIZABLE);
+		win.setResizable(GameConfig.RESIZABLE);
 		win.pack();
 		win.setLocationRelativeTo(null);
 	}

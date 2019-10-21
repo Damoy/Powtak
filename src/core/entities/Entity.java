@@ -1,10 +1,10 @@
 package core.entities;
 
+import core.configs.GameConfig;
 import core.world.Tile;
 import rendering.Screen;
 import rendering.Texture;
 import utils.AABB;
-import utils.Config;
 
 public abstract class Entity {
 
@@ -46,11 +46,11 @@ public abstract class Entity {
 	}
 	
 	public int getRow() {
-		return y / Config.TILE_SIZE;
+		return y / GameConfig.TILE_SIZE;
 	}
 	
 	public int getCol() {
-		return x / Config.TILE_SIZE;
+		return x / GameConfig.TILE_SIZE;
 	}
 	
 	public Entity addX(int dx) {

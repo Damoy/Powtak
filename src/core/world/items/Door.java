@@ -1,10 +1,10 @@
 package core.world.items;
 
+import core.configs.GameConfig;
 import core.entities.Entity;
 import core.world.Tile;
 import rendering.Screen;
 import rendering.Texture;
-import utils.Config;
 
 public class Door extends Entity{
 	
@@ -12,7 +12,7 @@ public class Door extends Entity{
 
 	public Door(Tile tile, int id, int x, int y) {
 		super(tile, x, y, Texture.DOOR);
-		this.id = Config.getDoorId(id);
+		this.id = GameConfig.getDoorId(id);
 	}
 
 	@Override

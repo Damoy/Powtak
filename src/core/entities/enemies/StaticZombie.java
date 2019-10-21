@@ -3,6 +3,7 @@ package core.entities.enemies;
 import java.util.ArrayList;
 import java.util.List;
 
+import core.configs.GameConfig;
 import core.entities.Direction;
 import core.entities.projectiles.Projectile;
 import core.entities.projectiles.ZombieProjectile;
@@ -12,7 +13,6 @@ import rendering.Texture;
 import rendering.animation.Animation;
 import rendering.animation.BasicAnimationOnCall;
 import rendering.animation.StaticAnimation;
-import utils.Config;
 import utils.Utils;
 import utils.TickCounter;
 
@@ -26,9 +26,9 @@ public class StaticZombie extends Zombie{
 	private TickCounter shootCounter;
 	
 	public StaticZombie(Tile tile, EnemyChunck enemyChunck, int x, int y, float scale, Direction initialDirection) {
-		super(null, tile, enemyChunck, x, y, Texture.STATIC_ZOMBIE_SPRITESHEET, initialDirection);
+		super(null, tile, enemyChunck, x, y, Texture.ZOMBIE_SPRITESHEET, initialDirection);
 		this.scale = scale;
-		this.shootSpeed = Utils.irand(Config.UPS, Config.UPS * 2);
+		this.shootSpeed = Utils.irand(GameConfig.UPS, GameConfig.UPS * 2);
 		this.ticksCap = shootSpeed;
 		this.projectiles = new ArrayList<>();
 		this.shootCounter = new TickCounter(shootSpeed);
@@ -61,13 +61,13 @@ public class StaticZombie extends Zombie{
 	}
 	
 	private int getRenderingXOffset() {
-		int ts = Config.TILE_SIZE;
+		int ts = GameConfig.TILE_SIZE;
 		int w = getWidth();
 		return (ts - w) >> 1;
 	}
 	
 	private int getRenderingYOffset() {
-		int ts = Config.TILE_SIZE;
+		int ts = GameConfig.TILE_SIZE;
 		int h = getHeight();
 		int offset = ((ts - h) >> 1);
 		return offset;
@@ -120,7 +120,7 @@ public class StaticZombie extends Zombie{
 	private final static Animation ZOMBIE_PROJECTILE_ANIMATION = new StaticAnimation(Texture.RED_PROJECTILE, 0, 0, 2, 2, 1);
 	
 	private void generateProjectile() {
-		int ts = Config.TILE_SIZE;
+		int ts = GameConfig.TILE_SIZE;
 		int w = ZOMBIE_PROJECTILE_ANIMATION.getCurrentFrame().getWidth();
 		int h = ZOMBIE_PROJECTILE_ANIMATION.getCurrentFrame().getHeight();
 		int projX = 0;

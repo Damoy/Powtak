@@ -3,6 +3,14 @@ package utils;
 import java.awt.Color;
 
 public class Colors {
+	
+	public static final Color DARK_RED = new Color(139, 0, 0);
+	public static final Color DARK_GRAY = new Color(126, 126, 126);
+	public static final Color DARK_WHITE = new Color(255, 255, 255);
+	
+	public static final Color LIGHT_RED = new Color(250, 50, 50);
+	public static final Color LIGHT_GRAY = new Color(200, 200, 200);
+	public static final Color LIGHT_GREEN = new Color(130, 210, 130, 230);
 
 	private Colors() {}
 	

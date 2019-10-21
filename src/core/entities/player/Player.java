@@ -3,6 +3,7 @@ package core.entities.player;
 import java.util.ArrayList;
 import java.util.List;
 
+import core.configs.GameConfig;
 import core.entities.Direction;
 import core.entities.Entity;
 import core.entities.projectiles.PlayerStaticProjectile;
@@ -18,7 +19,6 @@ import rendering.animation.AnimationFrame;
 import rendering.animation.DirectedAnimation;
 import rendering.animation.DirectedAnimationOnTick;
 import rendering.config.TextRenderingConfig;
-import utils.Config;
 import utils.Utils;
 import utils.TickCounter;
 
@@ -128,7 +128,7 @@ public class Player extends Entity{
 	
 	private DirectedAnimationOnTick generateAnimation() {
 		Texture t = getTexture();
-		int ticksBounds2f = Config.TILE_SIZE;
+		int ticksBounds2f = GameConfig.TILE_SIZE;
 		int ticksBounds3f = ticksBounds2f;
 		
 		DirectedAnimationOnTick animation = new DirectedAnimationOnTick();
@@ -184,11 +184,11 @@ public class Player extends Entity{
 	}
 	
 	private int getFrameXoffset(AnimationFrame frame) {
-		return (Config.TILE_SIZE - frame.getWidth()) >> 1;
+		return (GameConfig.TILE_SIZE - frame.getWidth()) >> 1;
 	}
 	
 	private int getFrameYoffset(AnimationFrame frame) {
-		return (Config.TILE_SIZE - frame.getHeight()) >> 1;
+		return (GameConfig.TILE_SIZE - frame.getHeight()) >> 1;
 	}
 
 	@Override
@@ -290,7 +290,7 @@ public class Player extends Entity{
 		if(!moving) {
 			int dx = 0;
 			int dy = 0;
-			int offset = Config.PLAYER_SPEED;
+			int offset = GameConfig.PLAYER_SPEED;
 			
 			sx = x;
 			sy = y;
@@ -329,7 +329,7 @@ public class Player extends Entity{
 			blocked = !(move2(ldx, 0) && move2(0, ldy));
 		}
 		
-		int ts = Config.TILE_SIZE;
+		int ts = GameConfig.TILE_SIZE;
 		int xpts = sx + ts;
 		int ypts = sy + ts;
 		int xmts = sx - ts;
@@ -363,9 +363,9 @@ public class Player extends Entity{
 	private boolean move2(int dx, int dy) {
 		if(dx != 0 && dy != 0) throw new IllegalStateException();
 		
-		int xr = Config.TILE_SIZE - 1;
+		int xr = GameConfig.TILE_SIZE - 1;
 		int yr = xr;
-		int sv = (int) Utils.log2(Config.TILE_SIZE);
+		int sv = (int) Utils.log2(GameConfig.TILE_SIZE);
 		
 		int rowTo0 = y >> sv;
 		int colTo0 = x >> sv;
@@ -377,12 +377,12 @@ public class Player extends Entity{
 		int row1 = (y + dy + yr) >> sv;
 		int col1 = (x + dx + xr) >> sv;
 		
-		if(row0 < 0 || col0 < 0 || row1 >= Config.NUM_ROWS || col1 >= Config.NUM_COLS) return false;
+		if(row0 < 0 || col0 < 0 || row1 >= GameConfig.NUM_ROWS || col1 >= GameConfig.NUM_COLS) return false;
 		
 		for(int row = row0; row <= row1; ++row) {
 			for(int col = col0; col <= col1; ++col) {
 				if(col >= colTo0 && col <= colTo1 && row >= rowTo0 && row <= rowTo1) continue;
-				if(row < 0 || row >= Config.NUM_ROWS || col < 0 || col >= Config.NUM_COLS) continue;
+				if(row < 0 || row >= GameConfig.NUM_ROWS || col < 0 || col >= GameConfig.NUM_COLS) continue;
 				
 				Tile tile = map.getTileAt(row, col);
 				
@@ -445,7 +445,7 @@ public class Player extends Entity{
 	public void activateTeleportation() {
 		teleporting = true;
 		Keys.deactivateAll();
-		Keys.blockKeysWithDelay(Config.UPS >> 2);
+		Keys.blockKeysWithDelay(GameConfig.UPS >> 2);
 		resetMovement();
 	}
 	

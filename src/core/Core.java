@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import core.configs.GameConfig;
 import core.gamestates.GameState;
 import core.menus.MainMenu;
 import core.world.World;
@@ -16,9 +17,7 @@ import input.Keys;
 import rendering.Screen;
 import rendering.Window;
 import rendering.UI.IndependentLoadingScreen;
-import utils.Config;
 import utils.exceptions.PowtakException;
-
 
 public class Core extends JPanel implements Runnable, KeyListener{
 
@@ -41,7 +40,7 @@ public class Core extends JPanel implements Runnable, KeyListener{
 	}
 	
 	private void setComponent() {
-		setPreferredSize(new Dimension(Config.WIDTH * Config.SCALE, Config.HEIGHT * Config.SCALE));
+		setPreferredSize(new Dimension(GameConfig.WIDTH * GameConfig.SCALE, GameConfig.HEIGHT * GameConfig.SCALE));
 		setFocusable(true);
 		requestFocus();
 	}
@@ -51,19 +50,24 @@ public class Core extends JPanel implements Runnable, KeyListener{
 		// this.loadingScreen = new IndependentLoadingScreen(this, screen, 3000);
 		this.gameState = GameState.MAIN_MENU;
 		this.mainMenu = new MainMenu(this, screen);
-		// this.world = WorldGeneration.generateWorldFromPredefinedLevels(screen);
+		
 	}
 
 	private void initGraphics() {
-		screen = Screen.of(this, new BufferedImage(Config.WIDTH, Config.HEIGHT, BufferedImage.TYPE_INT_RGB));
-		window = new Window(Config.TITLE, this);
+		screen = Screen.of(this, new BufferedImage(GameConfig.WIDTH, GameConfig.HEIGHT, BufferedImage.TYPE_INT_RGB));
+		window = new Window(GameConfig.TITLE, this);
+	}
+	
+	public void launchGame() throws PowtakException {
+		this.world = WorldGeneration.generateWorldFromPredefinedLevels(screen);
+		gameState = GameState.IN_GAME;
 	}
 	
 	@Override
 	public void run() {
 		long lastTime = System.nanoTime();
 		double unprocessed = 0;
-		double nsPerTick = 1000000000.0 / Config.UPS;
+		double nsPerTick = 1000000000.0 / GameConfig.UPS;
 		int frames = 0;
 
 		int ticks = 0;
@@ -113,6 +117,7 @@ public class Core extends JPanel implements Runnable, KeyListener{
 		switch (gameState) {
 		case MAIN_MENU:
 			this.mainMenu.update();
+			Keys.update();
 			break;
 		case IN_GAME:
 			world.update();
@@ -124,7 +129,6 @@ public class Core extends JPanel implements Runnable, KeyListener{
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + gameState);
 		}
-
 	}
 
 	public void render() {

@@ -1,11 +1,11 @@
-package utils;
+package core.configs;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-public final class Config {
+public final class GameConfig {
 
-	private Config() {}
+	private GameConfig() {}
 	
 	public final static int UPS = 60;
 	public final static int WIDTH = 240;
@@ -46,4 +46,5 @@ public final class Config {
 	public static int getKeyId(int index) {
 		return BASE_KEY_INDEX + index;
 	}
+	
 }

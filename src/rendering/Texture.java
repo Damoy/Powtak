@@ -9,27 +9,37 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import utils.Config;
+import core.configs.GameConfig;
 import utils.Utils;
 
 public class Texture {
 	
-	public final static Texture GROUND_TILE = getSubTexture(Utils.texturePath("groundTile.png"));
-	public final static Texture GROUND_TILE2 = getSubTexture(Utils.texturePath("groundTile2.png"));
-	public final static Texture STANDARD_WALL = getSubTexture(Utils.texturePath("swall.png"));
-	public final static Texture DESTRUCTIBLE_WALL = getSubTexture(Utils.texturePath("dwall.png"));
-	public final static Texture KEY = getSubTexture(Utils.texturePath("key.png"));
-	public final static Texture DOOR = getSubTexture(Utils.texturePath("door.png"));
-	public final static Texture SHADOW = getSubTexture(Utils.texturePath("shadow.png"));
-	public final static Texture GRAY_PROJECTILE = getSubTexture(Utils.texturePath("grayProj.png"), 0, 0, 2, 2);
-	public final static Texture RED_PROJECTILE = getSubTexture(Utils.texturePath("redProj.png"), 0, 0, 2, 2);
+	// projectiles
+	public final static Texture GRAY_PROJECTILE = getSubTexture(Utils.texturePath("grayProj.png", "projectiles"), 0, 0, 2, 2);
+	public final static Texture RED_PROJECTILE = getSubTexture(Utils.texturePath("redProj.png", "projectiles"), 0, 0, 2, 2);
+	
+	// tiles
+	public final static Texture GROUND_TILE = getTexture(Utils.texturePath("groundTile.png", "tiles"));
+	
+	// walls
+	public final static Texture DESTRUCTIBLE_WALL = getTexture(Utils.texturePath("dwall.png", "walls"));
+	public final static Texture STANDARD_WALL = getTexture(Utils.texturePath("swall.png", "walls"));
+	
+	// doors
+	public final static Texture DOOR = getTexture(Utils.texturePath("door.png", "doors"));
+	
+	// keys
+	public final static Texture KEY = getTexture(Utils.texturePath("key.png", "keys"));
+	
+	// Icons
+	public final static Texture NORMAL_PLAYER_ICON = getSubTexture(Utils.texturePath("normalPlayerIcon.png", "icons"), 0, 0, 12, 10);
 	
 	// Sprite-sheets
-	public final static Texture PLAYER_SPRITESHEET = getSubTexture(Utils.texturePath("player_spritesheet.png"), 0, 0, 155, 13);
-	public final static Texture PARTICULE_SPRITESHEET = getSubTexture(Utils.texturePath("particuleAnimTest.png"), 0, 0, 9, 3);
-	public final static Texture ENERGY_SPRITESHEET = getSubTexture(Utils.texturePath("energy_spritesheet.png"), 0, 0, 31, 10);
-	public final static Texture STATIC_ZOMBIE_SPRITESHEET = getSubTexture(Utils.texturePath("staticZombie_spritesheet.png"), 0, 0, 87, 13);
-	public final static Texture TELEPORT_POINT_SPRITESHEET = getSubTexture(Utils.texturePath("portal_spritesheet.png"), 0, 0, 64, 16);
+	public final static Texture PLAYER_SPRITESHEET = getSubTexture(Utils.texturePath("player_spritesheet.png", "player"), 0, 0, 155, 13);
+	public final static Texture PARTICULE_SPRITESHEET = getSubTexture(Utils.texturePath("particuleAnimTest.png", "particles"), 0, 0, 9, 3);
+	public final static Texture ENERGY_SPRITESHEET = getSubTexture(Utils.texturePath("energy_spritesheet.png", "energy"), 0, 0, 31, 10);
+	public final static Texture ZOMBIE_SPRITESHEET = getSubTexture(Utils.texturePath("zombie_spritesheet.png", "enemies"), 0, 0, 87, 13);
+	public final static Texture TELEPORT_POINT_SPRITESHEET = getSubTexture(Utils.texturePath("portal_spritesheet.png", "portals"), 0, 0, 64, 16);
 
 	private int width;
 	private int height;
@@ -47,12 +57,12 @@ public class Texture {
 		return new Texture(width, height, data, filePath);
 	}
 	
-	public static Texture getSubTexture(String filePath) {
-		return getSubTexture(filePath, 0, 0, Config.TILE_SIZE, Config.TILE_SIZE);
+	public static Texture getTexture(String filePath) {
+		return getSubTexture(filePath, 0, 0, GameConfig.TILE_SIZE, GameConfig.TILE_SIZE);
 	}
 	
 	public static Texture getSubTexture(String filePath, int xp, int yp, int width, int height) {
-		BufferedImage tex = new BufferedImage(width, height, Config.TEXTURE_TYPE);
+		BufferedImage tex = new BufferedImage(width, height, GameConfig.TEXTURE_TYPE);
 		try {
 			tex = ImageIO.read(new FileInputStream(filePath));
 			tex = tex.getSubimage(xp, yp, width, height);

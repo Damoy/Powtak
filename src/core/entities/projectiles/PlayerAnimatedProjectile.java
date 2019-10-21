@@ -1,5 +1,6 @@
 package core.entities.projectiles;
 
+import core.configs.GameConfig;
 import core.entities.Direction;
 import core.entities.enemies.Enemy;
 import core.entities.walls.Wall;
@@ -7,7 +8,6 @@ import core.world.Tile;
 import core.world.level.Level;
 import rendering.animation.Animation;
 import utils.AABB;
-import utils.Config;
 
 public class PlayerAnimatedProjectile extends AnimatedProjectile{
 
@@ -41,7 +41,7 @@ public class PlayerAnimatedProjectile extends AnimatedProjectile{
 				x += dx;
 				y += dy;
 				
-				if(x < 0 || x > Config.WIDTH || y < 0 || y > Config.HEIGHT) {
+				if(x < 0 || x > GameConfig.WIDTH || y < 0 || y > GameConfig.HEIGHT) {
 					die();
 					return;
 				}

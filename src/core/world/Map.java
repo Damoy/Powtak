@@ -1,8 +1,8 @@
 package core.world;
 
+import core.configs.GameConfig;
 import core.world.teleportation.Portal;
 import rendering.Screen;
-import utils.Config;
 
 public class Map {
 	
@@ -40,7 +40,7 @@ public class Map {
 	
 	public Tile getNormTileAt(int x, int y) {
 		try {
-			return tiles[y / Config.TILE_SIZE][x / Config.TILE_SIZE];
+			return tiles[y / GameConfig.TILE_SIZE][x / GameConfig.TILE_SIZE];
 		} catch(ArrayIndexOutOfBoundsException e) {
 			return null;
 		}

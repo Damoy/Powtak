@@ -6,10 +6,10 @@ import java.awt.Point;
 import javax.swing.SwingUtilities;
 
 import core.Core;
+import core.configs.GameConfig;
 import rendering.Screen;
 import rendering.config.TextRenderingConfig;
-import utils.Config;
-import utils.ScreenPositionCalculator;
+import utils.ScreenComputation;
 
 public class IndependentLoadingScreen implements Runnable{
 
@@ -57,13 +57,13 @@ public class IndependentLoadingScreen implements Runnable{
 	}
 	
 	private void render() {
-		Point center = ScreenPositionCalculator.getCenter();
+		Point center = ScreenComputation.getCenter();
 		
 		screen.clear(Color.WHITE);
-		screen.renderText(Config.TITLE.toUpperCase(), (int) (center.x - Config.TILE_SIZE * 2.5f), center.y - Config.TILE_SIZE, 24.0f, Color.BLACK);
-		screen.renderText("Loading", (int) (center.x - Config.TILE_SIZE * 1.75f), center.y, 10.0f, Color.BLACK);
+		screen.renderText(GameConfig.TITLE.toUpperCase(), (int) (center.x - GameConfig.TILE_SIZE * 2.5f), center.y - GameConfig.TILE_SIZE, 24.0f, Color.BLACK);
+		screen.renderText("Loading", (int) (center.x - GameConfig.TILE_SIZE * 1.75f), center.y, 10.0f, Color.BLACK);
 		screen.renderTextWithFont("...", TextRenderingConfig.RAW_RENDERING_FONT,
-				(int) (center.x + Config.TILE_SIZE * 0.9f), (int) (center.y - (Config.TILE_SIZE * 0.05f)),  10.0f, Color.BLACK);
+				(int) (center.x + GameConfig.TILE_SIZE * 0.9f), (int) (center.y - (GameConfig.TILE_SIZE * 0.05f)),  10.0f, Color.BLACK);
 		screen.render();
 	}
 }

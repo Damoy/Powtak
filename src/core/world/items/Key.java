@@ -1,10 +1,10 @@
 package core.world.items;
 
+import core.configs.GameConfig;
 import core.entities.Entity;
 import core.world.Tile;
 import rendering.Screen;
 import rendering.Texture;
-import utils.Config;
 
 public class Key extends Entity{
 

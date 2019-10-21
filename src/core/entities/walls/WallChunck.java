@@ -3,10 +3,10 @@ package core.entities.walls;
 import java.util.ArrayList;
 import java.util.List;
 
+import core.configs.GameConfig;
 import core.world.Tile;
 import rendering.Screen;
 import utils.AABB;
-import utils.Config;
 
 public class WallChunck {
 
@@ -41,7 +41,7 @@ public class WallChunck {
 	}
 	
 	public Wall add(Tile tile, int row, int col, Class<? extends Wall> cl) {
-		return addNorm(tile, col * Config.TILE_SIZE, row * Config.TILE_SIZE, cl);
+		return addNorm(tile, col * GameConfig.TILE_SIZE, row * GameConfig.TILE_SIZE, cl);
 	}
 	
 	public void render(Screen s) {

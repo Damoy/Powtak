@@ -1,5 +1,6 @@
 package core.world.teleportation;
 
+import core.configs.GameConfig;
 import core.entities.Entity;
 import core.entities.player.Player;
 import core.world.Tile;
@@ -7,7 +8,6 @@ import rendering.Screen;
 import rendering.Texture;
 import rendering.animation.Animation;
 import rendering.animation.BasicAnimationOnTick;
-import utils.Config;
 import utils.exceptions.PowtakException;
 
 public abstract class Portal extends Entity {
@@ -26,7 +26,7 @@ public abstract class Portal extends Entity {
 	}
 	
 	private Animation buildAnimation() {
-		return BasicAnimationOnTick.get(getTexture(), Config.UPS, 1, 
+		return BasicAnimationOnTick.get(getTexture(), GameConfig.UPS, 1, 
 				2, 2, 13, 13,
 				18, 2, 13, 13,
 				34, 2, 13, 13,

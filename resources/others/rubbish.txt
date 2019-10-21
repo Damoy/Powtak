@@ -865,3 +865,59 @@ public class LightChunck {
 			}
 		}
 	}
+	--
+
+	//		Point centerPoint = ScreenComputation.getCenter();
+//		int width = getStringWidth(s);
+//		int x = (int) (centerPoint.x - (width >> 1));
+//		int y = centerPoint.y + (rowOffset * Config.TILE_SIZE);
+
+--
+
+		String powtakInfo = "POWTAK";
+		int fontSize = 40;
+		screen.setupTextRendering(fontSize, Colors.DARK_RED);
+		Point powtakInfoPos = screen.getStringCenteredPosition(powtakInfo, fontSize, -2);
+		screen.renderText(powtakInfo, powtakInfoPos.x, powtakInfoPos.y);
+
+		--
+
+			public void renderCenteredText(Color fontColor, String s, float fontSize, int rowOffset) {
+		Graphics2D g = g();
+		Font oldFont = g.getFont();
+		Color oldFontColor = g.getColor();
+
+//		g.setFont(TextRenderingConfig.GAME_RENDERING_FONT.deriveFont(fontSize));
+//		g.setColor(fontColor);
+		setupTextRendering(fontSize, fontColor);
+		
+		Point stringPos = getStringCenteredPosition(s, fontSize, rowOffset);
+		int x = stringPos.x;
+		int y = stringPos.y;
+		
+		//g.drawString(s, x, y);
+		renderText(s, x, y);
+		
+//		g.setFont(oldFont);
+//		g.setColor(oldFontColor);
+		cleanTextRendering();
+	}
+
+	--
+
+	//	public Rectangle getStringBounds(Graphics2D g2, String str, float x, float y) {
+//		FontRenderContext frc = g2.getFontRenderContext();
+//		GlyphVector gv = g2.getFont().createGlyphVector(frc, str);
+//		return gv.getPixelBounds(null, x, y);
+//	}
+
+--
+
+//	public void renderCenteredText(Color fontColor, String s, float fontSize, int rowOffset, float yoffset) {
+//		setupTextRendering(fontSize, fontColor);
+//		Point stringPos = getStringCenteredPosition(s, fontSize, rowOffset);
+//		int x = stringPos.x;
+//		int y = stringPos.y;
+//		renderText(s, x, y);
+//		cleanTextRendering();
+//	}
