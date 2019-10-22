@@ -101,6 +101,12 @@ public class Screen {
 		return new Point(x, y);
 	}
 	
+	public Point renderCenteredWrapedTextAndClean(Color wrapColor, Color fontColor, String s, float fontSize, int rowOffset) {
+		Point renderPosition = renderCenteredWrapedText(wrapColor, fontColor, s, fontSize, rowOffset);
+		cleanTextRendering();
+		return renderPosition;
+	}
+	
 	public Point renderCenteredWrapedText(Color wrapColor, Color fontColor, String s, float fontSize, int rowOffset) {
 		setupTextRendering(fontSize, wrapColor);
 		Point stringPos = getStringCenteredPosition(s, fontSize, rowOffset);

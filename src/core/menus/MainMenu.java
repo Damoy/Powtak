@@ -22,8 +22,10 @@ import utils.exceptions.UnknownEnumOptionException;
 public class MainMenu extends Menu {
 	
 	private final static String MENU_LEVEL_FILE_NAME = "main_menu.lvl";
-	private final static int SELECTION_MAX_INDEX = MainMenuOption.values().length;
-	private final static int BACKGROUND_LIGHTNING_POWER = 100;
+	private final static int BACKGROUND_LIGHTNING_POWER = 80;
+	public final static int POWTAK_INFO_FONT_SIZE = 40;
+	public final static Color TEXT_RENDERING_WRAP_COLOR = Colors.DARK_GRAY;
+	public final static Color TEXT_RENDERING_COLOR = Colors.LIGHT_GREEN;
 	
 	private MenuSelector menuSelector;
 	private Level level;
@@ -41,7 +43,16 @@ public class MainMenu extends Menu {
 		this.level = MenuLevel.from(screen, menuLevelConfig);
 		this.optionsConfig = new OptionsConfig();
 		this.menuSelector = new MenuSelector(screen);
-		this.menuSelector.addEntry(this, 0, SELECTION_MAX_INDEX);
+		this.menuSelector.addEntry(this, 0, getOptionsCount() - 1);
+	}
+	
+	public void focusMainMenu() {
+		currentSubMenu = null;
+	}
+	
+	@Override
+	public int getOptionsCount() {
+		return MainMenuOption.values().length;
 	}
 	
 	@Override
@@ -75,7 +86,8 @@ public class MainMenu extends Menu {
 	}
 	
 	private void setSelectedOption() {
-		userSelectedOption = MainMenuOption.values()[menuSelector.getValue(this)];
+		int menuSelectionValue = menuSelector.getValue(this);
+		userSelectedOption = MainMenuOption.values()[menuSelectionValue];
 	}
 	
 	private void applyUserSelection() throws PowtakException {
@@ -98,7 +110,7 @@ public class MainMenu extends Menu {
 	
 	private void createOptionsMenu() throws PowtakException {
 		if(optionsMenu == null) {
-			optionsMenu = new OptionsMenu(core, screen, menuSelector, optionsConfig);
+			optionsMenu = new OptionsMenu(this, core, screen, menuSelector, optionsConfig);
 		}
 		currentSubMenu = optionsMenu;
 	}
@@ -116,8 +128,9 @@ public class MainMenu extends Menu {
 	}
 	
 	private void renderCurrentSubMenu() {
+		renderPowtakInfo();
 		if(currentSubMenu == null) {
-			renderMenuInfos();
+			renderSubMenusInfos();
 			renderSelectionIcon();
 		} else {
 			currentSubMenu.render();
@@ -129,24 +142,24 @@ public class MainMenu extends Menu {
 		lightEngine.enlightScreen(screen, BACKGROUND_LIGHTNING_POWER);
 	}
 	
-	private void renderMenuInfos() {
-		// POWTAK
+	private void renderPowtakInfo() {
 		String powtak = "POWTAK";
-		int fontSize = 40;
+		int fontSize = POWTAK_INFO_FONT_SIZE;
 		int rowOffset = -3;
 		screen.renderCenteredText(Colors.DARK_RED, powtak, fontSize, rowOffset);
-		
-		// Menus
+	}
+	
+	private void renderSubMenusInfos() {
 		String play = "Play";
 		String editor = "Editor";
 		String options = "Options";
 		String credits = "Credits";
 		
 		// setup menus
-		Color wrapColor = Colors.DARK_GRAY;
-		Color renderingColor = Colors.LIGHT_GREEN;
-		fontSize = 20;
-		rowOffset += 2;
+		Color wrapColor = TEXT_RENDERING_WRAP_COLOR;
+		Color renderingColor = TEXT_RENDERING_COLOR;
+		int fontSize = POWTAK_INFO_FONT_SIZE >> 1;
+		int rowOffset = -1;
 		screen.setupTextRendering(fontSize, wrapColor);
 		
 		// render play
@@ -191,5 +204,11 @@ public class MainMenu extends Menu {
 	public OptionsConfig getOptionsConfig() {
 		return optionsConfig;
 	}
+	
+
+	private static enum MainMenuOption {
+		PLAY, EDITOR, OPTIONS, CREDITS
+	}
+
 	
 }

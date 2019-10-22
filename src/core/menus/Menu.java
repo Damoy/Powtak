@@ -19,6 +19,7 @@ public abstract class Menu {
 	protected abstract void handleInput() throws PowtakException ;
 	public abstract void render();
 	protected abstract void reset();
+	public abstract int getOptionsCount();
 	
 	
 }
