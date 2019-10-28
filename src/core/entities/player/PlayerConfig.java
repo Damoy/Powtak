@@ -1,5 +1,6 @@
 package core.entities.player;
 
+import core.configs.CharacterSkin;
 import core.entities.Direction;
 
 public class PlayerConfig {
@@ -8,15 +9,9 @@ public class PlayerConfig {
 	private int y;
 	private int energy;
 	private Direction direction;
+	private CharacterSkin characterSkin;
 	
 	public PlayerConfig() {}
-	
-	public PlayerConfig(int x, int y, int energy, Direction direction) {
-		this.x = x;
-		this.y = y;
-		this.energy = energy;
-		this.direction = direction;
-	}
 	
 	public int getX() {
 		return x;
@@ -50,9 +45,12 @@ public class PlayerConfig {
 		this.direction = direction;
 	}
 
-	@Override
-	public String toString() {
-		return "PlayerConfig [x=" + x + ", y=" + y + ", energy=" + energy + ", direction=" + direction + "]";
+	public CharacterSkin getCharacterSkin() {
+		return characterSkin;
+	}
+
+	public void setCharacterSkin(CharacterSkin characterSkin) {
+		this.characterSkin = characterSkin;
 	}
 	
 }

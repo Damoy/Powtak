@@ -4,13 +4,14 @@ import java.awt.Color;
 import java.awt.Point;
 
 import core.Core;
+import core.configs.CharacterSkin;
 import core.configs.GameConfig;
 import core.configs.OptionsConfig;
 import input.Keys;
 import rendering.Screen;
 import rendering.Texture;
 import utils.Colors;
-import utils.Log;
+import utils.Selection;
 import utils.exceptions.PowtakException;
 import utils.exceptions.UnknownEnumOptionException;
 
@@ -27,19 +28,26 @@ public class OptionsMenu extends Menu {
 	private Point iconRenderingStartPos;
 	private int iconRenderingYOffset;
 	
+	private Selection<Color> characterSelection;
+	
 	public OptionsMenu(MainMenu mainMenu, Core core, Screen screen, MenuSelector menuSelector, OptionsConfig optionsConfig) throws PowtakException {
 		super(core, screen);
 		this.mainMenu = mainMenu;
 		this.optionsConfig = optionsConfig;
 		this.menuSelector = menuSelector;
 		this.menuSelector.addEntry(this, 0, getOptionsCount() - 1);
+		this.characterSelection = new Selection<>(Color.class, CharacterSkin.values().length, true);
+		this.characterSelection.addEntry(0, CharacterSkin.getCharacterColor(CharacterSkin.values()[0]));
+		this.characterSelection.addEntry(1, CharacterSkin.getCharacterColor(CharacterSkin.values()[1]));
+		this.characterSelection.addEntry(2, CharacterSkin.getCharacterColor(CharacterSkin.values()[2]));
+		this.characterSelection.addEntry(3, CharacterSkin.getCharacterColor(CharacterSkin.values()[3]));
 	}
 	
 	@Override
 	public int getOptionsCount() {
 		return 2;
 	}
-
+	
 	@Override
 	public void update() throws PowtakException {
 		handleInput();
@@ -56,7 +64,8 @@ public class OptionsMenu extends Menu {
 		}
 		
 		if(Keys.isPressed(Keys.ESCAPE)) {
-			mainMenu.focusMainMenu();
+			reset();
+			mainMenu.focusMainMenuFromSubMenu();
 		}
 		
 		setSelectedOption();
@@ -74,19 +83,29 @@ public class OptionsMenu extends Menu {
 	private void applyUserSelection() throws PowtakException {
 		switch (userSelectedOption) {
 		case SOUND_ACTIVATION:
-			optionsConfig.setSoundActivated(!optionsConfig.isSoundActivated());
-			Log.warn(optionsConfig.isSoundActivated());
+			updateSoundState();
 			break;
 		case CHARACTER_SELECTION:
+			updateCharacterSelection();
 			break;
 		default:
 			throw new UnknownEnumOptionException(OptionsMenuOption.class.getName(), userSelectedOption.name());
 		}
 	}
+	
+	private void updateSoundState() {
+		optionsConfig.setSoundActivated(!optionsConfig.isSoundActivated());
+	}
+	
+	private void updateCharacterSelection() {
+		characterSelection.increaseValue();
+		optionsConfig.setCharacterSkin(CharacterSkin.values()[characterSelection.getIndex()]);
+	}
 
 	@Override
-	public void render() {
+	public void render() throws PowtakException {
 		renderSoundInfo();
+		renderCharacterSelection();
 		renderSelectionIcon();
 	}
 	
@@ -108,9 +127,9 @@ public class OptionsMenu extends Menu {
 		// wrapped rendering
 		screen.renderWrapedText(soundInfo, renderingColor, soundInfoRenderingPos.x, soundInfoRenderingPos.y);
 		// clean rendering
-		screen.cleanTextRendering();
+		screen.cleanTextRendering();		
 		
-		setupIconRenderingStartPos(soundInfoRenderingPos, 0);
+		setupIconRenderingStartPos(soundInfoRenderingPos, GameConfig.TILE_SIZE << 1);
 	}
 	
 	private void setupIconRenderingStartPos(Point pos, int iconRenderingYOffset) {
@@ -120,8 +139,22 @@ public class OptionsMenu extends Menu {
 		}
 	}
 	
-	private void renderSelectionIcon() {
-		Texture iconSelectionTexture = Texture.NORMAL_PLAYER_ICON;
+	private void renderCharacterSelection() throws PowtakException {
+		// render icon and arrow or just color name and update icon
+		String characterSelectionInfo = "Character";
+		Color wrapColor = MainMenu.TEXT_RENDERING_WRAP_COLOR;
+		int fontSize = MainMenu.POWTAK_INFO_FONT_SIZE >> 1;
+		int rowOffset = 1;
+		Color renderingColor = characterSelection.getCurrentOption();
+		
+		screen.setupTextRendering(fontSize, wrapColor);
+		Point characterInfosPos = screen.getStringCenteredPosition(characterSelectionInfo, fontSize, rowOffset);
+		screen.renderWrapedText(characterSelectionInfo, renderingColor, this.iconRenderingStartPos.x, characterInfosPos.y);
+		screen.cleanTextRendering();
+	}
+	
+	private void renderSelectionIcon() throws PowtakException {
+		Texture iconSelectionTexture = menuSelector.updateTexture(optionsConfig.getCharacterSkin());
 		int ts = GameConfig.TILE_SIZE;
 		int x = (int) (iconRenderingStartPos.x - (ts * 1.5f));
 		int y = iconRenderingStartPos.y - (iconSelectionTexture.getHeight());
@@ -131,6 +164,7 @@ public class OptionsMenu extends Menu {
 
 	@Override
 	protected void reset() {
+		menuSelector.setValue(this, 0);
 	}
 	
 	private static enum OptionsMenuOption {

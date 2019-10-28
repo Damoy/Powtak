@@ -2,6 +2,7 @@ package core.world.level;
 
 import java.util.List;
 
+import core.Core;
 import core.world.teleportation.Portal;
 import core.world.teleportation.PortalSourcePoint;
 import rendering.Screen;
@@ -9,10 +10,12 @@ import utils.exceptions.PowtakException;
 
 public abstract class LevelChunck {
 
+	protected Core core;
 	protected List<Level> levels;
 	protected int currentLevelIndex;
 	
-	public LevelChunck(List<Level> inLevels) {
+	public LevelChunck(Core core, List<Level> inLevels) {
+		this.core = core;
 		this.currentLevelIndex = 0;
 		this.levels = inLevels;
 		this.levels.forEach(lvl -> lvl.setLevelChunck(this));

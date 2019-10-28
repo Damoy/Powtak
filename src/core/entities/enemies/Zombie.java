@@ -18,4 +18,12 @@ public abstract class Zombie extends Enemy {
 		this.inGameLevel = (level instanceof InGameLevel);
 	}
 	
+	@Override
+	public void setLevel(Level level, boolean force) {
+		if(level != null || this.level == null || this.level != null && force) {
+			this.level = level;
+			this.inGameLevel = (level instanceof InGameLevel);
+		}
+	}
+	
 }

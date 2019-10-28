@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import core.Core;
 import core.configs.GameConfig;
 import core.world.level.Level;
 import core.world.level.ingame.InGameLevel;
@@ -17,22 +18,21 @@ public final class WorldGeneration {
 	
 	private WorldGeneration() {}
 	
-	public static World generateWorldFromResourcesLevels(Screen screen) throws PowtakException {
+	public static World generateWorldFromResourcesLevels(Core core, Screen screen) throws PowtakException {
 		List<File> levelFiles = Utils.loadFilesIgnoreDirs(GameConfig.CUSTOM_LEVELS_FILE_PATH);
-		return generateWorldFromLevelFileNames(screen, levelFiles);
+		return generateWorldFromLevelFileNames(core, screen, levelFiles);
 	}
 	
-	public static World generateWorldFromPredefinedLevels(Screen screen) throws PowtakException {
+	public static World generateWorldFromPredefinedLevels(Core core, Screen screen) throws PowtakException {
 		List<File> levelFiles = new ArrayList<>();
 		levelFiles.add(new File(Utils.levelPath("level3.lvl")));
-//		levelFiles.add(new File("level2.lvl"));
 		levelFiles.add(new File(Utils.levelPath("level4.lvl")));
-		return generateWorldFromLevelFileNames(screen, levelFiles);
+		return generateWorldFromLevelFileNames(core, screen, levelFiles);
 	}
 	
-	private static World generateWorldFromLevelFileNames(Screen screen, List<File> levelFiles) throws PowtakException {
+	private static World generateWorldFromLevelFileNames(Core core, Screen screen, List<File> levelFiles) throws PowtakException {
 		List<Level> levels = InGameLevel.from(screen, levelFiles);
-		InGameLevelChunck levelChunck = new InGameLevelChunck(levels);
+		InGameLevelChunck levelChunck = new InGameLevelChunck(core, levels);
 		PortalSetup.enableNextLevelPortals(levelChunck);
 		return new World(levelChunck);
 	}

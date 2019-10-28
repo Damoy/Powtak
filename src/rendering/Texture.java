@@ -33,9 +33,24 @@ public class Texture {
 	
 	// Icons
 	public final static Texture NORMAL_PLAYER_ICON = getSubTexture(Utils.texturePath("normalPlayerIcon.png", "icons"), 0, 0, 12, 10);
+	public final static Texture BLUE_PLAYER_ICON = getSubTexture(Utils.texturePath("bluePlayerIcon.png", "icons"), 0, 0, 12, 10);
+	public final static Texture GREEN_PLAYER_ICON = getSubTexture(Utils.texturePath("greenPlayerIcon.png", "icons"), 0, 0, 12, 10);
+	public final static Texture PINK_PLAYER_ICON = getSubTexture(Utils.texturePath("pinkPlayerIcon.png", "icons"), 0, 0, 12, 10);
+	
+	public final static Texture NORMAL_PLAYER_SKIN_ICON = getSubTexture(Utils.texturePath("normalPlayerSelection.png", "icons"), 0, 0, 12, 13);
+	public final static Texture BLUE_PLAYER_SKIN_ICON = getSubTexture(Utils.texturePath("bluePlayerSelection.png", "icons"), 0, 0, 12, 13);
+	public final static Texture GREEN_PLAYER_SKIN_ICON = getSubTexture(Utils.texturePath("greenPlayerSelection.png", "icons"), 0, 0, 12, 13);
+	public final static Texture PINK_PLAYER_SKIN_ICON = getSubTexture(Utils.texturePath("pinkPlayerSelection.png", "icons"), 0, 0, 12, 13);
+	
+	public final static Texture LEFT_ARROW_ICON = getSubTexture(Utils.texturePath("arrow.png", "icons"), 0, 0, 5, 7);
+	public final static Texture RIGHT_ARROW_ICON = getSubTexture(Utils.texturePath("arrow.png", "icons"), 0, 0, 5, 7);
 	
 	// Sprite-sheets
-	public final static Texture PLAYER_SPRITESHEET = getSubTexture(Utils.texturePath("player_spritesheet.png", "player"), 0, 0, 155, 13);
+	public final static Texture NORMAL_PLAYER_SPRITESHEET = getSubTexture(Utils.texturePath("normalPlayer_spritesheet.png", "player"), 0, 0, 155, 13);
+	public final static Texture BLUE_PLAYER_SPRITESHEET = getSubTexture(Utils.texturePath("bluePlayer_spritesheet.png", "player"), 0, 0, 155, 13);
+	public final static Texture GREEN_PLAYER_SPRITESHEET = getSubTexture(Utils.texturePath("greenPlayer_spritesheet.png", "player"), 0, 0, 155, 13);
+	public final static Texture PINK_PLAYER_SPRITESHEET = getSubTexture(Utils.texturePath("pinkPlayer_spritesheet.png", "player"), 0, 0, 155, 13);
+	
 	public final static Texture PARTICULE_SPRITESHEET = getSubTexture(Utils.texturePath("particuleAnimTest.png", "particles"), 0, 0, 9, 3);
 	public final static Texture ENERGY_SPRITESHEET = getSubTexture(Utils.texturePath("energy_spritesheet.png", "energy"), 0, 0, 31, 10);
 	public final static Texture ZOMBIE_SPRITESHEET = getSubTexture(Utils.texturePath("zombie_spritesheet.png", "enemies"), 0, 0, 87, 13);
@@ -82,6 +97,19 @@ public class Texture {
 			e.printStackTrace();
 			throw new IllegalStateException();
 		}
+	}
+	
+	public Texture mirror() {
+		BufferedImage mirroredData = new BufferedImage(width * 2, height, BufferedImage.TYPE_INT_ARGB);
+		for (int y = 0; y < height; y++) {
+			for (int lx = 0, rx = width * 2 - 1; lx < width; lx++, rx--) {
+				int p = data.getRGB(lx, y);
+				mirroredData.setRGB(lx, y, p);
+				mirroredData.setRGB(rx, y, p);
+			}
+		}
+		this.data = mirroredData;
+		return this;
 	}
 	
 	public Texture scale(float wscale, float hscale) {

@@ -921,3 +921,17 @@ public class LightChunck {
 //		renderText(s, x, y);
 //		cleanTextRendering();
 //	}
+
+--
+
+		Texture characterSkinTexture = CharacterSkin.getCharacterSkinIcon(characterSkin);
+		int ts = GameConfig.TILE_SIZE;
+		int characX = characterInfosPos.x - ts;
+		screen.renderTex(characterSkinTexture, characX, characterInfosPos.y);
+
+		--
+
+		//	public void setup(OptionsConfig optionsConfig) throws PowtakException {
+//		this.texture = CharacterSkin.getCharacterSpriteSheet(optionsConfig.getCharacterSkin());
+//		attributesInit();
+//	}

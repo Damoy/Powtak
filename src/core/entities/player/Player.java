@@ -3,6 +3,7 @@ package core.entities.player;
 import java.util.ArrayList;
 import java.util.List;
 
+import core.Core;
 import core.configs.GameConfig;
 import core.entities.Direction;
 import core.entities.Entity;
@@ -22,8 +23,10 @@ import rendering.config.TextRenderingConfig;
 import utils.Utils;
 import utils.TickCounter;
 
-public class Player extends Entity{
+public class Player extends Entity {
 
+	private Core core;
+	
 	private Direction direction;
 	
 	private boolean moving;
@@ -58,8 +61,9 @@ public class Player extends Entity{
 	// teleportation counter
 	private TickCounter tpCounter;
 	
-	public Player(InGameLevel level) {
-		super(Texture.PLAYER_SPRITESHEET);
+	public Player(Core core, InGameLevel level, Texture texture) {
+		super(texture);
+		this.core = core;
 		attributesInit();
 		initUsingLevel(level);
 	}
@@ -243,7 +247,7 @@ public class Player extends Entity{
 		}
 		
 		if(Keys.isPressed(Keys.ESCAPE)) {
-			System.exit(0);
+			core.focusMainMenuFromInGame();
 		}
 	}
 	

@@ -3,9 +3,11 @@ package core.menus;
 import java.util.HashMap;
 import java.util.Map;
 
+import core.configs.CharacterSkin;
 import rendering.Screen;
 import rendering.Texture;
 import utils.Pair;
+import utils.exceptions.PowtakException;
 
 public class MenuSelector {
 
@@ -16,6 +18,11 @@ public class MenuSelector {
 	public MenuSelector(Screen screen) {
 		this.screen = screen;
 		this.menusSelections = new HashMap<>();
+	}
+	
+	public Texture updateTexture(CharacterSkin characterSkin) throws PowtakException {
+		this.texture = CharacterSkin.getCharacterReducedIcon(characterSkin);
+		return this.texture;
 	}
 	
 	public void addEntry(Menu menu, int value, int capValue) {

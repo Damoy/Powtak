@@ -2,6 +2,7 @@ package core.world.level.ingame;
 
 import java.util.List;
 
+import core.Core;
 import core.entities.player.Player;
 import core.world.level.Level;
 import core.world.level.LevelChunck;
@@ -16,9 +17,9 @@ public class InGameLevelChunck extends LevelChunck {
 
 	private Player player;
 	
-	public InGameLevelChunck(List<Level> inLevels) {
-		super(inLevels);
-		this.player = new Player((InGameLevel) this.levels.get(0));
+	public InGameLevelChunck(Core core, List<Level> inLevels) throws PowtakException {
+		super(core, inLevels);
+		this.player = new Player(core, (InGameLevel) this.levels.get(0), core.getCurrentCharacterSkin());
 	}
 	
 	public void update() throws PowtakException {
@@ -43,6 +44,10 @@ public class InGameLevelChunck extends LevelChunck {
 		reloadedLevel.setNextLevelPortal(nextLevelPortal);
 		levels.set(getLevelIndexUsingId(levelId), reloadedLevel);
 		player.setLevel(reloadedLevel);
+	}
+
+	public Player getPlayer() {
+		return player;
 	}
 	
 }

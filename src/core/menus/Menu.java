@@ -12,14 +12,12 @@ public abstract class Menu {
 	public Menu(Core core, Screen screen) throws PowtakException {
 		this.screen = screen;
 		this.core = core;
-		
 	}
 	
-	public abstract void update() throws PowtakException ;
-	protected abstract void handleInput() throws PowtakException ;
-	public abstract void render();
+	public abstract void update() throws PowtakException;
+	protected abstract void handleInput() throws PowtakException;
+	public abstract void render() throws PowtakException;
 	protected abstract void reset();
 	public abstract int getOptionsCount();
-	
 	
 }

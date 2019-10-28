@@ -12,6 +12,10 @@ public class Colors {
 	public static final Color LIGHT_GRAY = new Color(200, 200, 200);
 	public static final Color LIGHT_GREEN = new Color(130, 210, 130, 230);
 
+	public static final Color DODGER_BLUE = new Color(30, 144, 255);
+	public static final Color HOT_PINK = new Color(255, 105, 180);
+	public static final Color SIENNA_BROWN = new Color(160, 82, 45);
+	
 	private Colors() {}
 	
 	public static int alpha(int rgb) {

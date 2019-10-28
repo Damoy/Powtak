@@ -8,15 +8,19 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import core.configs.CharacterSkin;
 import core.configs.GameConfig;
+import core.configs.OptionsConfig;
 import core.gamestates.GameState;
 import core.menus.MainMenu;
 import core.world.World;
 import core.world.WorldGeneration;
 import input.Keys;
 import rendering.Screen;
+import rendering.Texture;
 import rendering.Window;
 import rendering.UI.IndependentLoadingScreen;
+import utils.Log;
 import utils.exceptions.PowtakException;
 
 public class Core extends JPanel implements Runnable, KeyListener{
@@ -32,7 +36,9 @@ public class Core extends JPanel implements Runnable, KeyListener{
 	private Window window;
 	private World world;
 	private IndependentLoadingScreen loadingScreen;
-
+	
+	private OptionsConfig optionsConfig;
+	
 	public Core() throws PowtakException {
 		super();
 		setComponent();
@@ -49,8 +55,8 @@ public class Core extends JPanel implements Runnable, KeyListener{
 		initGraphics();
 		// this.loadingScreen = new IndependentLoadingScreen(this, screen, 3000);
 		this.gameState = GameState.MAIN_MENU;
-		this.mainMenu = new MainMenu(this, screen);
-		
+		this.optionsConfig = new OptionsConfig();
+		this.mainMenu = new MainMenu(this, screen, optionsConfig);
 	}
 
 	private void initGraphics() {
@@ -59,8 +65,22 @@ public class Core extends JPanel implements Runnable, KeyListener{
 	}
 	
 	public void launchGame() throws PowtakException {
-		this.world = WorldGeneration.generateWorldFromPredefinedLevels(screen);
+		this.world = WorldGeneration.generateWorldFromPredefinedLevels(this, screen);
 		gameState = GameState.IN_GAME;
+	}
+	
+	public void focusMainMenuFromInGame() {
+		Keys.update();
+		gameState = GameState.MAIN_MENU;
+	}
+	
+	public void exitGame() {
+		Log.warn("Exiting game...");
+		System.exit(0);
+	}
+	
+	public Texture getCurrentCharacterSkin() throws PowtakException {
+		return CharacterSkin.getCharacterSpriteSheet(optionsConfig.getCharacterSkin());
 	}
 	
 	@Override
@@ -101,7 +121,11 @@ public class Core extends JPanel implements Runnable, KeyListener{
 
 			if (shouldRender) {
 				frames++;
-				render();
+				try {
+					render();
+				} catch (PowtakException e) {
+					e.printStackTrace();
+				}
 			}
 
 			if (System.currentTimeMillis() - lastTimer1 > 1000) {
@@ -131,7 +155,7 @@ public class Core extends JPanel implements Runnable, KeyListener{
 		}
 	}
 
-	public void render() {
+	public void render() throws PowtakException {
 		screen.clear(Color.WHITE);
 		
 		switch (gameState) {
@@ -186,4 +210,8 @@ public class Core extends JPanel implements Runnable, KeyListener{
 		Keys.keySet(e.getKeyCode(), true);
 	}
 
+	public OptionsConfig getOptionsConfig() {
+		return optionsConfig;
+	}
+	
 }

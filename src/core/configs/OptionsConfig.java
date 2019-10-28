@@ -7,7 +7,7 @@ public class OptionsConfig {
 	
 	public OptionsConfig() {
 		this.soundActivated = true;
-		this.characterSkin = CharacterSkin.STANDARD;
+		this.characterSkin = CharacterSkin.NORMAL;
 	}
 
 	public OptionsConfig(boolean soundActivated, CharacterSkin characterSkin) {

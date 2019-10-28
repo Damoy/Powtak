@@ -9,6 +9,7 @@ import core.world.level.ingame.InGameLevel;
 import rendering.Screen;
 import rendering.animation.Animation;
 import utils.AABB;
+import utils.Log;
 
 public class ZombieProjectile extends EnemyProjectile{
 	
@@ -32,6 +33,7 @@ public class ZombieProjectile extends EnemyProjectile{
 				if(level.playerCollidesWith(this)) {
 					die();
 					level.getPlayer().die();
+					Log.warn("DIE");
 					return;
 				}
 			} 

@@ -37,16 +37,17 @@ public class MainMenu extends Menu {
 	private OptionsMenu optionsMenu;
 	private OptionsConfig optionsConfig;
 
-	public MainMenu(Core core, Screen screen) throws PowtakException {
+	public MainMenu(Core core, Screen screen, OptionsConfig optionsConfig) throws PowtakException {
 		super(core, screen);
 		LevelConfig menuLevelConfig = LevelLoader.get().loadCustomLevel(Utils.levelPath(MENU_LEVEL_FILE_NAME));
 		this.level = MenuLevel.from(screen, menuLevelConfig);
-		this.optionsConfig = new OptionsConfig();
+		this.optionsConfig = optionsConfig;
 		this.menuSelector = new MenuSelector(screen);
 		this.menuSelector.addEntry(this, 0, getOptionsCount() - 1);
+		this.menuSelector.updateTexture(optionsConfig.getCharacterSkin());
 	}
 	
-	public void focusMainMenu() {
+	public void focusMainMenuFromSubMenu() {
 		currentSubMenu = null;
 	}
 	
@@ -76,6 +77,10 @@ public class MainMenu extends Menu {
 		
 		if(Keys.downKeyPressed()) {
 			menuSelector.increaseValue(this);
+		}
+		
+		if(Keys.isPressed(Keys.ESCAPE)) {
+			core.exitGame();
 		}
 		
 		setSelectedOption();
@@ -121,13 +126,13 @@ public class MainMenu extends Menu {
 	}
 	
 	@Override
-	public void render() {
+	public void render() throws PowtakException {
 		this.level.render();
 		renderMenuLightning();
 		renderCurrentSubMenu();
 	}
 	
-	private void renderCurrentSubMenu() {
+	private void renderCurrentSubMenu() throws PowtakException {
 		renderPowtakInfo();
 		if(currentSubMenu == null) {
 			renderSubMenusInfos();
@@ -193,7 +198,7 @@ public class MainMenu extends Menu {
 	}
 	
 	private void renderSelectionIcon() {
-		Texture iconSelectionTexture = Texture.NORMAL_PLAYER_ICON;
+		Texture iconSelectionTexture = menuSelector.getTexture();
 		int ts = GameConfig.TILE_SIZE;
 		int x = (int) (iconRenderingStartPos.x - (ts * 1.5f));
 		int y = iconRenderingStartPos.y - (iconSelectionTexture.getHeight());
