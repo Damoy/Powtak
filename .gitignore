@@ -26,3 +26,4 @@ local.properties
 rubb/**
 /bin/
 proto/**
+resources/others/**
