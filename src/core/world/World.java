@@ -1,10 +1,11 @@
 package core.world;
 
+import java.util.Optional;
+
 import core.entities.player.Player;
 import core.world.level.LevelChunck;
 import core.world.level.ingame.InGameLevelChunck;
 import rendering.Screen;
-import utils.Optional;
 import utils.exceptions.PowtakException;
 
 public class World {
@@ -28,10 +29,10 @@ public class World {
 	}
 	
 	public Optional<Player> getPlayer(){
-		Optional<Player> player = new Optional<Player>();
+		Optional<Player> player = Optional.empty();
 		if(levelChunck instanceof InGameLevelChunck) {
 			InGameLevelChunck inGameLevelChunck = (InGameLevelChunck) levelChunck;
-			player.setElement(inGameLevelChunck.getPlayer());
+			player = Optional.of(inGameLevelChunck.getPlayer());
 		}
 		return player;
 	}

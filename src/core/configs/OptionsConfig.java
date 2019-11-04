@@ -10,11 +10,6 @@ public class OptionsConfig {
 		this.characterSkin = CharacterSkin.NORMAL;
 	}
 
-	public OptionsConfig(boolean soundActivated, CharacterSkin characterSkin) {
-		this.soundActivated = soundActivated;
-		this.characterSkin = characterSkin;
-	}
-
 	public boolean isSoundActivated() {
 		return soundActivated;
 	}

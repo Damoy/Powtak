@@ -72,11 +72,17 @@ public class MainMenu extends Menu {
 	
 	protected void handleInput() throws PowtakException {
 		if(Keys.upKeyPressed()) {
-			menuSelector.decreaseValue(this);
+			boolean valueDecreased = menuSelector.decreaseValue(this);
+			if(valueDecreased) {
+				soundEngine.playMenuOptionSound();
+			}
 		}
 		
 		if(Keys.downKeyPressed()) {
-			menuSelector.increaseValue(this);
+			boolean valueIncreased = menuSelector.increaseValue(this);
+			if(valueIncreased) {
+				soundEngine.playMenuOptionSound();
+			}
 		}
 		
 		if(Keys.isPressed(Keys.ESCAPE)) {
@@ -98,12 +104,14 @@ public class MainMenu extends Menu {
 	private void applyUserSelection() throws PowtakException {
 		switch (userSelectedOption) {
 		case PLAY:
+			soundEngine.playMenuSelectionSound();
 			reset();
 			core.launchGame();
 			break;
 		case EDITOR:
 			break;
 		case OPTIONS:
+			soundEngine.playMenuSelectionSound();
 			createOptionsMenu();
 			break;
 		case CREDITS:

@@ -20,12 +20,14 @@ import rendering.animation.AnimationFrame;
 import rendering.animation.DirectedAnimation;
 import rendering.animation.DirectedAnimationOnTick;
 import rendering.config.TextRenderingConfig;
+import sound.SoundEngine;
 import utils.Utils;
 import utils.TickCounter;
 
 public class Player extends Entity {
 
 	private Core core;
+	private SoundEngine soundEngine;
 	
 	private Direction direction;
 	
@@ -64,6 +66,7 @@ public class Player extends Entity {
 	public Player(Core core, InGameLevel level, Texture texture) {
 		super(texture);
 		this.core = core;
+		this.soundEngine = core.getSoundEngine();
 		attributesInit();
 		initUsingLevel(level);
 	}
@@ -127,6 +130,7 @@ public class Player extends Entity {
 	}
 	
 	public void die() {
+		soundEngine.playDeathSound();
 		level.reset();
 	}
 	
@@ -168,34 +172,6 @@ public class Player extends Entity {
 	}
 	
 	@Override
-	public void render(Screen s) {
-		renderProjectiles(s);
-		renderAnimation(s);
-		renderEnergy(s);
-	}
-	
-	private void renderProjectiles(Screen s) {
-		projectiles.forEach(projectile -> projectile.render(s));
-	}
-	
-	private void renderEnergy(Screen s) {
-		s.renderUIText(energyAmount, TextRenderingConfig.PLAYER_ENERGY_FONT_SIZE, TextRenderingConfig.PLAYER_ENERGY_FONT_COLOR);
-	}
-	
-	private void renderAnimation(Screen s) {
-		animation.render(s, x + getFrameXoffset(animation.getCurrentFrame()),
-							y + getFrameYoffset(animation.getCurrentFrame()));
-	}
-	
-	private int getFrameXoffset(AnimationFrame frame) {
-		return (GameConfig.TILE_SIZE - frame.getWidth()) >> 1;
-	}
-	
-	private int getFrameYoffset(AnimationFrame frame) {
-		return (GameConfig.TILE_SIZE - frame.getHeight()) >> 1;
-	}
-
-	@Override
 	public void update() {
 		input();
 		updateTpCounter();
@@ -236,8 +212,7 @@ public class Player extends Entity {
 		if(Keys.isPressed(Keys.SPACE)) {
 			energyAmount -= 2;
 			if(checkEnergy()) {
-				projectiles.add(new PlayerStaticProjectile(getLevel(), animation.getCurrentDirection(),
-						getProjX(), getProjY()));
+				generateProjectile();
 			}
 			Keys.deactivate(Keys.SPACE);
 		}
@@ -249,6 +224,12 @@ public class Player extends Entity {
 		if(Keys.isPressed(Keys.ESCAPE)) {
 			core.focusMainMenuFromInGame();
 		}
+	}
+	
+	private void generateProjectile() {
+		soundEngine.playHitSound();
+		projectiles.add(new PlayerStaticProjectile(getLevel(), animation.getCurrentDirection(),
+				getProjX(), getProjY()));
 	}
 	
 	private int getProjX() {
@@ -392,26 +373,28 @@ public class Player extends Entity {
 				
 				// wall tile collision
 				if(tile.isWalled()) {
+					launchWallInteraction();
 					return false;
 				}
 				
 				if(level.getEnemyOn(row, col) != null) {
+					launchEnemyInteraction();
 					return false;
 				}
 				
 				// door key collision
 				if(level.interactIfCollisionDoorKey(tile)) {
+					launchDoorKeyInteraction();
 					return false;
 				}
 				
 				// next level teleport collision
 				if(tile.isNextLevelPortaled()) {
-					tile.getNextLevelPortal().activate(this);
-					return false;
+					return launchPortalInteraction(tile);
 				}
 				
 				if(tile.isPoweredUp()) {
-					tile.getEnergy().interact(this);
+					launchEnergyInteraction(tile);
 				}
 			}
 		}
@@ -424,6 +407,57 @@ public class Player extends Entity {
 		}
 		
 		return false;
+	}
+	
+	private void launchWallInteraction() {
+		soundEngine.playWallHitSound();
+	}
+	
+	private void launchEnemyInteraction() {
+		soundEngine.playWallHitSound();
+	}
+	
+	private void launchDoorKeyInteraction() {
+		soundEngine.playDoorOpeningSound();
+	}
+	
+	private boolean launchPortalInteraction(Tile tile) {
+		soundEngine.playPortalSound();
+		tile.getNextLevelPortal().activate(this);
+		return false;
+	}
+	
+	private void launchEnergyInteraction(Tile tile) {
+		soundEngine.playPowerupSound();
+		tile.getEnergy().interact(this);
+	}
+	
+	@Override
+	public void render(Screen s) {
+		renderProjectiles(s);
+		renderAnimation(s);
+		renderEnergy(s);
+	}
+	
+	private void renderProjectiles(Screen s) {
+		projectiles.forEach(projectile -> projectile.render(s));
+	}
+	
+	private void renderEnergy(Screen s) {
+		s.renderUIText(energyAmount, TextRenderingConfig.PLAYER_ENERGY_FONT_SIZE, TextRenderingConfig.PLAYER_ENERGY_FONT_COLOR);
+	}
+	
+	private void renderAnimation(Screen s) {
+		animation.render(s, x + getFrameXoffset(animation.getCurrentFrame()),
+							y + getFrameYoffset(animation.getCurrentFrame()));
+	}
+	
+	private int getFrameXoffset(AnimationFrame frame) {
+		return (GameConfig.TILE_SIZE - frame.getWidth()) >> 1;
+	}
+	
+	private int getFrameYoffset(AnimationFrame frame) {
+		return (GameConfig.TILE_SIZE - frame.getHeight()) >> 1;
 	}
 	
 	private void updateProjectiles() {

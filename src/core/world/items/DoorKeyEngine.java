@@ -1,7 +1,6 @@
 package core.world.items;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -11,29 +10,20 @@ import java.util.stream.Collectors;
 
 import core.world.Tile;
 import rendering.Screen;
-import utils.Colors;
-import utils.Log;
 
 public class DoorKeyEngine {
 	
 	private Map<Integer, DoorKeyEntry> memory;
 	private Set<Integer> doorIdSet;
-	// private Set<Integer> keyIdSet;
 	private List<Door> waitingList;
 
 	public DoorKeyEngine() {
 		memory = new HashMap<>();
 		doorIdSet = new HashSet<>();
 		waitingList = new ArrayList<>();
-		//keyIdSet = new HashSet<Integer>();
 	}
 	
 	public Door addDoor(Tile tile, int id) {
-//		if(doorIdSet.contains(id)) {
-//			throw new IllegalStateException("Duplicated Door Identifiers.");
-//		}
-		
-		// Log.warn(id);
 		Door door = null;
 		
 		if(memory.containsKey(id)) {
@@ -55,7 +45,6 @@ public class DoorKeyEngine {
 			throw new IllegalStateException("Duplicated Keys");
 		}
 		
-		// TODO set tile dooor / id
 		Key key = new Key(tile, id, tile.getX(), tile.getY());
 		memory.put(id, new DoorKeyEntry(key, waitingList.stream().filter(door -> door.getId() == id).collect(Collectors.toList())));
 		tile.setKey(key);
@@ -74,23 +63,6 @@ public class DoorKeyEngine {
 		
 		waitingList.clear();
 	}
-	
-	public static int getKeyIdentifier(int rgb) {
-		return Colors.blue(rgb);
-	}
-	
-	public static int getDoorIdentifier(int rgb) {
-		return Colors.green(rgb);
-	}
-	
-//	public boolean addEntry(Key key, Door... doors) {
-//		if(!memory.containsKey(key.getId())) {
-//			memory.put(key.getId(), new DoorKeyEntry(key, doors));
-//			return true;
-//		}
-//		
-//		return false;
-//	}
 	
 	public void update() {
 		memory.forEach((id, entry) -> {
@@ -134,35 +106,9 @@ public class DoorKeyEngine {
 			this.doors = doors;
 		}
 		
-//		public DoorKeyEntry(Key key, Door... doors) {
-//			this.key = key;
-//			this.doors = Arrays.asList(doors);
-//		}
-		
 		public void addDoor(Door door) {
 			doors.add(door);
 		}
 	}
 	
-//	public static class DoorKeyEngineBuilder {
-//		private Map<Integer, List<Door>> doorMemory;
-//		private Map<Integer, List<Key>> keyMemory;
-//		
-//		public DoorKeyEngineBuilder() {
-//			doorMemory = new HashMap<>();
-//			keyMemory = new HashMap<>();
-//		}
-//		
-//		public void addDoor(Door door) {
-//			
-//		}
-//		
-//		public void addKey(Key key) {
-//			
-//		}
-//		
-//		public DoorKeyEngine builDoorKeyEngine() {
-//			
-//		}
-//	}
 }

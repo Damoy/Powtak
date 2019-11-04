@@ -20,6 +20,7 @@ import rendering.Screen;
 import rendering.Texture;
 import rendering.Window;
 import rendering.UI.IndependentLoadingScreen;
+import sound.SoundEngine;
 import utils.Log;
 import utils.exceptions.PowtakException;
 
@@ -37,6 +38,7 @@ public class Core extends JPanel implements Runnable, KeyListener{
 	private World world;
 	private IndependentLoadingScreen loadingScreen;
 	
+	private SoundEngine soundEngine;
 	private OptionsConfig optionsConfig;
 	
 	public Core() throws PowtakException {
@@ -52,26 +54,37 @@ public class Core extends JPanel implements Runnable, KeyListener{
 	}
 
 	private void init() throws PowtakException {
-		initGraphics();
+		this.initGraphics();
 		// this.loadingScreen = new IndependentLoadingScreen(this, screen, 3000);
 		this.gameState = GameState.MAIN_MENU;
 		this.optionsConfig = new OptionsConfig();
+		this.initSound();
 		this.mainMenu = new MainMenu(this, screen, optionsConfig);
 	}
-
+	
 	private void initGraphics() {
 		screen = Screen.of(this, new BufferedImage(GameConfig.WIDTH, GameConfig.HEIGHT, BufferedImage.TYPE_INT_RGB));
 		window = new Window(GameConfig.TITLE, this);
 	}
 	
+	private void initSound() throws PowtakException {
+		this.soundEngine = new SoundEngine(optionsConfig);
+	}
+	
 	public void launchGame() throws PowtakException {
-		this.world = WorldGeneration.generateWorldFromPredefinedLevels(this, screen);
+		soundEngine.playMainMusic();
+		world = WorldGeneration.generateWorldFromPredefinedLevels(this, screen);
 		gameState = GameState.IN_GAME;
 	}
 	
 	public void focusMainMenuFromInGame() {
 		Keys.update();
 		gameState = GameState.MAIN_MENU;
+		try {
+			soundEngine.stopMainMusic();
+		} catch (PowtakException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void exitGame() {
@@ -140,10 +153,12 @@ public class Core extends JPanel implements Runnable, KeyListener{
 	public void update() throws PowtakException {
 		switch (gameState) {
 		case MAIN_MENU:
+			this.soundEngine.update();
 			this.mainMenu.update();
 			Keys.update();
 			break;
 		case IN_GAME:
+			this.soundEngine.update();
 			world.update();
 			screen.update();
 			Keys.updateKeysBlockCounter();
@@ -197,7 +212,6 @@ public class Core extends JPanel implements Runnable, KeyListener{
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		
 	}
 
 	@Override
@@ -212,6 +226,10 @@ public class Core extends JPanel implements Runnable, KeyListener{
 
 	public OptionsConfig getOptionsConfig() {
 		return optionsConfig;
+	}
+
+	public SoundEngine getSoundEngine() {
+		return soundEngine;
 	}
 	
 }

@@ -56,11 +56,17 @@ public class OptionsMenu extends Menu {
 	@Override
 	protected void handleInput() throws PowtakException {
 		if(Keys.upKeyPressed()) {
-			menuSelector.decreaseValue(this);
+			boolean valueDecreased = menuSelector.decreaseValue(this);
+			if(valueDecreased) {
+				soundEngine.playMenuOptionSound();
+			}
 		}
 		
 		if(Keys.downKeyPressed()) {
-			menuSelector.increaseValue(this);
+			boolean valueIncreased = menuSelector.increaseValue(this);
+			if(valueIncreased) {
+				soundEngine.playMenuOptionSound();
+			}
 		}
 		
 		if(Keys.isPressed(Keys.ESCAPE)) {
@@ -83,9 +89,11 @@ public class OptionsMenu extends Menu {
 	private void applyUserSelection() throws PowtakException {
 		switch (userSelectedOption) {
 		case SOUND_ACTIVATION:
+			soundEngine.playMenuSelectionSound();
 			updateSoundState();
 			break;
 		case CHARACTER_SELECTION:
+			soundEngine.playMenuOptionSound();
 			updateCharacterSelection();
 			break;
 		default:
