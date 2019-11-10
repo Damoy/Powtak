@@ -45,20 +45,22 @@ public class MenuSelector {
 		menusSelections.get(menu).setFirst(0);
 	}
 	
-	public void increaseValue(Menu menu) {
-		increaseValue(menu, 1);
+	public boolean increaseValue(Menu menu) {
+		return increaseValue(menu, 1);
 	}
 	
-	public void decreaseValue(Menu menu) {
-		increaseValue(menu, -1);
+	public boolean decreaseValue(Menu menu) {
+		return increaseValue(menu, -1);
 	}
 	
-	public void increaseValue(Menu menu, int offset) {
+	public boolean increaseValue(Menu menu, int offset) {
 		Pair<Integer, Integer> menuSelection = menusSelections.get(menu);
 		int value = menuSelection.getFirst();
 		value += offset;
+		int saveValue = value;
 		value = capValue(value, menuSelection.getSecond());
 		menuSelection.setFirst(value);
+		return value == saveValue;
 	}
 	
 	private int capValue(int value, int capValue) {

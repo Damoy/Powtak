@@ -87,7 +87,7 @@ public class LevelLoader {
 	}
 	
 	private void loadCustomLevel(LevelConfig levelConfig, String levelFileName, List<String> levelFileLines) throws PowtakException {
-		for(String levelFileLine : levelFileLines.stream().filter(lfl -> !lfl.isBlank()).collect(Collectors.toList())) {
+		for(String levelFileLine : levelFileLines.stream().filter(lfl -> lfl != null && !lfl.replaceAll(" ", "").isEmpty()).collect(Collectors.toList())) {
 			loadCustomLevelLine(levelConfig, levelFileName, levelFileLine);
 		}
 	}

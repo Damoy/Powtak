@@ -4,6 +4,7 @@ import core.configs.GameConfig;
 import core.world.Tile;
 import rendering.Screen;
 import rendering.Texture;
+import sound.SoundEngine;
 import utils.AABB;
 
 public abstract class Entity {
