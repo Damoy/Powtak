@@ -410,11 +410,11 @@ public class Player extends Entity {
 	}
 	
 	private void launchWallInteraction() {
-		soundEngine.playWallHitSound();
+		//soundEngine.playWallHitSound();
 	}
 	
 	private void launchEnemyInteraction() {
-		soundEngine.playWallHitSound();
+		//soundEngine.playWallHitSound();
 	}
 	
 	private void launchDoorKeyInteraction() {

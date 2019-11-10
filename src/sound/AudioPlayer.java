@@ -107,6 +107,8 @@ public class AudioPlayer {
 		
 		if(frames > 0) {
 			deactivate(frames);
+		} else {
+			setActivation(false);
 		}
 	}
 	
