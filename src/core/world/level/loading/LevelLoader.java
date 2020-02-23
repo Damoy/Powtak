@@ -67,8 +67,12 @@ public class LevelLoader {
 		EnergyChunck energyChunck = new EnergyChunck();
 		
 		List<String> fileLines = Utils.getFileLines(levelFilePath);
+		
 		if(fileLines == null || fileLines.isEmpty()) {
-			throw new IllegalLevelFileException(levelFilePath);
+			// throw new IllegalLevelFileException(levelFilePath);
+			LevelConfig levelConfig = new LevelConfig();
+			levelConfig.setTiles(tiles);
+			return levelConfig;
 		}
 		
 		LevelConfig levelConfig = new LevelConfig();

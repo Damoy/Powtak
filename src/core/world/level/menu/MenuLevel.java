@@ -27,6 +27,19 @@ public class MenuLevel extends Level {
 				particleEngine);
 	}
 	
+	public static Level from(Screen screen, String levelFileName){
+		LevelLoader levelLoader = LevelLoader.get();
+		Level level = null;
+		
+		try {
+			level = from(screen, levelLoader.loadCustomLevel(levelFileName));
+		} catch(PowtakException e) {
+			Log.error(e.getMessage());
+		}
+		
+		return level;
+	}
+	
 	public static List<Level> from(Screen screen, List<File> levelFiles){
 		LevelLoader levelLoader = LevelLoader.get();
 		List<Level> levels = new ArrayList<>();

@@ -36,6 +36,8 @@ public class MainMenu extends Menu {
 	private Menu currentSubMenu;
 	private OptionsMenu optionsMenu;
 	private OptionsConfig optionsConfig;
+	
+	private EditorMenu editorMenu;
 
 	public MainMenu(Core core, Screen screen, OptionsConfig optionsConfig) throws PowtakException {
 		super(core, screen);
@@ -109,6 +111,8 @@ public class MainMenu extends Menu {
 			core.launchGame();
 			break;
 		case EDITOR:
+			soundEngine.playMenuSelectionSound();
+			createEditorMenu();
 			break;
 		case OPTIONS:
 			soundEngine.playMenuSelectionSound();
@@ -126,6 +130,13 @@ public class MainMenu extends Menu {
 			optionsMenu = new OptionsMenu(this, core, screen, menuSelector, optionsConfig);
 		}
 		currentSubMenu = optionsMenu;
+	}
+	
+	private void createEditorMenu() throws PowtakException {
+		if(editorMenu == null) {
+			editorMenu = new EditorMenu(this, core, screen, menuSelector, optionsConfig);
+		}
+		currentSubMenu = editorMenu;
 	}
 	
 	protected void reset() {
@@ -146,7 +157,7 @@ public class MainMenu extends Menu {
 			renderSubMenusInfos();
 			renderSelectionIcon();
 		} else {
-			currentSubMenu.render();
+			currentSubMenu.render(); // TODO avoid render when editor
 		}
 	}
 	
