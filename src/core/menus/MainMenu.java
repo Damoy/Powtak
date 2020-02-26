@@ -146,9 +146,17 @@ public class MainMenu extends Menu {
 	
 	@Override
 	public void render() throws PowtakException {
-		this.level.render();
-		renderMenuLightning();
-		renderCurrentSubMenu();
+		if(shouldRenderMainMenuBasis()) {
+			this.level.render();
+			renderMenuLightning();
+			renderCurrentSubMenu();
+		} else {
+			currentSubMenu.render();
+		}
+	}
+	
+	private boolean shouldRenderMainMenuBasis() {
+		return currentSubMenu == null || !(currentSubMenu instanceof EditorMenu); 
 	}
 	
 	private void renderCurrentSubMenu() throws PowtakException {
@@ -157,7 +165,7 @@ public class MainMenu extends Menu {
 			renderSubMenusInfos();
 			renderSelectionIcon();
 		} else {
-			currentSubMenu.render(); // TODO avoid render when editor
+			currentSubMenu.render();
 		}
 	}
 	
